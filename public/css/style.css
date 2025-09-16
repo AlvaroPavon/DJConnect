@@ -1,0 +1,199 @@
+/* --- Estilos Generales y Tema Dinámico --- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Definición de la paleta de colores */
+:root {
+    --color-background: #121212;
+    --color-surface: #1e1e1e;
+    --color-primary: #bb86fc;
+    --color-secondary: #03dac6;
+    --color-error: #cf6679;
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #aaaaaa;
+    --color-border: #333333;
+}
+
+/* Animaciones reusables */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-15px); max-height: 0; }
+    to { opacity: 1; transform: translateY(0); max-height: 100px; }
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--color-surface);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-sizing: border-box;
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+h1, h2, h3, p {
+    text-align: center;
+    color: var(--color-primary);
+    margin-top: 0;
+}
+h2 { color: var(--color-text-primary); }
+p { color: var(--color-text-secondary); line-height: 1.5; }
+a { color: var(--color-secondary); text-decoration: none; font-weight: bold; }
+hr { border: 1px solid var(--color-border); margin: 30px 0; }
+
+/* --- Formularios y Botones Interactivos --- */
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #333;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    color: var(--color-text-primary);
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 15px rgba(187, 134, 252, 0.3);
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+    background-color: var(--color-secondary);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(3, 218, 198, 0.3);
+}
+
+button:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 10px rgba(3, 218, 198, 0.2);
+}
+
+/* --- Listas Dinámicas (Sugerencias y Peticiones) --- */
+#suggestions li, .cancion-item {
+    animation: slideDown 0.5s ease-out forwards;
+    overflow: hidden;
+}
+
+#suggestions { list-style: none; padding: 0; margin: 0; max-height: 250px; overflow-y: auto; }
+#suggestions li { padding: 15px; background-color: #2c2c2c; border-bottom: 1px solid var(--color-border); cursor: pointer; transition: background-color 0.2s; }
+#suggestions li:first-child { border-radius: 8px 8px 0 0; }
+#suggestions li:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
+#suggestions li:hover { background-color: var(--color-primary); color: var(--color-background); }
+
+/* --- Panel del DJ y Ranking --- */
+#lista-canciones { list-style: none; padding: 0; max-height: 400px; overflow-y: auto; border: 1px solid var(--color-border); border-radius: 8px; padding: 10px; }
+.cancion-item { background-color: #2c2c2c; border-left: 5px solid var(--color-primary); margin-bottom: 10px; padding: 15px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; transition: all 0.4s ease; }
+.cancion-info strong { font-size: 1.1em; color: var(--color-text-primary); }
+.cancion-info em { font-size: 0.9em; color: var(--color-text-secondary); display: block; margin-top: 5px; }
+.cancion-item.played { background-color: #222; border-left-color: var(--color-secondary); opacity: 0.6; }
+.cancion-item.played .cancion-info { text-decoration: line-through; }
+.btn-played { padding: 8px 12px; font-size: 12px; background-color: #333; color: var(--color-secondary); border: 1px solid var(--color-secondary); width: auto; margin-left: 15px; }
+.btn-played:disabled { background-color: var(--color-surface); color: #666; border-color: #444; cursor: not-allowed; }
+.btn-played:disabled:hover { transform: none; box-shadow: none; }
+
+table { width: 100%; border-collapse: collapse; text-align: left; }
+table th { padding: 12px; background-color: #333; color: var(--color-secondary); }
+table td { padding: 12px; border-bottom: 1px solid var(--color-border); }
+table tr:last-child td { border-bottom: none; }
+table tr:hover { background-color: #2c2c2c; }
+
+/* --- Modal y Animaciones --- */
+#rating-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(5px); animation: fadeIn 0.3s ease forwards; }
+.modal-content { background: var(--color-surface); padding: 25px; border-radius: 12px; text-align: center; }
+.stars span { font-size: 3.5em; cursor: pointer; color: #444; transition: transform 0.2s ease, color 0.2s ease; display: inline-block; }
+.stars span:hover, .stars span.lit { transform: scale(1.2); color: var(--color-primary); }
+@keyframes fadeOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.9); margin-bottom: -60px; } }
+.cancion-item.removing { animation: fadeOut 0.4s ease-out forwards; }
+
+/* --- Estilos para Formularios --- */
+.form-container { animation: fadeIn 0.6s ease-out forwards; }
+.form-title { margin-bottom: 2rem; color: var(--color-text-primary); }
+.input-group { position: relative; margin-bottom: 1.5rem; }
+.password-toggle { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer; user-select: none; }
+.form-footer { text-align: center; margin-top: 1.5rem; }
+.strength-meter { height: 5px; width: 100%; background-color: var(--color-border); border-radius: 5px; margin-top: -10px; margin-bottom: 15px; overflow: hidden; }
+.strength-bar { height: 100%; width: 0; transition: width 0.3s ease, background-color 0.3s ease; }
+.strength-bar.weak { width: 25%; background-color: #ef5350; }
+.strength-bar.medium { width: 50%; background-color: #ffc107; }
+.strength-bar.strong { width: 75%; background-color: #66bb6a; }
+.strength-bar.very-strong { width: 100%; background-color: #4caf50; }
+.password-hint { font-size: 0.8em; color: var(--color-text-secondary); text-align: left; height: 15px; }
+
+
+/* --- BLOQUE AÑADIDO: ESTILOS RESPONSIVE PARA LA TABLA DE RANKING --- */
+@media screen and (max-width: 600px) {
+    table thead {
+        display: none;
+    }
+    table, tbody, tr, td {
+        display: block;
+        width: 100%;
+    }
+    table tr {
+        margin-bottom: 15px;
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    table td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+        border-bottom: 1px solid var(--color-border);
+    }
+    table td:last-child {
+        border-bottom: none;
+    }
+    table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: auto;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+        color: var(--color-primary);
+    }
+}

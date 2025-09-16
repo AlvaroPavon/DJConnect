@@ -1,0 +1,15 @@
+# Archivo .gitignore
+
+# Ignorar la carpeta de dependencias de Node.js
+# Esta carpeta se regenera ejecutando "npm install"
+node_modules/
+
+# Ignorar el archivo con las variables de entorno y claves secretas
+.env
+
+# Opcional: Ignorar archivos de registro de errores de npm
+npm-debug.log*
+
+# Opcional: Ignorar archivos del sistema operativo
+.DS_Store
+Thumbs.db
