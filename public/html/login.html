@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login de DJ</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/login.js" defer></script>
+</head>
+<body>
+    <div class="container form-container">
+        <h1 class="form-title">Iniciar Sesión</h1>
+        <form id="login-form">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Nombre de DJ" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Contraseña" required>
+            </div>
+            <button type="submit">Entrar</button>
+        </form>
+        <div class="form-footer">
+            <p>¿No tienes cuenta? <a href="/html/register.html">Regístrate</a>.</p>
+            <p><a href="/html/forgot-password.html">Olvidé mi contraseña</a></p>
+        </div>
+    </div>
+</body>
+</html>

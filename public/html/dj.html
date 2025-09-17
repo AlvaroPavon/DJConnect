@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del DJ</title>
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1/build/qrcode.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@capacitor/core@latest/dist/capacitor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@capacitor/app@latest/dist/plugin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@capacitor/share@latest/dist/plugin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@capacitor/filesystem@latest/dist/plugin.js"></script>
+
+    <script src="/js/dj.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Panel de Peticiones</h1>
+        
+        <div id="party-setup">
+            <h3>Crea tu Evento</h3>
+            <p>Dale un nombre a tu fiesta. El sistema añadirá un código único para asegurar que no se repita.</p>
+            <input type="text" id="party-name-input" placeholder="Ej: Boda de Ana y Luis">
+            <button id="create-party-btn">Crear Fiesta y Generar QR</button>
+        </div>
+
+        <div id="dashboard-content" style="display: none;">
+            <h2 id="dj-name"></h2>
+            <div class="nav-links">
+                <a id="ranking-link" href="/html/ranking.html">Ver Ranking</a>
+            </div>
+            
+            <h3>Peticiones en Cola:</h3>
+            <ul id="lista-canciones"></ul>
+            <hr>
+
+            <div id="qr-section">
+                <h3>QR de la Fiesta</h3>
+                <p>Muestra o imprime este QR para que tus invitados pidan canciones.</p>
+                <div id="qrcode-container"></div>
+                <button id="share-qr-btn" style="display: none;">Compartir / Guardar QR</button>
+            </div>
+            <button id="btn-nueva-fiesta" style="margin-top: 20px;">🎉 Limpiar Lista</button>
+            <button id="end-party-btn" style="background-color: var(--color-error); margin-top: 10px;">Finalizar y Crear Nueva Fiesta</button>
+        </div>
+    </div>
+</body>
+</html>

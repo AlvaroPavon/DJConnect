@@ -34,9 +34,9 @@ app.use(express.static('public'));
 app.use(express.json());
 
 // --- LÍNEA MODIFICADA ---
-// La ruta raíz ahora siempre redirige a la página de login.
+// La ruta raíz ahora siempre redirige a la página de login dentro de la carpeta html.
 app.get('/', (req, res) => {
-    res.redirect('/login.html');
+    res.redirect('/html/login.html');
 });
 
 
@@ -110,7 +110,7 @@ app.post('/forgot-password', async (req, res) => {
         dj.passwordResetToken = resetToken;
         dj.passwordResetExpires = Date.now() + 3600000;
         await dj.save();
-        const resetUrl = `${process.env.APP_BASE_URL}/reset-password.html?token=${resetToken}`;
+        const resetUrl = `${process.env.APP_BASE_URL}/html/reset-password.html?token=${resetToken}`;
         await transporter.sendMail({
             from: '"DJ Connect App" <alvaropavonmartinez7@gmail.com>',
             to: dj.email,
@@ -164,7 +164,7 @@ app.get('/search', async (req, res) => {
     }
     const query = req.query.q;
     try {
-        const response = await axios.get(`https://api.spotify.com/v1/search?q=$${encodeURIComponent(query)}&type=track&limit=10`, {
+        const response = await axios.get(`https://api.spotify.com/v1/search?q=$$${encodeURIComponent(query)}&type=track&limit=10`, {
             headers: { 'Authorization': `Bearer ${spotifyToken}` }
         });
         const tracks = response.data.tracks.items.map(track => ({
