@@ -197,3 +197,31 @@ table tr:hover { background-color: #2c2c2c; }
         color: var(--color-primary);
     }
 }
+
+/* --- BLOQUE AÑADIDO: Estilos para el contenedor principal y la advertencia --- */
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column; /* Apila los elementos verticalmente */
+  align-items: center;    /* Centra los elementos horizontalmente */
+  width: 100%;
+  max-width: 500px;       /* Mismo ancho que el .container para consistencia */
+}
+
+#warning-banner {
+  color: yellow;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  width: 100%;            /* Ocupa todo el ancho del wrapper */
+  margin-bottom: 20px;    /* Añade un espacio entre la advertencia y el cuadro */
+  border: 1px solid yellow;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 0, 0.1);
+  box-sizing: border-box; /* Asegura que el padding no aumente el ancho total */
+}
+
+#warning-banner p {
+    margin: 0;
+    color: yellow; /* Asegura que el texto dentro del párrafo también sea amarillo */
+}

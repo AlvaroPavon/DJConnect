@@ -10,16 +10,22 @@
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </head>
 <body>
-    <div id="warning-banner">
-        <p>⚠️ Atención: La canción solicitada será puesta según los criterios de los novios y la organización del evento. ⚠️</p>
-    </div>
-    <div class="container">
-        <h1>¡Pide tu Canción!</h1>
-        <div id="search-container">
-            <input type="text" id="search-input" placeholder="Busca por título o artista...">
-            <ul id="suggestions"></ul>
+    <div class="main-wrapper">
+
+        <div id="warning-banner">
+            <p>⚠️ Atención: La canción solicitada será puesta según los criterios de los novios <br>y la organización del evento. ⚠️</p>
         </div>
+
+        <div class="container">
+            <h1>¡Pide tu Canción!</h1>
+            <div id="search-container">
+                <input type="text" id="search-input" placeholder="Busca por título o artista...">
+                <ul id="suggestions"></ul>
+            </div>
+        </div>
+
     </div>
+
     <div id="rating-modal" style="display:none;">
         <div class="modal-content">
             <h3>¿Qué tal lo está haciendo el DJ?</h3>
@@ -29,6 +35,5 @@
             <button id="close-modal">Cerrar</button>
         </div>
     </div>
-
 </body>
 </html>
