@@ -127,10 +127,10 @@ Asegúrate de tener Node.js y npm instalados en tu sistema.
     ```sh
     npm start
     ```
-    La aplicación estará disponible en `http://localhost:3000`.
+    La aplicación estará disponible en `https://djapp.duckdns.org/`.
 
 ---
 
 ## 📄 Licencia
 
-Distribuido bajo la Licencia MIT. Ver `LICENSE.txt` para más información.
+Distribuido bajo la Licencia MIT. Ver `LICENSE.md` para más información.
