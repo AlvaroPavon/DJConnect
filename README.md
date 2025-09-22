@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.png" width="120" alt="DJConnect Logo" />
+  <img src="./public/images/logo.png" width="120" alt="DJConnect Logo" />
 </p>
 
 <div align="center">
@@ -73,11 +73,12 @@ El proyecto sigue una organización modular para separar las responsabilidades:
 
 ```sh
 /
+├── assets/                # Recursos para el README (logo)
+│   └── logo.png
 ├── public/                # Assets del cliente (Frontend)
-│   ├── css/               # Hojas de estilo
-│   ├── html/              # Vistas HTML estáticas
-│   └── js/                # Scripts del lado del cliente
-├── logo.png               # Logo de la aplicación
+│   ├── images/
+│   ├── css/
+│   └── js/
 ├── djModel.js             # Esquema Mongoose para la entidad 'DJ'
 ├── partyModel.js          # Esquema Mongoose para la entidad 'Party'
 ├── server.js              # Lógica principal del servidor, API y Sockets
