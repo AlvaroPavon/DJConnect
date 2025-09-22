@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="#" target="blank"><img src="/images/logo.png" width="120" alt="DJConnect Logo" /></a>
+  <img src="logo.png" width="120" alt="DJConnect Logo" />
 </p>
 
 <div align="center">
@@ -77,6 +77,7 @@ El proyecto sigue una organización modular para separar las responsabilidades:
 │   ├── css/               # Hojas de estilo
 │   ├── html/              # Vistas HTML estáticas
 │   └── js/                # Scripts del lado del cliente
+├── logo.png               # Logo de la aplicación
 ├── djModel.js             # Esquema Mongoose para la entidad 'DJ'
 ├── partyModel.js          # Esquema Mongoose para la entidad 'Party'
 ├── server.js              # Lógica principal del servidor, API y Sockets
@@ -125,7 +126,7 @@ Asegúrate de tener Node.js y npm instalados en tu sistema.
     ```sh
     npm start
     ```
-    La aplicación estará disponible en `https://djapp.duckdns.org/`.
+    La aplicación estará disponible en `http://localhost:3000`.
 
 ---
 
