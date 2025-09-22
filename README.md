@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="#" target="blank"><img src="https://i.imgur.com/your-logo-image-url.png" width="120" alt="DJConnect Logo" /></a>
+  <a href="#" target="blank"><img src="/images/logo.png" width="120" alt="DJConnect Logo" /></a>
 </p>
 
 <div align="center">
