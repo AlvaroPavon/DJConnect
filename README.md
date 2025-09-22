@@ -7,6 +7,10 @@
   <p>Una plataforma web en tiempo real para la gestión interactiva de peticiones musicales en eventos en vivo. Optimizando la conexión entre el DJ y su audiencia.</p>
 </div>
 
+<p align="center">
+  <img src="assets/visualizer_banner.gif" alt="Music Visualizer Banner" width="700px"/>
+</p>
+
 <div align="center">
   <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js"/>
   <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js"/>
@@ -15,7 +19,7 @@
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript"/>
 </div>
 
----
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
 ## 📜 Tabla de Contenidos
 
@@ -25,7 +29,7 @@
 4.  [**Estructura del Directorio**](#-estructura-del-directorio)
 5.  [**Licencia**](#-licencia)
 
----
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
 ## 🚀 Acerca del Proyecto
 
@@ -35,7 +39,7 @@ Los invitados utilizan una interfaz web accesible mediante un código QR para bu
 
 El sistema también incorpora un mecanismo de feedback mediante un sistema de valoración, proveyendo al DJ datos valiosos sobre su rendimiento.
 
----
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
 ## ✨ Funcionalidades Clave
 
@@ -48,7 +52,7 @@ El sistema también incorpora un mecanismo de feedback mediante un sistema de va
 | **Gamificación** | Ranking y Valoraciones | Sistema que agrega las puntuaciones de los invitados para generar un ranking de DJs basado en su rendimiento promedio. |
 | **Accesibilidad** | Código QR y Movilidad | Generación de códigos QR en el frontend para un acceso instantáneo. `CapacitorJS` se utiliza para habilitar la compartición nativa en dispositivos móviles. |
 
----
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
 ## 🛠️ Stack Tecnológico
 
@@ -62,7 +66,7 @@ La arquitectura de la aplicación se basa en las siguientes tecnologías:
 | **Frontend** | **HTML5, CSS3, Vanilla JS** | Estructura, diseño e interactividad del lado del cliente sin dependencias de frameworks. |
 | **Servicios Externos** | **API de Spotify** | Provee el catálogo de búsqueda de canciones para los invitados. |
 
----
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
 ## 📁 Estructura del Directorio
 
@@ -70,20 +74,15 @@ El proyecto sigue una organización modular para separar las responsabilidades:
 
 ```sh
 /
-├── assets/                # Recursos para el README (logo)
-│   └── logo.png
+├── assets/                # Recursos para el README (logo, gifs)
+│   ├── logo.png
+│   ├── visualizer_banner.gif
+│   └── wave_divider.gif
 ├── public/                # Assets del cliente (Frontend)
-│   ├── images/
-│   ├── css/
-│   └── js/
-├── djModel.js             # Esquema Mongoose para la entidad 'DJ'
-├── partyModel.js          # Esquema Mongoose para la entidad 'Party'
-├── server.js              # Lógica principal del servidor, API y Sockets
-├── package.json           # Dependencias y scripts de Node.js
-└── .env.example           # Plantilla para variables de entorno
+# ... resto de la estructura
 ```
 
----
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
 ## 📄 Licencia
 
