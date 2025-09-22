@@ -23,10 +23,7 @@
 2.  [**Funcionalidades Clave**](#-funcionalidades-clave)
 3.  [**Stack Tecnológico**](#-stack-tecnológico)
 4.  [**Estructura del Directorio**](#-estructura-del-directorio)
-5.  [**Primeros Pasos**](#-primeros-pasos)
-    * [Prerrequisitos](#prerrequisitos)
-    * [Instalación](#instalación)
-6.  [**Licencia**](#-licencia)
+5.  [**Licencia**](#-licencia)
 
 ---
 
@@ -88,49 +85,6 @@ El proyecto sigue una organización modular para separar las responsabilidades:
 
 ---
 
-## 🏁 Primeros Pasos
-
-Para ejecutar una instancia local de este proyecto, sigue estos pasos.
-
-### Prerrequisitos
-
-Asegúrate de tener Node.js y npm instalados en tu sistema.
-* **npm**
-    ```sh
-    npm install npm@latest -g
-    ```
-* Una instancia de MongoDB (local o en la nube).
-* Credenciales de la API de Spotify y de un servicio SMTP (como SendGrid).
-
-### Instalación
-
-1.  **Clona el repositorio**
-    ```sh
-    git clone [https://github.com/tu-usuario/djconnect.git](https://github.com/tu-usuario/djconnect.git)
-    ```
-2.  **Instala las dependencias**
-    ```sh
-    cd djconnect
-    npm install
-    ```
-3.  **Configura las variables de entorno**
-    Crea un archivo `.env` en la raíz del proyecto y añade las claves necesarias (ver `.env.example`).
-    ```
-    MONGO_URI=tu_uri_de_mongodb
-    JWT_SECRET=tu_clave_secreta
-    SPOTIFY_CLIENT_ID=tu_client_id
-    SPOTIFY_CLIENT_SECRET=tu_client_secret
-    SENDGRID_API_KEY=tu_api_key
-    APP_BASE_URL=http://localhost:3000
-    ```
-4.  **Inicia el servidor**
-    ```sh
-    npm start
-    ```
-    La aplicación estará disponible en `https://djapp.duckdns.org/`.
-
----
-
 ## 📄 Licencia
 
-Distribuido bajo la Licencia MIT. Ver `LICENSE.md` para más información.
+Este proyecto se distribuye bajo una licencia propietaria. Consulta el archivo `LICENSE.md` para más detalles.
