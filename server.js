@@ -396,6 +396,20 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('hide-song', async (data) => {
+        const { partyId, songId } = data;
+        try {
+            await Party.updateOne(
+                { "partyId": partyId, "songRequests._id": songId },
+                { "$set": { "songRequests.$.hidden": true } }
+            );
+            console.log(`🚫 Canción ${songId} ocultada en la fiesta ${partyId}`);
+            io.to(partyId).emit('song-was-hidden', songId);
+        } catch (error) {
+            console.error('Error al ocultar la canción:', error);
+        }
+    });
+
     socket.on('disconnect', () => {
         console.log(`🔌 Un cliente se ha desconectado: ${socket.id}`);
     });
