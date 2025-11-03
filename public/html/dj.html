@@ -18,6 +18,11 @@
     <script src="/js/dj.js" defer></script>
 </head>
 <body>
+    <!-- Banner publicitario superior -->
+    <div class="ad-banner ad-banner-top">
+        📢 Espacio Publicitario - 728x90
+    </div>
+
     <div class="container">
         <h1>Panel de Peticiones</h1>
         
@@ -32,6 +37,15 @@
             <h2 id="dj-name"></h2>
             <div class="nav-links">
                 <a id="ranking-link" href="/html/ranking.html">Ver Ranking</a>
+                <a id="history-link" href="/html/history.html">Historial de Fiestas</a>
+            </div>
+            
+            <!-- Stats Panel -->
+            <div class="stats-panel">
+                <h3>📊 Estadísticas en Vivo</h3>
+                <p><strong>Total de peticiones:</strong> <span id="total-songs">0</span></p>
+                <p><strong>Género más pedido:</strong> <span id="top-genre">-</span></p>
+                <div class="genre-stats" id="genre-stats"></div>
             </div>
             
             <h3>Peticiones en Cola:</h3>
@@ -47,6 +61,11 @@
             <button id="btn-nueva-fiesta" style="margin-top: 20px;">🎉 Limpiar Lista</button>
             <button id="end-party-btn" style="background-color: var(--color-error); margin-top: 10px;">Finalizar y Crear Nueva Fiesta</button>
         </div>
+    </div>
+
+    <!-- Banner publicitario inferior -->
+    <div class="ad-banner ad-banner-bottom">
+        📢 Espacio Publicitario - 728x90
     </div>
 </body>
 </html>
