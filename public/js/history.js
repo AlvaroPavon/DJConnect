@@ -3,7 +3,7 @@ if (!token) {
     window.location.href = '/html/login.html';
 }
 
-const serverUrl = "https://djapp.duckdns.org";
+const serverUrl = window.SERVER_URL || window.location.origin;
 
 async function loadHistory() {
     const loadingMessage = document.getElementById('loading-message');
