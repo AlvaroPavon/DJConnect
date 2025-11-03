@@ -346,17 +346,19 @@ io.on('connection', (socket) => {
     });
 
     socket.on('nueva-cancion', async (peticion) => {
-        const { salaId, titulo, artista } = peticion;
+        const { salaId, titulo, artista, genre } = peticion;
         const songId = new mongoose.Types.ObjectId();
         const cancionConHora = {
             _id: songId,
             titulo: titulo,
             artista: artista,
-            hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+            hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+            genre: genre || 'Desconocido',
+            hidden: false
         };
         try {
             await Party.updateOne({ partyId: salaId }, { $push: { songRequests: cancionConHora } });
-            console.log(`🎵 Nueva petición para la sala [${salaId}]: ${titulo}`);
+            console.log(`🎵 Nueva petición para la sala [${salaId}]: ${titulo} - Género: ${genre}`);
             io.to(salaId).emit('recibir-cancion', cancionConHora);
         } catch (error) {
             console.error('Error al guardar la canción:', error);
