@@ -164,14 +164,34 @@ app.get('/search', async (req, res) => {
     }
     const query = req.query.q;
     try {
-        const response = await axios.get(`https://api.spotify.com/v1/search?q=$$${encodeURIComponent(query)}&type=track&limit=10`, {
+        const response = await axios.get(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10`, {
             headers: { 'Authorization': `Bearer ${spotifyToken}` }
         });
-        const tracks = response.data.tracks.items.map(track => ({
-            titulo: track.name,
-            artista: track.artists.map(artist => artist.name).join(', ')
+        
+        const tracksWithGenres = await Promise.all(response.data.tracks.items.map(async track => {
+            let genre = 'Desconocido';
+            try {
+                if (track.artists && track.artists.length > 0) {
+                    const artistId = track.artists[0].id;
+                    const artistResponse = await axios.get(`https://api.spotify.com/v1/artists/${artistId}`, {
+                        headers: { 'Authorization': `Bearer ${spotifyToken}` }
+                    });
+                    if (artistResponse.data.genres && artistResponse.data.genres.length > 0) {
+                        genre = artistResponse.data.genres[0];
+                    }
+                }
+            } catch (err) {
+                console.error('Error obteniendo género:', err.message);
+            }
+            
+            return {
+                titulo: track.name,
+                artista: track.artists.map(artist => artist.name).join(', '),
+                genre: genre
+            };
         }));
-        res.json(tracks);
+        
+        res.json(tracksWithGenres);
     } catch (error) {
         res.status(500).json({ error: 'Error al buscar en Spotify.' });
     }
