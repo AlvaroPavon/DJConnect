@@ -1,7 +1,7 @@
 const token = localStorage.getItem('dj-token');
 if (!token) window.location.href = '/html/login.html'; // <-- RUTA CORREGIDA
 
-const serverUrl = "https://djapp.duckdns.org";
+const serverUrl = window.SERVER_URL || window.location.origin;
 
 async function loadRanking() {
     const response = await fetch(`${serverUrl}/ranking`, {
