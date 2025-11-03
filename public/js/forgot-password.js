@@ -1,5 +1,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get('token');
+const serverUrl = window.SERVER_URL || window.location.origin;
 
 document.getElementById('reset-form').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -10,7 +11,7 @@ document.getElementById('reset-form').addEventListener('submit', async (e) => {
         return alert('Las contraseñas no coinciden.');
     }
 
-    const response = await fetch('/reset-password', {
+    const response = await fetch(`${serverUrl}/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: token, password: password })
