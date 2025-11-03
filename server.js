@@ -21,15 +21,36 @@ const app = express();
 const server = http.createServer(app);
 
 // Opciones de CORS
+const allowedOrigins = [
+    "http://localhost:3000", 
+    "http://localhost:8001",
+    "https://localhost", 
+    "https://djapp.duckdns.org", 
+    "http://localhost:5173"
+];
+
+// Agregar FRONTEND_URL del entorno si existe
+if (process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
 const corsOptions = {
-    origin: [
-        "http://localhost:3000", 
-        "http://localhost:8001",
-        "https://localhost", 
-        "https://djapp.duckdns.org", 
-        "http://localhost:5173",
-        process.env.FRONTEND_URL || "http://localhost:3000"
-    ].filter(Boolean),
+    origin: function (origin, callback) {
+        // Permitir requests sin origin (como mobile apps o curl)
+        if (!origin) return callback(null, true);
+        
+        // Permitir dominios en la lista
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            return callback(null, true);
+        }
+        
+        // Permitir cualquier dominio emergent.host para producción
+        if (origin.includes('.emergent.host') || origin.includes('emergent.host')) {
+            return callback(null, true);
+        }
+        
+        callback(new Error('Not allowed by CORS'));
+    },
     methods: ["GET", "POST"],
     credentials: true
 };
