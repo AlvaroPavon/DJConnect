@@ -48,6 +48,33 @@ body {
     animation: fadeIn 0.6s ease-out forwards;
 }
 
+/* --- BANNERS PUBLICITARIOS --- */
+.ad-banner {
+    width: 100%;
+    max-width: 728px;
+    min-height: 90px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px dashed var(--color-border);
+    border-radius: 8px;
+    margin: 15px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.ad-banner-top {
+    margin-bottom: 20px;
+}
+
+.ad-banner-bottom {
+    margin-top: 20px;
+}
+
 h1, h2, h3, p {
     text-align: center;
     color: var(--color-primary);
@@ -120,15 +147,108 @@ button:active {
 #suggestions li:hover { background-color: var(--color-primary); color: var(--color-background); }
 
 /* --- Panel del DJ y Ranking --- */
-#lista-canciones { list-style: none; padding: 0; max-height: 400px; overflow-y: auto; border: 1px solid var(--color-border); border-radius: 8px; padding: 10px; }
-.cancion-item { background-color: #2c2c2c; border-left: 5px solid var(--color-primary); margin-bottom: 10px; padding: 15px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; transition: all 0.4s ease; }
-.cancion-info strong { font-size: 1.1em; color: var(--color-text-primary); }
+#lista-canciones { 
+    list-style: none; 
+    padding: 0; 
+    max-height: 500px; 
+    overflow-y: auto; 
+    border: 1px solid var(--color-border); 
+    border-radius: 8px; 
+    padding: 10px; 
+}
+
+.cancion-item { 
+    background-color: #2c2c2c; 
+    border-left: 5px solid var(--color-primary); 
+    margin-bottom: 10px; 
+    padding: 15px; 
+    border-radius: 5px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    transition: all 0.4s ease;
+    flex-wrap: wrap;
+}
+
+.cancion-info { 
+    flex: 1;
+    min-width: 200px;
+}
+
+.cancion-info strong { font-size: 1.1em; color: var(--color-text-primary); display: block; }
 .cancion-info em { font-size: 0.9em; color: var(--color-text-secondary); display: block; margin-top: 5px; }
+.cancion-info .genre-tag { 
+    display: inline-block;
+    font-size: 0.75em; 
+    color: var(--color-secondary); 
+    background-color: rgba(3, 218, 198, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 5px;
+    font-style: normal;
+}
+
 .cancion-item.played { background-color: #222; border-left-color: var(--color-secondary); opacity: 0.6; }
-.cancion-item.played .cancion-info { text-decoration: line-through; }
-.btn-played { padding: 8px 12px; font-size: 12px; background-color: #333; color: var(--color-secondary); border: 1px solid var(--color-secondary); width: auto; margin-left: 15px; }
+.cancion-item.played .cancion-info strong { text-decoration: line-through; }
+
+.cancion-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-played, .btn-hide { 
+    padding: 8px 12px; 
+    font-size: 12px; 
+    background-color: #333; 
+    color: var(--color-secondary); 
+    border: 1px solid var(--color-secondary); 
+    width: auto; 
+    margin: 0;
+}
+
+.btn-hide {
+    color: var(--color-error);
+    border-color: var(--color-error);
+}
+
 .btn-played:disabled { background-color: var(--color-surface); color: #666; border-color: #444; cursor: not-allowed; }
-.btn-played:disabled:hover { transform: none; box-shadow: none; }
+.btn-played:disabled:hover, .btn-hide:disabled:hover { transform: none; box-shadow: none; }
+
+/* --- Stats Panel --- */
+.stats-panel {
+    background-color: rgba(187, 134, 252, 0.1);
+    border: 1px solid var(--color-primary);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.stats-panel h3 {
+    margin-top: 0;
+    color: var(--color-primary);
+}
+
+.genre-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.genre-badge {
+    background-color: rgba(3, 218, 198, 0.2);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    border: 1px solid var(--color-secondary);
+}
+
+.genre-badge.top {
+    background-color: rgba(187, 134, 252, 0.3);
+    border-color: var(--color-primary);
+    font-weight: bold;
+}
 
 table { width: 100%; border-collapse: collapse; text-align: left; }
 table th { padding: 12px; background-color: #333; color: var(--color-secondary); }
@@ -138,7 +258,7 @@ table tr:hover { background-color: #2c2c2c; }
 
 /* --- Modal y Animaciones --- */
 #rating-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(5px); animation: fadeIn 0.3s ease forwards; }
-.modal-content { background: var(--color-surface); padding: 25px; border-radius: 12px; text-align: center; }
+.modal-content { background: var(--color-surface); padding: 25px; border-radius: 12px; text-align: center; max-width: 90%; }
 .stars span { font-size: 3.5em; cursor: pointer; color: #444; transition: transform 0.2s ease, color 0.2s ease; display: inline-block; }
 .stars span:hover, .stars span.lit { transform: scale(1.2); color: var(--color-primary); }
 @keyframes fadeOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.9); margin-bottom: -60px; } }
@@ -158,8 +278,27 @@ table tr:hover { background-color: #2c2c2c; }
 .strength-bar.very-strong { width: 100%; background-color: #4caf50; }
 .password-hint { font-size: 0.8em; color: var(--color-text-secondary); text-align: left; height: 15px; }
 
+.nav-links {
+    text-align: center;
+    margin: 15px 0;
+}
 
-/* --- BLOQUE AÑADIDO: ESTILOS RESPONSIVE PARA LA TABLA DE RANKING --- */
+.nav-links a {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 8px 15px;
+    background-color: rgba(187, 134, 252, 0.1);
+    border: 1px solid var(--color-primary);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+}
+
+/* --- RESPONSIVE PARA TABLA DE RANKING --- */
 @media screen and (max-width: 600px) {
     table thead {
         display: none;
@@ -199,13 +338,12 @@ table tr:hover { background-color: #2c2c2c; }
 }
 
 /* --- BLOQUE AÑADIDO: Estilos para el contenedor principal y la advertencia --- */
-
 .main-wrapper {
   display: flex;
-  flex-direction: column; /* Apila los elementos verticalmente */
-  align-items: center;    /* Centra los elementos horizontalmente */
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  max-width: 500px;       /* Mismo ancho que el .container para consistencia */
+  max-width: 500px;
 }
 
 #warning-banner {
@@ -213,15 +351,127 @@ table tr:hover { background-color: #2c2c2c; }
   text-align: center;
   padding: 10px;
   font-weight: bold;
-  width: 100%;            /* Ocupa todo el ancho del wrapper */
-  margin-bottom: 20px;    /* Añade un espacio entre la advertencia y el cuadro */
+  width: 100%;
+  margin-bottom: 20px;
   border: 1px solid yellow;
   border-radius: 8px;
   background-color: rgba(255, 255, 0, 0.1);
-  box-sizing: border-box; /* Asegura que el padding no aumente el ancho total */
+  box-sizing: border-box;
 }
 
 #warning-banner p {
     margin: 0;
-    color: yellow; /* Asegura que el texto dentro del párrafo también sea amarillo */
+    color: yellow;
+}
+
+/* --- RESPONSIVE DESIGN PARA MÓVILES --- */
+@media screen and (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    h2 {
+        font-size: 1.3em;
+    }
+
+    h3 {
+        font-size: 1.1em;
+    }
+
+    button {
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .cancion-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cancion-info {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .cancion-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .btn-played, .btn-hide {
+        flex: 1;
+        min-width: 80px;
+    }
+
+    #qrcode-container canvas {
+        max-width: 100%;
+        height: auto !important;
+    }
+
+    .stars span {
+        font-size: 2.5em;
+    }
+
+    .modal-content {
+        padding: 20px;
+        margin: 0 10px;
+    }
+
+    #lista-canciones {
+        max-height: 400px;
+    }
+
+    .ad-banner {
+        min-height: 60px;
+        font-size: 12px;
+        max-width: 100%;
+    }
+
+    .stats-panel {
+        padding: 10px;
+    }
+
+    .genre-badge {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .nav-links a {
+        display: block;
+        margin: 5px 0;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    h1 {
+        font-size: 1.3em;
+    }
+
+    .container {
+        padding: 12px;
+    }
+
+    .cancion-info strong {
+        font-size: 1em;
+    }
+
+    .cancion-info em {
+        font-size: 0.85em;
+    }
 }
