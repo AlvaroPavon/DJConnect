@@ -1,5 +1,5 @@
 // --- Define la URL completa de tu servidor ---
-const serverUrl = 'https://djapp.duckdns.org';
+const serverUrl = window.SERVER_URL || window.location.origin;
 
 const passwordInput = document.getElementById('password');
 const passwordToggle = document.querySelector('.password-toggle');
