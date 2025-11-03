@@ -6,7 +6,7 @@ if (!token) {
     window.location.href = '/html/login.html';
 }
 
-const serverUrl = "https://djapp.duckdns.org";
+const serverUrl = window.SERVER_URL || window.location.origin;
 
 const partySetupSection = document.getElementById('party-setup');
 const dashboardContentSection = document.getElementById('dashboard-content');
