@@ -22,8 +22,16 @@ const server = http.createServer(app);
 
 // Opciones de CORS
 const corsOptions = {
-    origin: ["http://localhost:3000", "https://localhost", "https://djapp.duckdns.org", "http://localhost:5173"],
-    methods: ["GET", "POST"]
+    origin: [
+        "http://localhost:3000", 
+        "http://localhost:8001",
+        "https://localhost", 
+        "https://djapp.duckdns.org", 
+        "http://localhost:5173",
+        process.env.FRONTEND_URL || "http://localhost:3000"
+    ].filter(Boolean),
+    methods: ["GET", "POST"],
+    credentials: true
 };
 app.use(cors(corsOptions));
 const io = new Server(server, {
