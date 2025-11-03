@@ -8,20 +8,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const salaId = urlParams.get('dj');
     const stars = document.querySelectorAll('.stars span');
 
-    // --- LÓGICA MODIFICADA ---
-    // Si no hay ID de sala en la URL, redirige al login.
     if (!salaId) {
-        window.location.href = '/html/login.html'; // <-- RUTA CORREGIDA
-        return; // Detiene la ejecución del resto del script
+        window.location.href = '/html/login.html';
+        return;
     }
 
-    // --- LÓGICA DE BÚSQUEDA ---
     let searchTimeout;
     searchInput.addEventListener('keyup', () => {
         clearTimeout(searchTimeout);
         const query = searchInput.value;
         if (query.length < 3) {
-            suggestionsList.innerHTML = ''; return;
+            suggestionsList.innerHTML = ''; 
+            return;
         }
         searchTimeout = setTimeout(async () => {
             const response = await fetch(`${serverUrl}/search?q=${encodeURIComponent(query)}`);
@@ -31,32 +29,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 const item = document.createElement('li');
                 item.dataset.titulo = song.titulo;
                 item.dataset.artista = song.artista;
+                item.dataset.genre = song.genre || 'Desconocido';
                 item.textContent = `${song.titulo} - ${song.artista}`;
                 suggestionsList.appendChild(item);
             });
         }, 300);
     });
 
-    // --- LÓGICA DE CLIC EN SUGERENCIA ---
     suggestionsList.addEventListener('click', (event) => {
         const listItem = event.target.closest('li');
         if (listItem) {
             const song = {
                 titulo: listItem.dataset.titulo,
-                artista: listItem.dataset.artista
+                artista: listItem.dataset.artista,
+                genre: listItem.dataset.genre
             };
             selectSong(song);
         }
     });
 
     function selectSong(song) {
-        socket.emit('nueva-cancion', { salaId: salaId, titulo: song.titulo, artista: song.artista });
+        socket.emit('nueva-cancion', { 
+            salaId: salaId, 
+            titulo: song.titulo, 
+            artista: song.artista,
+            genre: song.genre 
+        });
         searchInput.value = '';
         suggestionsList.innerHTML = '';
         ratingModal.style.display = 'flex';
     }
 
-    // --- LÓGICA DE VALORACIÓN ---
     stars.forEach(star => {
         star.addEventListener('click', () => {
             const rating = star.getAttribute('data-value');
