@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const serverUrl = "https://djapp.duckdns.org";
+    const serverUrl = window.SERVER_URL || window.location.origin;
     const socket = io(serverUrl, { transports: ["websocket"] });
     const searchInput = document.getElementById('search-input');
     const suggestionsList = document.getElementById('suggestions');
