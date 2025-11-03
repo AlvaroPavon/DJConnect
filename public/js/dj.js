@@ -82,29 +82,75 @@ function runDashboard(currentPartyId) {
     
     socket.emit('join-dj-room', currentPartyId);
     
+    let allSongs = [];
+    
+    const updateStats = () => {
+        const visibleSongs = allSongs.filter(s => !s.hidden);
+        document.getElementById('total-songs').textContent = visibleSongs.length;
+        
+        // Calcular géneros
+        const genreCounts = {};
+        visibleSongs.forEach(song => {
+            const genre = song.genre || 'Desconocido';
+            genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+        });
+        
+        // Ordenar por cantidad
+        const sortedGenres = Object.entries(genreCounts).sort((a, b) => b[1] - a[1]);
+        const topGenre = sortedGenres.length > 0 ? sortedGenres[0][0] : '-';
+        document.getElementById('top-genre').textContent = topGenre;
+        
+        // Mostrar badges de géneros
+        const genreStatsDiv = document.getElementById('genre-stats');
+        genreStatsDiv.innerHTML = '';
+        sortedGenres.forEach(([genre, count], index) => {
+            const badge = document.createElement('div');
+            badge.className = index === 0 ? 'genre-badge top' : 'genre-badge';
+            badge.textContent = `${genre}: ${count}`;
+            genreStatsDiv.appendChild(badge);
+        });
+    };
+    
     const createSongItem = (cancion) => {
         const item = document.createElement('li');
         item.className = 'cancion-item';
         item.id = cancion._id;
         if (cancion.played) item.classList.add('played');
+        
+        const genreTag = cancion.genre && cancion.genre !== 'Desconocido' 
+            ? `<span class="genre-tag">🎵 ${cancion.genre}</span>` 
+            : '';
+        
         item.innerHTML = `
             <div class="cancion-info">
                 <strong>${cancion.titulo}</strong>
                 <em>${cancion.artista} (Pedido a las ${cancion.hora})</em>
+                ${genreTag}
             </div>
-            <button class="btn-played" data-songid="${cancion._id}" ${cancion.played ? 'disabled' : ''}>
-                ${cancion.played ? 'Puesta ✓' : 'Marcar Puesta'}
-            </button>`;
+            <div class="cancion-actions">
+                <button class="btn-played" data-songid="${cancion._id}" ${cancion.played ? 'disabled' : ''}>
+                    ${cancion.played ? 'Puesta ✓' : 'Marcar Puesta'}
+                </button>
+                <button class="btn-hide" data-songid="${cancion._id}">
+                    🗑️ Ocultar
+                </button>
+            </div>`;
         return item;
     };
 
     socket.on('load-initial-songs', (songs) => {
+        allSongs = songs.filter(s => !s.hidden);
         listaCanciones.innerHTML = '';
-        songs.forEach(cancion => listaCanciones.appendChild(createSongItem(cancion)));
+        allSongs.forEach(cancion => listaCanciones.appendChild(createSongItem(cancion)));
+        updateStats();
     });
 
     socket.on('recibir-cancion', (cancion) => {
-        listaCanciones.prepend(createSongItem(cancion));
+        if (!cancion.hidden) {
+            allSongs.unshift(cancion);
+            listaCanciones.prepend(createSongItem(cancion));
+            updateStats();
+        }
     });
 
     socket.on('song-was-played', (songId) => {
@@ -114,14 +160,38 @@ function runDashboard(currentPartyId) {
             const button = item.querySelector('.btn-played');
             button.textContent = 'Puesta ✓';
             button.disabled = true;
+            
+            const song = allSongs.find(s => s._id === songId);
+            if (song) song.played = true;
+        }
+    });
+
+    socket.on('song-was-hidden', (songId) => {
+        const item = document.getElementById(songId);
+        if (item) {
+            item.classList.add('removing');
+            item.addEventListener('animationend', () => {
+                item.remove();
+                allSongs = allSongs.filter(s => s._id !== songId);
+                updateStats();
+            });
         }
     });
 
     listaCanciones.addEventListener('click', (event) => {
-        const button = event.target.closest('.btn-played');
-        if (button && !button.disabled) {
-            const songId = button.getAttribute('data-songid');
+        const playedButton = event.target.closest('.btn-played');
+        const hideButton = event.target.closest('.btn-hide');
+        
+        if (playedButton && !playedButton.disabled) {
+            const songId = playedButton.getAttribute('data-songid');
             socket.emit('mark-song-as-played', { partyId: currentPartyId, songId: songId });
+        }
+        
+        if (hideButton) {
+            const songId = hideButton.getAttribute('data-songid');
+            if (confirm('¿Ocultar esta canción? Se mantendrá en la base de datos para estadísticas.')) {
+                socket.emit('hide-song', { partyId: currentPartyId, songId: songId });
+            }
         }
     });
 
@@ -135,10 +205,11 @@ function runDashboard(currentPartyId) {
                     item.addEventListener('animationend', () => item.remove());
                 }, index * 50);
             });
+            allSongs = [];
+            updateStats();
         }
     });
     
-    // --- ESTA ES LA LÍNEA CLAVE ---
     const guestUrl = `${serverUrl}/index.html?dj=${currentPartyId}`;
     qrcodeContainer.innerHTML = '';
     const canvas = document.createElement('canvas');
@@ -181,7 +252,7 @@ function runDashboard(currentPartyId) {
     
     const endPartyBtn = document.getElementById('end-party-btn');
     endPartyBtn.addEventListener('click', async () => {
-        if (confirm('¿Estás seguro de que quieres finalizar esta fiesta?')) {
+        if (confirm('¿Estás seguro de que quieres finalizar esta fiesta? Se guardarán todas las estadísticas.')) {
             try {
                 const response = await fetch(`${serverUrl}/api/end-party`, {
                     method: 'POST',
@@ -189,6 +260,7 @@ function runDashboard(currentPartyId) {
                 });
 
                 if (response.ok) {
+                    alert('¡Fiesta finalizada! Las estadísticas se han guardado.');
                     window.location.href = '/html/dj.html';
                 } else {
                     const errorData = await response.json();
