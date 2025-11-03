@@ -2,7 +2,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    const serverUrl = 'https://djapp.duckdns.org';
+    const serverUrl = window.SERVER_URL || window.location.origin;
 
     const response = await fetch(`${serverUrl}/login`, {
         method: 'POST',
