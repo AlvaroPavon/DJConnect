@@ -247,9 +247,66 @@ app.get('/api/active-party', authenticateToken, async (req, res) => {
 
 app.post('/api/end-party', authenticateToken, async (req, res) => {
     try {
+        const dj = await DJ.findById(req.user.id);
+        if (!dj || !dj.activePartyId) {
+            return res.status(400).json({ message: 'No hay una fiesta activa.' });
+        }
+        
+        const party = await Party.findOne({ partyId: dj.activePartyId });
+        if (party) {
+            // Calcular estadísticas
+            const totalSongs = party.songRequests.length;
+            
+            // Calcular género más pedido
+            const genreCounts = {};
+            party.songRequests.forEach(song => {
+                const genre = song.genre || 'Desconocido';
+                genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+            });
+            let topGenre = 'Desconocido';
+            let maxCount = 0;
+            for (const [genre, count] of Object.entries(genreCounts)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    topGenre = genre;
+                }
+            }
+            
+            // Calcular valoración media de esta fiesta específica
+            const partyRatings = dj.ratings.filter(r => 
+                r.date >= party.createdAt && (!party.endDate || r.date <= party.endDate)
+            );
+            const averageRating = partyRatings.length > 0 
+                ? partyRatings.reduce((acc, r) => acc + r.value, 0) / partyRatings.length 
+                : 0;
+            
+            // Actualizar la fiesta con las estadísticas
+            party.isActive = false;
+            party.endDate = new Date();
+            party.totalSongs = totalSongs;
+            party.topGenre = topGenre;
+            party.averageRating = parseFloat(averageRating.toFixed(2));
+            await party.save();
+        }
+        
         await DJ.updateOne({ _id: req.user.id }, { activePartyId: null });
         res.json({ message: 'Fiesta finalizada con éxito.' });
     } catch (error) {
+        console.error('Error al finalizar fiesta:', error);
+        res.status(500).json({ message: 'Error en el servidor.' });
+    }
+});
+
+app.get('/api/party-history', authenticateToken, async (req, res) => {
+    try {
+        const parties = await Party.find({ 
+            djUsername: req.user.username,
+            isActive: false 
+        }).sort({ endDate: -1 });
+        
+        res.json(parties);
+    } catch (error) {
+        console.error('Error al obtener historial:', error);
         res.status(500).json({ message: 'Error en el servidor.' });
     }
 });
