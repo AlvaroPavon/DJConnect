@@ -108,52 +108,96 @@ body {
     margin-top: 20px;
 }
 
-/* Banners optimizados para tablets */
+/* Layout de 3 columnas para móvil */
 @media screen and (max-width: 768px) {
-    .ad-banner {
-        min-height: 50px;
-        max-height: 50px;
-        font-size: 11px;
-        padding: 5px;
-        margin: 8px auto;
-        opacity: 0.8;
+    body {
+        display: block;
+        padding: 0;
+        min-height: 100vh;
     }
     
-    .ad-banner-top {
-        margin-bottom: 8px;
+    /* Contenedor principal con grid */
+    .mobile-layout {
+        display: grid;
+        grid-template-columns: 60px 1fr 60px;
+        grid-template-areas: 
+            "ad-left content ad-right";
+        min-height: 100vh;
+        gap: 0;
     }
     
-    .ad-banner-bottom {
-        margin-top: 12px;
-    }
-}
-
-/* Banners mínimos en móviles pequeños */
-@media screen and (max-width: 480px) {
-    /* Banner superior muy compacto */
-    .ad-banner-top {
-        min-height: 32px;
-        max-height: 32px;
+    /* Publicidad lateral izquierda */
+    .ad-banner-left {
+        grid-area: ad-left;
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        min-height: 100vh;
+        width: 60px;
+        min-width: 60px;
+        max-width: 60px;
+        margin: 0;
+        border-radius: 0;
         font-size: 8px;
-        margin: 3px auto 8px;
-        padding: 3px;
-        border-radius: 4px;
-        opacity: 0.6;
+        padding: 5px 2px;
+        position: sticky;
+        top: 0;
+        background-color: rgba(255, 255, 255, 0.03);
+        border-right: 1px dashed var(--color-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
-    /* Banner inferior oculto para maximizar espacio útil */
+    /* Publicidad lateral derecha */
+    .ad-banner-right {
+        grid-area: ad-right;
+        writing-mode: vertical-rl;
+        min-height: 100vh;
+        width: 60px;
+        min-width: 60px;
+        max-width: 60px;
+        margin: 0;
+        border-radius: 0;
+        font-size: 8px;
+        padding: 5px 2px;
+        position: sticky;
+        top: 0;
+        background-color: rgba(255, 255, 255, 0.03);
+        border-left: 1px dashed var(--color-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Área de contenido centrada */
+    .mobile-content-area {
+        grid-area: content;
+        padding: 15px 10px;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    /* Ocultar banners horizontales en móvil */
+    .ad-banner-top,
     .ad-banner-bottom {
         display: none;
     }
 }
 
-/* Banner aún más pequeño en pantallas muy pequeñas */
-@media screen and (max-width: 360px) {
-    .ad-banner-top {
-        min-height: 28px;
-        max-height: 28px;
+/* Móviles muy pequeños - publicidad aún más delgada */
+@media screen and (max-width: 400px) {
+    .mobile-layout {
+        grid-template-columns: 40px 1fr 40px;
+    }
+    
+    .ad-banner-left,
+    .ad-banner-right {
+        width: 40px;
+        min-width: 40px;
+        max-width: 40px;
         font-size: 7px;
-        margin: 2px auto 5px;
     }
 }
 
