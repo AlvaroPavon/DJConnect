@@ -259,6 +259,29 @@ button:active {
 #suggestions li:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
 #suggestions li:hover { background-color: var(--color-primary); color: var(--color-background); }
 
+/* Optimización de sugerencias para móvil */
+@media screen and (max-width: 600px) {
+    #suggestions {
+        max-height: 220px;
+    }
+    
+    #suggestions li {
+        padding: 12px;
+        font-size: 0.95em;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    #suggestions {
+        max-height: 200px;
+    }
+    
+    #suggestions li {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+}
+
 /* --- Panel del DJ y Ranking --- */
 #lista-canciones { 
     list-style: none; 
