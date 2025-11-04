@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pide tu Canción</title>
     <link rel="stylesheet" href="/css/style.css">
     
@@ -11,26 +11,40 @@
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </head>
 <body>
-    <!-- Banner publicitario superior -->
+    <!-- Banner publicitario superior (solo desktop) -->
     <div class="ad-banner ad-banner-top">
         📢 Espacio Publicitario - 728x90
     </div>
 
-    <div class="main-wrapper">
-        <div id="warning-banner">
-            <p>⚠️ Atención: La canción solicitada será puesta según los criterios de los novios <br>y la organización del evento. ⚠️</p>
+    <!-- Layout móvil de 3 columnas -->
+    <div class="mobile-layout">
+        <!-- Publicidad lateral izquierda (solo móvil) -->
+        <div class="ad-banner-left">
+            📢 Publicidad
         </div>
 
-        <div class="container">
-            <h1>¡Pide tu Canción!</h1>
-            <div id="search-container">
-                <input type="text" id="search-input" placeholder="Busca por título o artista...">
-                <ul id="suggestions"></ul>
+        <!-- Área de contenido principal -->
+        <div class="mobile-content-area">
+            <div id="warning-banner">
+                <p>⚠️ Atención: La canción solicitada será puesta según los criterios de los novios <br>y la organización del evento. ⚠️</p>
             </div>
+
+            <div class="container">
+                <h1>¡Pide tu Canción!</h1>
+                <div id="search-container">
+                    <input type="text" id="search-input" placeholder="Busca por título o artista...">
+                    <ul id="suggestions"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Publicidad lateral derecha (solo móvil) -->
+        <div class="ad-banner-right">
+            📢 Publicidad
         </div>
     </div>
 
-    <!-- Banner publicitario inferior -->
+    <!-- Banner publicitario inferior (solo desktop) -->
     <div class="ad-banner ad-banner-bottom">
         📢 Espacio Publicitario - 728x90
     </div>
