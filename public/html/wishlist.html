@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugiere tus Canciones Favoritas</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/config.js"></script>
+    <script src="/js/wishlist.js" defer></script>
+</head>
+<body>
+    <!-- Banner publicitario superior -->
+    <div class="ad-banner ad-banner-top">
+        📢 Espacio Publicitario - 728x90
+    </div>
+
+    <div class="main-wrapper">
+        <div class="container">
+            <h1 id="wishlist-title">🎵 Sugiere tus Canciones</h1>
+            
+            <div id="wishlist-info" class="stats-panel" style="display: none; background-color: rgba(187, 134, 252, 0.1); border-color: var(--color-primary);">
+                <p id="wishlist-description" style="text-align: center;"></p>
+                <p style="text-align: center; color: var(--color-text-secondary); font-size: 0.9em;">
+                    <span id="wishlist-date"></span> • 
+                    <strong><span id="song-counter">0</span></strong> canciones sugeridas
+                </p>
+            </div>
+
+            <div id="loading" style="text-align: center; padding: 40px;">
+                <p>Cargando wishlist...</p>
+            </div>
+
+            <div id="error-message" style="display: none; text-align: center; padding: 40px;">
+                <h2 style="color: var(--color-error);">😔 Oops!</h2>
+                <p id="error-text"></p>
+            </div>
+
+            <div id="wishlist-content" style="display: none;">
+                <div id="search-container">
+                    <input type="text" id="search-input" placeholder="Busca la canción que quieres sugerir...">
+                    <ul id="suggestions"></ul>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <h3>💡 O agrégala manualmente:</h3>
+                    <form id="manual-form">
+                        <input type="text" id="manual-title" placeholder="Título de la canción" required>
+                        <input type="text" id="manual-artist" placeholder="Artista" required>
+                        <input type="text" id="manual-name" placeholder="Tu nombre (opcional)">
+                        <button type="submit">➕ Agregar Canción</button>
+                    </form>
+                </div>
+
+                <div class="stats-panel" style="margin-top: 30px;">
+                    <h3>📋 Canciones Sugeridas</h3>
+                    <ul id="songs-list" style="list-style: none; padding: 0; max-height: 400px; overflow-y: auto;">
+                        <li style="text-align: center; padding: 20px; color: var(--color-text-secondary);">
+                            No hay canciones aún. ¡Sé el primero en sugerir!
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner publicitario inferior -->
+    <div class="ad-banner ad-banner-bottom">
+        📢 Espacio Publicitario - 728x90
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div id="success-modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; z-index: 100;">
+        <div class="modal-content" style="text-align: center; max-width: 400px;">
+            <h2 style="color: var(--color-secondary);">✅ ¡Canción Agregada!</h2>
+            <p>Tu sugerencia ha sido añadida a la wishlist.</p>
+            <button id="close-success" onclick="document.getElementById('success-modal').style.display='none'">
+                Continuar
+            </button>
+        </div>
+    </div>
+</body>
+</html>
