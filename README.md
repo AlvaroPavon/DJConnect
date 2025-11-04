@@ -248,7 +248,14 @@ pkill -f "node server.js" && npm start
 - [x] Mejoras en gestión de peticiones
 - [x] Espacios publicitarios
 
-### 🚧 v2.1 - En Desarrollo (Q2 2025)
+### ✅ v2.1 - Completado (Actual)
+- [x] **Wishlists Pre-Evento** - Sistema completo de listas de deseos
+- [ ] Temas Personalizables - Dark/Light mode
+- [ ] Exportación avanzada - CSV para Excel
+- [ ] Notificaciones Push - Alertas en tiempo real
+- [ ] Multi-idioma - Inglés, Portugués, Francés
+
+### 🚧 v2.2 - En Desarrollo (Q2 2025)
 - [ ] **Playlists Personalizadas**: Crear playlists basadas en peticiones
 - [ ] **Temas Personalizables**: Dark/Light mode y colores customizables
 - [ ] **Exportación de Datos**: PDF y CSV con estadísticas detalladas
