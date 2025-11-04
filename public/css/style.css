@@ -683,13 +683,19 @@ table tr:hover { background-color: #2c2c2c; }
     color: yellow;
 }
 
-/* Warning banner más compacto en móvil */
-@media screen and (max-width: 600px) {
+/* Warning banner en móvil - más grande y visible */
+@media screen and (max-width: 768px) {
     #warning-banner {
-        padding: 8px;
-        margin-bottom: 12px;
-        font-size: 0.85em;
-        border-radius: 6px;
+        padding: 12px;
+        margin-bottom: 15px;
+        font-size: 0.9em;
+        border-radius: 8px;
+        border-width: 2px;
+        background-color: rgba(255, 255, 0, 0.15);
+    }
+    
+    #warning-banner p {
+        font-weight: bold;
     }
     
     #warning-banner br {
@@ -699,9 +705,8 @@ table tr:hover { background-color: #2c2c2c; }
 
 @media screen and (max-width: 400px) {
     #warning-banner {
-        padding: 6px;
-        margin-bottom: 10px;
-        font-size: 0.8em;
+        padding: 10px;
+        font-size: 0.85em;
     }
 }
 
