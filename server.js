@@ -15,6 +15,7 @@ const path = require('path');
 // Modelos de la base de datos
 const DJ = require('./djModel.js');
 const Party = require('./partyModel.js');
+const Wishlist = require('./wishlistModel.js');
 
 // --- 2. CONFIGURACIÓN INICIAL ---
 const app = express();
