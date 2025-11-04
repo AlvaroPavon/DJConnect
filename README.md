@@ -3,8 +3,9 @@
 </p>
 
 <div align="center">
-  <h1>DJConnect</h1>
-  <p>Una plataforma web en tiempo real para la gestión interactiva de peticiones musicales en eventos en vivo. Optimizando la conexión entre el DJ y su audiencia.</p>
+  <h1>🎵 DJConnect</h1>
+  <p><strong>Plataforma web en tiempo real para la gestión interactiva de peticiones musicales en eventos en vivo</strong></p>
+  <p>Optimizando la conexión entre el DJ y su audiencia</p>
 </div>
 
 <p align="center">
@@ -21,13 +22,18 @@
 
 <img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
-## 📜 Tabla de Contenidos
+## 📋 Tabla de Contenidos
 
-1.  [**Acerca del Proyecto**](#-acerca-del-proyecto)
-2.  [**Funcionalidades Clave**](#-funcionalidades-clave)
-3.  [**Stack Tecnológico**](#-stack-tecnológico)
-4.  [**Estructura del Directorio**](#-estructura-del-directorio)
-5.  [**Licencia**](#-licencia)
+1. [**Acerca del Proyecto**](#-acerca-del-proyecto)
+2. [**Funcionalidades Clave**](#-funcionalidades-clave)
+3. [**Novedades v2.0**](#-novedades-v20)
+4. [**Stack Tecnológico**](#️-stack-tecnológico)
+5. [**Instalación y Configuración**](#-instalación-y-configuración)
+6. [**Uso de la Aplicación**](#-uso-de-la-aplicación)
+7. [**Hoja de Ruta**](#-hoja-de-ruta)
+8. [**Estructura del Directorio**](#-estructura-del-directorio)
+9. [**Contribuir**](#-contribuir)
+10. [**Licencia**](#-licencia)
 
 <img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
@@ -35,55 +41,318 @@
 
 **DJConnect** es una solución de software diseñada para digitalizar y simplificar la interacción entre los DJs y los asistentes a un evento. La aplicación elimina las barreras de la comunicación tradicional (peticiones verbales o en papel) al proporcionar una plataforma centralizada y en tiempo real.
 
-Los invitados utilizan una interfaz web accesible mediante un código QR para buscar en un extenso catálogo de música y enviar sus solicitudes. El DJ, a su vez, gestiona estas peticiones desde un panel de control exclusivo, donde puede visualizar, organizar y marcar las canciones que ya ha reproducido.
+### 🎯 Características Destacadas
 
-El sistema también incorpora un mecanismo de feedback mediante un sistema de valoración, proveyendo al DJ datos valiosos sobre su rendimiento.
+- 🎵 **Peticiones en Tiempo Real**: Los invitados piden canciones desde sus móviles
+- 📊 **Analytics Avanzados**: Estadísticas de géneros musicales y valoraciones
+- 📱 **100% Responsive**: Optimizado para cualquier dispositivo móvil
+- 🎨 **Interfaz Moderna**: Dark mode con animaciones fluidas
+- 🔒 **Seguro**: Autenticación JWT y gestión de sesiones
+- ⚡ **Rápido**: WebSockets para comunicación instantánea
 
 <img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
 ## ✨ Funcionalidades Clave
 
-| Módulo | Funcionalidad | Descripción Técnica |
+| Módulo | Funcionalidad | Descripción |
 | :--- | :--- | :--- |
-| **Autenticación** | Gestión de Usuarios (DJ) | Registro, login y recuperación de contraseñas mediante `bcryptjs` para el hash y `JWT` para la gestión de sesiones seguras. |
-| **Gestión de Eventos**| Salas de Fiesta Dinámicas | Creación de espacios únicos (`partyId`) para cada evento, asociando las peticiones a un DJ y una sesión específicos. |
-| **Panel del DJ** | Dashboard en Tiempo Real | Interfaz para visualizar peticiones entrantes vía `Socket.IO`, marcar canciones como reproducidas y gestionar la cola. |
-| **Interacción (Invitado)**| Sistema de Peticiones | Búsqueda de canciones contra la API de Spotify y envío de solicitudes al servidor a través de eventos de `Socket.IO`. |
-| **Gamificación** | Ranking y Valoraciones | Sistema que agrega las puntuaciones de los invitados para generar un ranking de DJs basado en su rendimiento promedio. |
-| **Accesibilidad** | Código QR y Movilidad | Generación de códigos QR en el frontend para un acceso instantáneo. `CapacitorJS` se utiliza para habilitar la compartición nativa en dispositivos móviles. |
+| **🔐 Autenticación** | Gestión de Usuarios (DJ) | Registro, login y recuperación de contraseñas con `bcryptjs` y `JWT` |
+| **🎉 Gestión de Eventos** | Salas de Fiesta Dinámicas | Creación de eventos únicos con códigos QR para acceso instantáneo |
+| **🎛️ Panel del DJ** | Dashboard en Tiempo Real | Visualización de peticiones, estadísticas y gestión de cola |
+| **📱 Interacción** | Sistema de Peticiones | Búsqueda en Spotify y envío de solicitudes vía Socket.IO |
+| **⭐ Valoraciones** | Ranking y Feedback | Sistema de puntuación y ranking de DJs |
+| **📊 Analytics** | Estadísticas Avanzadas | Géneros más pedidos, historial de fiestas y métricas |
+
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
+
+## 🆕 Novedades v2.0
+
+### Mejoras Implementadas
+
+#### 📱 **Diseño Responsive Mejorado**
+- Media queries completas para smartphones y tablets
+- Optimización táctil para interfaces móviles
+- QR codes responsivos que se adaptan a cualquier pantalla
+
+#### 📊 **Sistema de Estadísticas Avanzado**
+- **Géneros Musicales**: Integración con Spotify API para detectar géneros automáticamente
+- **Analytics en Tiempo Real**: Panel con género más pedido y contadores
+- **Historial Completo**: Nueva sección con estadísticas de fiestas pasadas
+  - Total de canciones pedidas
+  - Género más popular
+  - Valoración media del evento
+  - Lista completa de todas las canciones
+
+#### 🎵 **Gestión Mejorada de Peticiones**
+- **Ocultar canciones**: Elimina de la vista sin borrar de la base de datos
+- **Sin límites**: Solucionado bug de carga máxima de 100 peticiones
+- **Mejor scroll**: Lista optimizada para cientos de peticiones
+
+#### 📢 **Espacios Publicitarios**
+- Banners no invasivos superiores e inferiores
+- Listos para AdSense u otras plataformas
+- Diseño responsive que no afecta la funcionalidad
 
 <img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
 ## 🛠️ Stack Tecnológico
 
-La arquitectura de la aplicación se basa en las siguientes tecnologías:
-
 | Capa | Tecnología | Propósito |
 | :--- | :--- | :--- |
-| **Backend** | **Node.js / Express** | Entorno de ejecución y framework para la construcción de la API REST y la lógica del servidor. |
-| **Base de Datos** | **MongoDB (con Mongoose)** | Almacenamiento NoSQL para persistir datos de usuarios, fiestas y canciones. |
-| **Comunicación Real-Time** | **Socket.IO** | Habilita la comunicación bidireccional y de baja latencia entre cliente y servidor. |
-| **Frontend** | **HTML5, CSS3, Vanilla JS** | Estructura, diseño e interactividad del lado del cliente sin dependencias de frameworks. |
-| **Servicios Externos** | **API de Spotify** | Provee el catálogo de búsqueda de canciones para los invitados. |
+| **Backend** | **Node.js / Express** | API REST y lógica del servidor |
+| **Base de Datos** | **MongoDB (Mongoose)** | Almacenamiento NoSQL persistente |
+| **Tiempo Real** | **Socket.IO** | Comunicación bidireccional de baja latencia |
+| **Frontend** | **HTML5, CSS3, Vanilla JS** | Interfaz sin dependencias de frameworks |
+| **APIs Externas** | **Spotify API** | Catálogo de búsqueda de música |
+| **Email** | **SendGrid** | Recuperación de contraseñas |
+
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
+
+## 📦 Instalación y Configuración
+
+### Requisitos Previos
+
+- **Node.js** v14 o superior
+- **MongoDB** v4.4 o superior
+- **npm** o **yarn**
+
+### Instalación Paso a Paso
+
+1. **Clonar el repositorio**
+```bash
+git clone https://github.com/tu-usuario/djconnect.git
+cd djconnect
+```
+
+2. **Instalar dependencias**
+```bash
+npm install
+```
+
+3. **Configurar variables de entorno**
+```bash
+cp .env.example .env
+```
+
+Edita el archivo `.env` con tus credenciales:
+```env
+MONGO_URI=mongodb://localhost:27017/djconnect
+JWT_SECRET=tu_clave_secreta_muy_segura
+SPOTIFY_CLIENT_ID=tu_spotify_client_id
+SPOTIFY_CLIENT_SECRET=tu_spotify_client_secret
+SENDGRID_API_KEY=tu_sendgrid_api_key
+APP_BASE_URL=http://localhost:8001
+PORT=8001
+```
+
+4. **Obtener credenciales de Spotify**
+   - Ve a [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/)
+   - Crea una nueva aplicación
+   - Copia el Client ID y Client Secret
+
+5. **Iniciar MongoDB**
+```bash
+# Linux/Mac
+sudo systemctl start mongod
+
+# Windows
+net start MongoDB
+```
+
+6. **Iniciar el servidor**
+```bash
+npm start
+# o con nodemon para desarrollo
+npm run dev
+```
+
+7. **Acceder a la aplicación**
+   - Abre tu navegador en `http://localhost:8001`
+   - Regístrate como DJ
+   - ¡Comienza a usar DJConnect!
+
+### 📝 Scripts Útiles
+
+```bash
+# Crear usuario de prueba
+./register_user.sh "djtest" "test@example.com" "password123"
+
+# Ver logs del servidor
+tail -f server.log
+
+# Reiniciar servicios
+pkill -f "node server.js" && npm start
+```
+
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
+
+## 🎮 Uso de la Aplicación
+
+### Para DJs
+
+1. **Registro e Inicio de Sesión**
+   - Regístrate con usuario, email y contraseña
+   - Inicia sesión en el panel del DJ
+
+2. **Crear una Fiesta**
+   - Da un nombre a tu evento
+   - Se generará automáticamente un código QR único
+   - Comparte el QR con tus invitados
+
+3. **Gestionar Peticiones**
+   - Visualiza peticiones en tiempo real
+   - Marca canciones como "Puestas"
+   - Oculta canciones que no quieras tocar
+   - Observa estadísticas en vivo
+
+4. **Finalizar Evento**
+   - Clic en "Finalizar Fiesta"
+   - Se guardan automáticamente todas las estadísticas
+   - Consulta el historial cuando quieras
+
+### Para Invitados
+
+1. **Escanear QR** o acceder al link compartido
+2. **Buscar canciones** por título o artista
+3. **Seleccionar tu canción** favorita
+4. **Valorar al DJ** (1-5 estrellas)
+5. ¡La petición llega instantáneamente!
+
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
+
+## 🗺️ Hoja de Ruta
+
+### ✅ v2.0 - Completado (Actual)
+- [x] Diseño responsive completo
+- [x] Sistema de géneros musicales
+- [x] Analytics y estadísticas avanzadas
+- [x] Historial de fiestas
+- [x] Mejoras en gestión de peticiones
+- [x] Espacios publicitarios
+
+### 🚧 v2.1 - En Desarrollo (Q2 2025)
+- [ ] **Playlists Personalizadas**: Crear playlists basadas en peticiones
+- [ ] **Temas Personalizables**: Dark/Light mode y colores customizables
+- [ ] **Exportación de Datos**: PDF y CSV con estadísticas detalladas
+- [ ] **Notificaciones Push**: Alertas para el DJ en nuevas peticiones
+- [ ] **Multi-idioma**: Soporte para inglés, portugués y francés
+
+### 🔮 v3.0 - Planificado (Q3 2025)
+- [ ] **Integración con Apple Music**: Alternativa a Spotify
+- [ ] **Sistema de Votación**: Los invitados votan las canciones más deseadas
+- [ ] **Chat en Vivo**: Comunicación directa DJ-invitados
+- [ ] **Predicción de Hits**: IA para sugerir canciones basadas en el ambiente
+- [ ] **Modo Karaoke**: Gestión de turnos para karaoke
+
+### 🌟 v4.0 - Visión Futura (2026)
+- [ ] **App Móvil Nativa**: iOS y Android con React Native
+- [ ] **Integración con Hardware DJ**: Pioneer, Traktor, Serato
+- [ ] **Monetización para DJs**: Sistema de propinas digitales
+- [ ] **Analytics Predictivos**: ML para recomendar setlists
+- [ ] **Marketplace**: Plantillas y temas de la comunidad
+
+### 💡 Ideas en Consideración
+- Integración con sistemas de iluminación (Philips Hue)
+- Modo "DJ Battle" para competencias
+- Sistema de fidelización para invitados frecuentes
+- API pública para integraciones de terceros
+- Modo offline con sincronización posterior
+
+> **¿Tienes ideas?** ¡Abre un [Issue](https://github.com/tu-usuario/djconnect/issues) o [Discussion](https://github.com/tu-usuario/djconnect/discussions)!
 
 <img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
 ## 📁 Estructura del Directorio
 
-El proyecto sigue una organización modular para separar las responsabilidades:
-
 ```sh
 /
-├── assets/                # Recursos para el README (logo, gifs)
+├── assets/                    # Recursos para el README
 │   ├── logo.png
 │   ├── visualizer_banner.gif
 │   └── wave_divider.gif
-├── public/                # Assets del cliente (Frontend)
-# ... resto de la estructura
+├── public/                    # Frontend estático
+│   ├── css/
+│   │   └── style.css         # Estilos responsive
+│   ├── html/
+│   │   ├── dj.html           # Panel del DJ
+│   │   ├── history.html      # Historial de fiestas
+│   │   ├── login.html
+│   │   ├── register.html
+│   │   └── ...
+│   ├── js/
+│   │   ├── config.js         # Configuración centralizada
+│   │   ├── dj.js             # Lógica del panel DJ
+│   │   ├── history.js        # Lógica del historial
+│   │   └── ...
+│   ├── images/
+│   └── index.html            # Página de peticiones
+├── djModel.js                 # Modelo de datos DJ (Mongoose)
+├── partyModel.js              # Modelo de datos Party (Mongoose)
+├── server.js                  # Servidor Express + Socket.IO
+├── package.json               # Dependencias del proyecto
+├── .env.example               # Plantilla de variables de entorno
+├── CHANGELOG.md               # Registro de cambios
+├── GUIA_INICIO.md            # Guía de inicio rápido
+└── README.md                  # Este archivo
 ```
+
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
+
+## 🤝 Contribuir
+
+¡Las contribuciones son bienvenidas! Si deseas mejorar DJConnect:
+
+1. **Fork** el proyecto
+2. Crea una **rama** para tu feature (`git checkout -b feature/AmazingFeature`)
+3. **Commit** tus cambios (`git commit -m 'Add: Amazing Feature'`)
+4. **Push** a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un **Pull Request**
+
+### 📝 Guías de Contribución
+
+- Sigue el estilo de código existente
+- Escribe commits descriptivos
+- Documenta nuevas funcionalidades
+- Agrega tests cuando sea posible
+- Actualiza el CHANGELOG.md
+
+### 🐛 Reportar Bugs
+
+Si encuentras un bug, por favor [abre un Issue](https://github.com/tu-usuario/djconnect/issues) con:
+- Descripción del problema
+- Pasos para reproducirlo
+- Comportamiento esperado vs actual
+- Screenshots si es aplicable
+- Información del entorno (OS, navegador, versión)
 
 <img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
 ## 📄 Licencia
 
 Este proyecto se distribuye bajo una licencia propietaria. Consulta el archivo `LICENSE.md` para más detalles.
+
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
+
+## 🌟 Agradecimientos
+
+- [Spotify Web API](https://developer.spotify.com/documentation/web-api/) por su increíble catálogo musical
+- [Socket.IO](https://socket.io/) por la comunicación en tiempo real
+- [MongoDB](https://www.mongodb.com/) por la base de datos flexible
+- A todos los DJs que han probado y mejorado esta aplicación
+
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
+
+## 📞 Contacto & Soporte
+
+- **Email**: soporte@djconnect.app
+- **Issues**: [GitHub Issues](https://github.com/tu-usuario/djconnect/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/tu-usuario/djconnect/discussions)
+- **Wiki**: [Documentación Completa](https://github.com/tu-usuario/djconnect/wiki)
+
+---
+
+<div align="center">
+  <p>Hecho con ❤️ para la comunidad de DJs</p>
+  <p>⭐ Si te gusta DJConnect, dale una estrella en GitHub!</p>
+</div>
+
