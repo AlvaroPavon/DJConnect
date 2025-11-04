@@ -309,22 +309,40 @@ button:active {
     box-shadow: 0 2px 10px rgba(3, 218, 198, 0.2);
 }
 
-/* Botones más grandes y touch-friendly en móvil */
-@media screen and (max-width: 600px) {
+/* Inputs y botones MÁS GRANDES en móvil */
+@media screen and (max-width: 768px) {
     input[type="text"],
     input[type="password"],
     input[type="email"],
     input[type="date"] {
-        padding: 14px;
-        font-size: 16px;
-        margin-bottom: 12px;
+        padding: 18px;
+        font-size: 18px;
+        margin-bottom: 18px;
+        border-width: 2px;
     }
     
     button {
+        padding: 20px;
+        font-size: 20px;
+        margin-bottom: 18px;
+        min-height: 60px;
+        border-radius: 10px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="date"] {
         padding: 16px;
         font-size: 17px;
-        margin-bottom: 12px;
-        min-height: 50px; /* Botones más altos para mejor tap */
+    }
+    
+    button {
+        padding: 18px;
+        font-size: 19px;
+        min-height: 58px;
     }
 }
 
