@@ -163,7 +163,8 @@ hr { border: 1px solid var(--color-border); margin: 30px 0; }
 /* --- Formularios y Botones Interactivos --- */
 input[type="text"],
 input[type="password"],
-input[type="email"] {
+input[type="email"],
+input[type="date"] {
     width: 100%;
     padding: 15px;
     margin-bottom: 15px;
@@ -178,7 +179,8 @@ input[type="email"] {
 
 input[type="text"]:focus,
 input[type="password"]:focus,
-input[type="email"]:focus {
+input[type="email"]:focus,
+input[type="date"]:focus {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 15px rgba(187, 134, 252, 0.3);
@@ -207,6 +209,25 @@ button:hover {
 button:active {
     transform: translateY(0px);
     box-shadow: 0 2px 10px rgba(3, 218, 198, 0.2);
+}
+
+/* Botones más grandes y touch-friendly en móvil */
+@media screen and (max-width: 600px) {
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="date"] {
+        padding: 14px;
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+    
+    button {
+        padding: 16px;
+        font-size: 17px;
+        margin-bottom: 12px;
+        min-height: 50px; /* Botones más altos para mejor tap */
+    }
 }
 
 /* --- Listas Dinámicas (Sugerencias y Peticiones) --- */
