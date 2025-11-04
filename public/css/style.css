@@ -133,6 +133,33 @@ p { color: var(--color-text-secondary); line-height: 1.5; }
 a { color: var(--color-secondary); text-decoration: none; font-weight: bold; }
 hr { border: 1px solid var(--color-border); margin: 30px 0; }
 
+/* Títulos más compactos en móvil */
+@media screen and (max-width: 600px) {
+    h1 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+    
+    h2 {
+        font-size: 1.3em;
+        margin-bottom: 10px;
+    }
+    
+    h3 {
+        font-size: 1.1em;
+        margin-bottom: 8px;
+    }
+    
+    p {
+        font-size: 0.95em;
+        line-height: 1.4;
+    }
+    
+    hr {
+        margin: 20px 0;
+    }
+}
+
 /* --- Formularios y Botones Interactivos --- */
 input[type="text"],
 input[type="password"],
