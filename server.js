@@ -359,6 +359,170 @@ app.get('/api/party-history', authenticateToken, async (req, res) => {
     }
 });
 
+// ===== RUTAS DE WISHLISTS PRE-EVENTO =====
+
+// Crear nueva wishlist
+app.post('/api/wishlists', authenticateToken, async (req, res) => {
+    try {
+        const { name, description, eventDate } = req.body;
+        
+        // Generar ID único para la wishlist
+        const cleanName = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        const randomString = Math.random().toString(36).substring(2, 8);
+        const wishlistId = `wish-${cleanName}-${randomString}`;
+        
+        const newWishlist = new Wishlist({
+            wishlistId,
+            name,
+            description: description || '',
+            djUsername: req.user.username,
+            eventDate: eventDate ? new Date(eventDate) : null
+        });
+        
+        await newWishlist.save();
+        res.status(201).json(newWishlist);
+    } catch (error) {
+        console.error('Error al crear wishlist:', error);
+        res.status(500).json({ message: 'Error al crear wishlist.' });
+    }
+});
+
+// Obtener wishlists del DJ
+app.get('/api/wishlists', authenticateToken, async (req, res) => {
+    try {
+        const wishlists = await Wishlist.find({ 
+            djUsername: req.user.username 
+        }).sort({ createdAt: -1 });
+        
+        res.json(wishlists);
+    } catch (error) {
+        console.error('Error al obtener wishlists:', error);
+        res.status(500).json({ message: 'Error en el servidor.' });
+    }
+});
+
+// Obtener una wishlist específica (público para invitados)
+app.get('/api/wishlists/:wishlistId', async (req, res) => {
+    try {
+        const wishlist = await Wishlist.findOne({ 
+            wishlistId: req.params.wishlistId,
+            isActive: true 
+        });
+        
+        if (!wishlist) {
+            return res.status(404).json({ message: 'Wishlist no encontrada o cerrada.' });
+        }
+        
+        res.json(wishlist);
+    } catch (error) {
+        console.error('Error al obtener wishlist:', error);
+        res.status(500).json({ message: 'Error en el servidor.' });
+    }
+});
+
+// Agregar canción a wishlist (público para invitados)
+app.post('/api/wishlists/:wishlistId/songs', async (req, res) => {
+    try {
+        const { titulo, artista, genre, addedBy } = req.body;
+        const { wishlistId } = req.params;
+        
+        const wishlist = await Wishlist.findOne({ 
+            wishlistId,
+            isActive: true 
+        });
+        
+        if (!wishlist) {
+            return res.status(404).json({ message: 'Wishlist no encontrada o cerrada.' });
+        }
+        
+        const newSong = {
+            _id: new mongoose.Types.ObjectId(),
+            titulo,
+            artista,
+            genre: genre || 'Desconocido',
+            addedBy: addedBy || 'Invitado',
+            timestamp: new Date()
+        };
+        
+        wishlist.songs.push(newSong);
+        await wishlist.save();
+        
+        res.status(201).json(newSong);
+    } catch (error) {
+        console.error('Error al agregar canción:', error);
+        res.status(500).json({ message: 'Error al agregar canción.' });
+    }
+});
+
+// Eliminar canción de wishlist (solo DJ)
+app.delete('/api/wishlists/:wishlistId/songs/:songId', authenticateToken, async (req, res) => {
+    try {
+        const { wishlistId, songId } = req.params;
+        
+        const wishlist = await Wishlist.findOne({ 
+            wishlistId,
+            djUsername: req.user.username 
+        });
+        
+        if (!wishlist) {
+            return res.status(404).json({ message: 'Wishlist no encontrada.' });
+        }
+        
+        wishlist.songs = wishlist.songs.filter(song => song._id.toString() !== songId);
+        await wishlist.save();
+        
+        res.json({ message: 'Canción eliminada.' });
+    } catch (error) {
+        console.error('Error al eliminar canción:', error);
+        res.status(500).json({ message: 'Error en el servidor.' });
+    }
+});
+
+// Cerrar/Activar wishlist (solo DJ)
+app.patch('/api/wishlists/:wishlistId/toggle', authenticateToken, async (req, res) => {
+    try {
+        const { wishlistId } = req.params;
+        
+        const wishlist = await Wishlist.findOne({ 
+            wishlistId,
+            djUsername: req.user.username 
+        });
+        
+        if (!wishlist) {
+            return res.status(404).json({ message: 'Wishlist no encontrada.' });
+        }
+        
+        wishlist.isActive = !wishlist.isActive;
+        await wishlist.save();
+        
+        res.json(wishlist);
+    } catch (error) {
+        console.error('Error al cambiar estado:', error);
+        res.status(500).json({ message: 'Error en el servidor.' });
+    }
+});
+
+// Eliminar wishlist (solo DJ)
+app.delete('/api/wishlists/:wishlistId', authenticateToken, async (req, res) => {
+    try {
+        const { wishlistId } = req.params;
+        
+        const result = await Wishlist.deleteOne({ 
+            wishlistId,
+            djUsername: req.user.username 
+        });
+        
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: 'Wishlist no encontrada.' });
+        }
+        
+        res.json({ message: 'Wishlist eliminada.' });
+    } catch (error) {
+        console.error('Error al eliminar wishlist:', error);
+        res.status(500).json({ message: 'Error en el servidor.' });
+    }
+});
+
 // --- 6. LÓGICA DE SOCKET.IO ---
 io.on('connection', (socket) => {
     console.log(`🔌 Un cliente se ha conectado: ${socket.id}`);
