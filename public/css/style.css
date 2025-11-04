@@ -65,18 +65,27 @@ body {
     animation: fadeIn 0.6s ease-out forwards;
 }
 
-/* Optimización para móviles */
-@media screen and (max-width: 600px) {
+/* Layout móvil optimizado */
+@media screen and (max-width: 768px) {
     body {
-        padding: 5px;
-        align-items: flex-start;
-        padding-top: 10px;
+        padding: 0;
+        align-items: stretch;
     }
     
     .container {
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        width: 100%;
+        max-width: 100%;
+        padding: 20px 15px;
+        border-radius: 0;
+        box-shadow: none;
+        background-color: var(--color-surface);
+        min-height: auto;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .container {
+        padding: 15px 10px;
     }
 }
 
@@ -108,52 +117,96 @@ body {
     margin-top: 20px;
 }
 
-/* Banners optimizados para tablets */
+/* Layout de 3 columnas para móvil */
 @media screen and (max-width: 768px) {
-    .ad-banner {
-        min-height: 50px;
-        max-height: 50px;
-        font-size: 11px;
-        padding: 5px;
-        margin: 8px auto;
-        opacity: 0.8;
+    body {
+        display: block;
+        padding: 0;
+        min-height: 100vh;
     }
     
-    .ad-banner-top {
-        margin-bottom: 8px;
+    /* Contenedor principal con grid */
+    .mobile-layout {
+        display: grid;
+        grid-template-columns: 60px 1fr 60px;
+        grid-template-areas: 
+            "ad-left content ad-right";
+        min-height: 100vh;
+        gap: 0;
     }
     
-    .ad-banner-bottom {
-        margin-top: 12px;
-    }
-}
-
-/* Banners mínimos en móviles pequeños */
-@media screen and (max-width: 480px) {
-    /* Banner superior muy compacto */
-    .ad-banner-top {
-        min-height: 32px;
-        max-height: 32px;
+    /* Publicidad lateral izquierda */
+    .ad-banner-left {
+        grid-area: ad-left;
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        min-height: 100vh;
+        width: 60px;
+        min-width: 60px;
+        max-width: 60px;
+        margin: 0;
+        border-radius: 0;
         font-size: 8px;
-        margin: 3px auto 8px;
-        padding: 3px;
-        border-radius: 4px;
-        opacity: 0.6;
+        padding: 5px 2px;
+        position: sticky;
+        top: 0;
+        background-color: rgba(255, 255, 255, 0.03);
+        border-right: 1px dashed var(--color-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
-    /* Banner inferior oculto para maximizar espacio útil */
+    /* Publicidad lateral derecha */
+    .ad-banner-right {
+        grid-area: ad-right;
+        writing-mode: vertical-rl;
+        min-height: 100vh;
+        width: 60px;
+        min-width: 60px;
+        max-width: 60px;
+        margin: 0;
+        border-radius: 0;
+        font-size: 8px;
+        padding: 5px 2px;
+        position: sticky;
+        top: 0;
+        background-color: rgba(255, 255, 255, 0.03);
+        border-left: 1px dashed var(--color-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Área de contenido centrada */
+    .mobile-content-area {
+        grid-area: content;
+        padding: 15px 10px;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    /* Ocultar banners horizontales en móvil */
+    .ad-banner-top,
     .ad-banner-bottom {
         display: none;
     }
 }
 
-/* Banner aún más pequeño en pantallas muy pequeñas */
-@media screen and (max-width: 360px) {
-    .ad-banner-top {
-        min-height: 28px;
-        max-height: 28px;
+/* Móviles muy pequeños - publicidad aún más delgada */
+@media screen and (max-width: 400px) {
+    .mobile-layout {
+        grid-template-columns: 40px 1fr 40px;
+    }
+    
+    .ad-banner-left,
+    .ad-banner-right {
+        width: 40px;
+        min-width: 40px;
+        max-width: 40px;
         font-size: 7px;
-        margin: 2px auto 5px;
     }
 }
 
@@ -167,30 +220,41 @@ p { color: var(--color-text-secondary); line-height: 1.5; }
 a { color: var(--color-secondary); text-decoration: none; font-weight: bold; }
 hr { border: 1px solid var(--color-border); margin: 30px 0; }
 
-/* Títulos más compactos en móvil */
-@media screen and (max-width: 600px) {
+/* Títulos más grandes y prominentes en móvil */
+@media screen and (max-width: 768px) {
     h1 {
-        font-size: 1.5em;
-        margin-bottom: 15px;
+        font-size: 2em;
+        margin-bottom: 20px;
+        font-weight: bold;
     }
     
     h2 {
-        font-size: 1.3em;
-        margin-bottom: 10px;
+        font-size: 1.6em;
+        margin-bottom: 15px;
     }
     
     h3 {
-        font-size: 1.1em;
-        margin-bottom: 8px;
+        font-size: 1.3em;
+        margin-bottom: 12px;
     }
     
     p {
-        font-size: 0.95em;
-        line-height: 1.4;
+        font-size: 1em;
+        line-height: 1.5;
     }
     
     hr {
-        margin: 20px 0;
+        margin: 25px 0;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    h2 {
+        font-size: 1.5em;
     }
 }
 
@@ -245,22 +309,40 @@ button:active {
     box-shadow: 0 2px 10px rgba(3, 218, 198, 0.2);
 }
 
-/* Botones más grandes y touch-friendly en móvil */
-@media screen and (max-width: 600px) {
+/* Inputs y botones MÁS GRANDES en móvil */
+@media screen and (max-width: 768px) {
     input[type="text"],
     input[type="password"],
     input[type="email"],
     input[type="date"] {
-        padding: 14px;
-        font-size: 16px;
-        margin-bottom: 12px;
+        padding: 18px;
+        font-size: 18px;
+        margin-bottom: 18px;
+        border-width: 2px;
     }
     
     button {
+        padding: 20px;
+        font-size: 20px;
+        margin-bottom: 18px;
+        min-height: 60px;
+        border-radius: 10px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="date"] {
         padding: 16px;
         font-size: 17px;
-        margin-bottom: 12px;
-        min-height: 50px; /* Botones más altos para mejor tap */
+    }
+    
+    button {
+        padding: 18px;
+        font-size: 19px;
+        min-height: 58px;
     }
 }
 
@@ -503,6 +585,38 @@ table tr:hover { background-color: #2c2c2c; }
     color: var(--color-background);
 }
 
+/* Navegación MUCHO MÁS GRANDE y prominente en móvil */
+@media screen and (max-width: 768px) {
+    .nav-links {
+        margin: 20px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .nav-links a {
+        display: block;
+        margin: 0;
+        padding: 18px 15px;
+        font-size: 18px;
+        font-weight: bold;
+        border-width: 2px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    
+    .nav-links a:active {
+        transform: scale(0.98);
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .nav-links a {
+        padding: 16px 12px;
+        font-size: 17px;
+    }
+}
+
 /* --- RESPONSIVE PARA TABLA DE RANKING --- */
 @media screen and (max-width: 600px) {
     table thead {
@@ -569,13 +683,19 @@ table tr:hover { background-color: #2c2c2c; }
     color: yellow;
 }
 
-/* Warning banner más compacto en móvil */
-@media screen and (max-width: 600px) {
+/* Warning banner en móvil - más grande y visible */
+@media screen and (max-width: 768px) {
     #warning-banner {
-        padding: 8px;
-        margin-bottom: 12px;
-        font-size: 0.85em;
-        border-radius: 6px;
+        padding: 12px;
+        margin-bottom: 15px;
+        font-size: 0.9em;
+        border-radius: 8px;
+        border-width: 2px;
+        background-color: rgba(255, 255, 0, 0.15);
+    }
+    
+    #warning-banner p {
+        font-weight: bold;
     }
     
     #warning-banner br {
@@ -585,9 +705,8 @@ table tr:hover { background-color: #2c2c2c; }
 
 @media screen and (max-width: 400px) {
     #warning-banner {
-        padding: 6px;
-        margin-bottom: 10px;
-        font-size: 0.8em;
+        padding: 10px;
+        font-size: 0.85em;
     }
 }
 
