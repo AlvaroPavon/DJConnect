@@ -13,6 +13,23 @@
     --color-border: #333333;
 }
 
+/* Optimización para scroll suave */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Prevenir zoom en inputs en iOS */
+@media screen and (max-width: 600px) {
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="date"],
+    select,
+    textarea {
+        font-size: 16px !important; /* iOS no hace zoom si es >= 16px */
+    }
+}
+
 /* Animaciones reusables */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(15px); }
