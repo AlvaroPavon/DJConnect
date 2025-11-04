@@ -1,6 +1,88 @@
 # 🎉 DJConnect - Changelog de Mejoras
 
+## ✅ v2.1 - Wishlists Pre-Evento (Enero 2025)
+
+### 🆕 Nueva Funcionalidad: Wishlists Pre-Evento
+
+**Sistema Completo de Planificación Musical Anticipada**
+
+#### Características Principales:
+- ✅ **Crear Wishlists Ilimitadas**: Un DJ puede tener múltiples wishlists activas
+- ✅ **Compartir con Invitados**: URL única y código QR para cada wishlist
+- ✅ **Sugerencias de Canciones**: Los invitados pueden:
+  - Buscar canciones en Spotify
+  - Agregar manualmente (título + artista)
+  - Ver todas las canciones ya sugeridas
+  - Indicar su nombre (opcional)
+- ✅ **Gestión para DJs**:
+  - Ver todas las wishlists en un panel
+  - Abrir/Cerrar wishlists (controlar si aceptan sugerencias)
+  - Eliminar canciones individuales
+  - Eliminar wishlists completas
+- ✅ **Exportación a PDF**: Genera un documento imprimible con:
+  - Nombre del evento y fecha
+  - Lista completa de canciones
+  - Artista y género de cada canción
+  - Quién sugirió cada canción
+- ✅ **Códigos QR**: Genera QR para compartir fácilmente
+- ✅ **Separación Total**: Las wishlists NO aparecen en peticiones en vivo
+
+#### Modelos de Datos:
+```javascript
+Wishlist {
+  wishlistId: String (único),
+  name: String,
+  description: String,
+  djUsername: String,
+  songs: [{
+    titulo, artista, genre,
+    addedBy, timestamp
+  }],
+  isActive: Boolean,
+  eventDate: Date,
+  maxSongsPerUser: Number
+}
+```
+
+#### Nuevos Endpoints:
+- `POST /api/wishlists` - Crear wishlist
+- `GET /api/wishlists` - Listar wishlists del DJ
+- `GET /api/wishlists/:id` - Ver wishlist específica (público)
+- `POST /api/wishlists/:id/songs` - Agregar canción (público)
+- `DELETE /api/wishlists/:id/songs/:songId` - Eliminar canción
+- `PATCH /api/wishlists/:id/toggle` - Abrir/Cerrar
+- `DELETE /api/wishlists/:id` - Eliminar wishlist
+
+#### Nuevas Páginas:
+- `/html/wishlist-manager.html` - Panel de gestión para DJs
+- `/html/wishlist.html` - Página pública para invitados
+
+#### Archivos Creados:
+- `/wishlistModel.js` - Modelo de base de datos
+- `/public/js/wishlist-manager.js` - Lógica del gestor
+- `/public/js/wishlist.js` - Lógica para invitados
+
+---
+
 ## ✅ Mejoras Implementadas
+
+### 🎯 Casos de Uso Resueltos:
+
+1. **Problema**: Los DJs quieren saber qué canciones gustan ANTES del evento
+   **Solución**: Wishlists pre-evento para recopilar favoritos con anticipación
+
+2. **Problema**: Demasiadas peticiones durante el evento distraen
+   **Solución**: Separación total entre wishlists pre-evento y peticiones en vivo
+
+3. **Problema**: Difícil preparar setlist sin conocer gustos
+   **Solución**: Exportación a PDF para estudiar y preparar playlist con tiempo
+
+4. **Problema**: Coordinación con novios/clientes sobre música
+   **Solución**: Wishlist compartida donde todos aportan sugerencias
+
+---
+
+## ✅ v2.0 - Analytics y Mejoras Core (Diciembre 2024)
 
 ### 1. 📱 **Diseño Responsive Mejorado**
 - **Media queries completas** para smartphones (600px y 400px)
