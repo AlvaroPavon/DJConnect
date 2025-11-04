@@ -65,9 +65,27 @@
 
 <img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
-## 🆕 Novedades v2.0
+## 🆕 Novedades v2.1
 
 ### Mejoras Implementadas
+
+#### 📝 **Wishlists Pre-Evento** (NUEVO!)
+- **Planificación Anticipada**: Crea wishlists antes de tus eventos
+- **Recopilación de Favoritas**: Los invitados sugieren canciones antes del evento
+- **Gestión Completa**: 
+  - Crea múltiples wishlists para diferentes eventos
+  - Comparte via URL o código QR
+  - Cierra/abre wishlists según necesites
+  - Elimina canciones individuales
+- **Exportación a PDF**: Descarga la lista completa para preparar tu set
+- **Separación Total**: Las wishlists NO interfieren con peticiones en vivo
+- **Estadísticas**: Ve cuántas canciones, géneros y quién las sugirió
+
+**Casos de uso:**
+- Bodas: Recopila canciones especiales de los novios e invitados
+- Cumpleaños: Lista de favoritos del cumpleañero
+- Eventos corporativos: Preferencias musicales del equipo
+- Fiestas temáticas: Asegura tener el repertorio adecuado
 
 #### 📱 **Diseño Responsive Mejorado**
 - Media queries completas para smartphones y tablets
