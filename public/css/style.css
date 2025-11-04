@@ -48,6 +48,21 @@ body {
     animation: fadeIn 0.6s ease-out forwards;
 }
 
+/* Optimización para móviles */
+@media screen and (max-width: 600px) {
+    body {
+        padding: 5px;
+        align-items: flex-start;
+        padding-top: 10px;
+    }
+    
+    .container {
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+}
+
 /* --- BANNERS PUBLICITARIOS --- */
 .ad-banner {
     width: 100%;
