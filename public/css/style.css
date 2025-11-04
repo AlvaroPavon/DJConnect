@@ -80,6 +80,7 @@ body {
     text-align: center;
     padding: 10px;
     box-sizing: border-box;
+    transition: all 0.3s ease;
 }
 
 .ad-banner-top {
@@ -90,36 +91,52 @@ body {
     margin-top: 20px;
 }
 
-/* Banners pequeños en móvil */
+/* Banners optimizados para tablets */
 @media screen and (max-width: 768px) {
     .ad-banner {
         min-height: 50px;
         max-height: 50px;
-        font-size: 10px;
+        font-size: 11px;
         padding: 5px;
-        margin: 10px auto;
+        margin: 8px auto;
+        opacity: 0.8;
     }
     
     .ad-banner-top {
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
     
     .ad-banner-bottom {
-        margin-top: 15px;
+        margin-top: 12px;
     }
 }
 
-/* Ocultar banner inferior en móviles pequeños para ahorrar espacio */
+/* Banners mínimos en móviles pequeños */
 @media screen and (max-width: 480px) {
+    /* Banner superior muy compacto */
+    .ad-banner-top {
+        min-height: 32px;
+        max-height: 32px;
+        font-size: 8px;
+        margin: 3px auto 8px;
+        padding: 3px;
+        border-radius: 4px;
+        opacity: 0.6;
+    }
+    
+    /* Banner inferior oculto para maximizar espacio útil */
     .ad-banner-bottom {
         display: none;
     }
-    
+}
+
+/* Banner aún más pequeño en pantallas muy pequeñas */
+@media screen and (max-width: 360px) {
     .ad-banner-top {
-        min-height: 40px;
-        max-height: 40px;
-        font-size: 9px;
-        margin: 5px auto;
+        min-height: 28px;
+        max-height: 28px;
+        font-size: 7px;
+        margin: 2px auto 5px;
     }
 }
 
