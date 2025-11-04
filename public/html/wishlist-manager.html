@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Wishlists Pre-Evento</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1/build/qrcode.min.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/wishlist-manager.js" defer></script>
+</head>
+<body>
+    <!-- Banner publicitario superior -->
+    <div class="ad-banner ad-banner-top">
+        📢 Espacio Publicitario - 728x90
+    </div>
+
+    <div class="container">
+        <h1>🎵 Wishlists Pre-Evento</h1>
+        
+        <div class="nav-links">
+            <a href="/html/dj.html">← Volver al Panel</a>
+            <a href="/html/history.html">Historial</a>
+        </div>
+
+        <div class="stats-panel" style="background-color: rgba(3, 218, 198, 0.1); border-color: var(--color-secondary);">
+            <h3>ℹ️ ¿Qué son las Wishlists Pre-Evento?</h3>
+            <p style="text-align: left; margin: 10px 0;">
+                Las <strong>Wishlists Pre-Evento</strong> te permiten recopilar las canciones favoritas de tus invitados 
+                <strong>antes</strong> del evento. Crea una wishlist, comparte el enlace/QR con tus invitados, 
+                y ellos podrán sugerir canciones. Luego exporta la lista a PDF para preparar tu set.
+            </p>
+            <p style="text-align: left; margin: 10px 0; color: var(--color-secondary);">
+                <strong>✅ Ventaja:</strong> Estas peticiones NO aparecerán durante el evento en vivo, 
+                manteniendo tu panel de peticiones limpio y organizado.
+            </p>
+        </div>
+
+        <!-- Formulario para crear nueva wishlist -->
+        <div class="stats-panel" id="create-section">
+            <h3>➕ Crear Nueva Wishlist</h3>
+            <form id="create-wishlist-form">
+                <input type="text" id="wishlist-name" placeholder="Nombre de la wishlist (ej: Boda de Ana - Favoritas)" required>
+                <input type="text" id="wishlist-description" placeholder="Descripción (opcional)">
+                <input type="date" id="wishlist-date" placeholder="Fecha del evento (opcional)">
+                <button type="submit" style="background-color: var(--color-secondary);">Crear Wishlist</button>
+            </form>
+        </div>
+
+        <!-- Lista de wishlists existentes -->
+        <div id="wishlists-container">
+            <h3>📋 Mis Wishlists</h3>
+            <p id="loading-message">Cargando wishlists...</p>
+            <div id="wishlists-list"></div>
+        </div>
+    </div>
+
+    <!-- Modal para ver detalles y exportar -->
+    <div id="wishlist-modal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 id="modal-title"></h2>
+                <button id="close-modal" style="width: auto; padding: 10px 20px; background-color: var(--color-error);">✕</button>
+            </div>
+            
+            <div id="modal-info"></div>
+            
+            <div style="display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap;">
+                <button id="export-pdf-btn" style="flex: 1; min-width: 150px; background-color: var(--color-error);">
+                    📄 Exportar a PDF
+                </button>
+                <button id="copy-link-btn" style="flex: 1; min-width: 150px; background-color: var(--color-secondary);">
+                    🔗 Copiar Enlace
+                </button>
+                <button id="show-qr-btn" style="flex: 1; min-width: 150px; background-color: var(--color-primary);">
+                    📱 Mostrar QR
+                </button>
+            </div>
+
+            <div id="qr-container" style="display: none; text-align: center; margin: 20px 0;">
+                <canvas id="wishlist-qr"></canvas>
+            </div>
+            
+            <h3>🎵 Canciones Sugeridas (<span id="song-count">0</span>)</h3>
+            <ul id="modal-songs-list" style="list-style: none; padding: 0; max-height: 400px; overflow-y: auto;"></ul>
+        </div>
+    </div>
+
+    <!-- Banner publicitario inferior -->
+    <div class="ad-banner ad-banner-bottom">
+        📢 Espacio Publicitario - 728x90
+    </div>
+</body>
+</html>
