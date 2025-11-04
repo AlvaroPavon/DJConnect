@@ -75,6 +75,39 @@ body {
     margin-top: 20px;
 }
 
+/* Banners pequeños en móvil */
+@media screen and (max-width: 768px) {
+    .ad-banner {
+        min-height: 50px;
+        max-height: 50px;
+        font-size: 10px;
+        padding: 5px;
+        margin: 10px auto;
+    }
+    
+    .ad-banner-top {
+        margin-bottom: 10px;
+    }
+    
+    .ad-banner-bottom {
+        margin-top: 15px;
+    }
+}
+
+/* Ocultar banner inferior en móviles pequeños para ahorrar espacio */
+@media screen and (max-width: 480px) {
+    .ad-banner-bottom {
+        display: none;
+    }
+    
+    .ad-banner-top {
+        min-height: 40px;
+        max-height: 40px;
+        font-size: 9px;
+        margin: 5px auto;
+    }
+}
+
 h1, h2, h3, p {
     text-align: center;
     color: var(--color-primary);
