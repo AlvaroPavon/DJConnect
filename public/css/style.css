@@ -220,30 +220,41 @@ p { color: var(--color-text-secondary); line-height: 1.5; }
 a { color: var(--color-secondary); text-decoration: none; font-weight: bold; }
 hr { border: 1px solid var(--color-border); margin: 30px 0; }
 
-/* Títulos más compactos en móvil */
-@media screen and (max-width: 600px) {
+/* Títulos más grandes y prominentes en móvil */
+@media screen and (max-width: 768px) {
     h1 {
-        font-size: 1.5em;
-        margin-bottom: 15px;
+        font-size: 2em;
+        margin-bottom: 20px;
+        font-weight: bold;
     }
     
     h2 {
-        font-size: 1.3em;
-        margin-bottom: 10px;
+        font-size: 1.6em;
+        margin-bottom: 15px;
     }
     
     h3 {
-        font-size: 1.1em;
-        margin-bottom: 8px;
+        font-size: 1.3em;
+        margin-bottom: 12px;
     }
     
     p {
-        font-size: 0.95em;
-        line-height: 1.4;
+        font-size: 1em;
+        line-height: 1.5;
     }
     
     hr {
-        margin: 20px 0;
+        margin: 25px 0;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    h2 {
+        font-size: 1.5em;
     }
 }
 
