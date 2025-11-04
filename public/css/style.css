@@ -542,7 +542,8 @@ table tr:hover { background-color: #2c2c2c; }
 
     input[type="text"],
     input[type="password"],
-    input[type="email"] {
+    input[type="email"],
+    input[type="date"] {
         padding: 12px;
         font-size: 16px;
     }
@@ -550,6 +551,7 @@ table tr:hover { background-color: #2c2c2c; }
     .cancion-item {
         flex-direction: column;
         align-items: flex-start;
+        padding: 12px;
     }
 
     .cancion-info {
@@ -564,7 +566,9 @@ table tr:hover { background-color: #2c2c2c; }
 
     .btn-played, .btn-hide {
         flex: 1;
-        min-width: 80px;
+        min-width: 70px;
+        padding: 10px 8px;
+        font-size: 11px;
     }
 
     #qrcode-container canvas {
@@ -582,7 +586,8 @@ table tr:hover { background-color: #2c2c2c; }
     }
 
     #lista-canciones {
-        max-height: 400px;
+        max-height: 350px;
+        padding: 8px;
     }
 
     .ad-banner {
@@ -603,6 +608,23 @@ table tr:hover { background-color: #2c2c2c; }
     .nav-links a {
         display: block;
         margin: 5px 0;
+        padding: 12px 10px;
+        font-size: 14px;
+    }
+    
+    /* Reducir espaciado general en móvil */
+    .main-wrapper {
+        padding: 0;
+    }
+    
+    #warning-banner {
+        padding: 8px;
+        margin-bottom: 10px;
+        font-size: 0.85em;
+    }
+    
+    #warning-banner br {
+        display: none; /* Quitar saltos de línea en móvil */
     }
 }
 
@@ -621,5 +643,15 @@ table tr:hover { background-color: #2c2c2c; }
 
     .cancion-info em {
         font-size: 0.85em;
+    }
+    
+    button {
+        font-size: 15px;
+        padding: 12px;
+    }
+    
+    .nav-links a {
+        font-size: 13px;
+        padding: 10px 8px;
     }
 }
