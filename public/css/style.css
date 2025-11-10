@@ -434,6 +434,12 @@ button:active {
 .btn-played:disabled { background-color: var(--color-surface); color: #666; border-color: #444; cursor: not-allowed; }
 .btn-played:disabled:hover, .btn-hide:disabled:hover { transform: none; box-shadow: none; }
 
+/* --- MODIFICACIÓN PARA CENTRAR QR --- */
+#qrcode-container {
+    text-align: center; /* Centra el canvas generado */
+    padding: 10px 0; /* Añade espacio vertical */
+}
+
 /* --- Stats Panel --- */
 .stats-panel {
     background-color: rgba(187, 134, 252, 0.1);
