@@ -26,14 +26,13 @@
 
 1. [**Acerca del Proyecto**](#-acerca-del-proyecto)
 2. [**Funcionalidades Clave**](#-funcionalidades-clave)
-3. [**Novedades v2.0**](#-novedades-v20)
+3. [**Novedades v2.1**](#-novedades-v21)
 4. [**Stack Tecnológico**](#️-stack-tecnológico)
-5. [**Instalación y Configuración**](#-instalación-y-configuración)
-6. [**Uso de la Aplicación**](#-uso-de-la-aplicación)
-7. [**Hoja de Ruta**](#-hoja-de-ruta)
-8. [**Estructura del Directorio**](#-estructura-del-directorio)
-9. [**Contribuir**](#-contribuir)
-10. [**Licencia**](#-licencia)
+5. [**Documentación (Wiki)**](#-documentación-wiki)
+6. [**Hoja de Ruta**](#-hoja-de-ruta)
+7. [**Estructura del Directorio**](#-estructura-del-directorio)
+8. [**Contribuir**](#-contribuir)
+9. [**Licencia**](#-licencia)
 
 <img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
@@ -126,127 +125,15 @@
 
 <img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
-## 📦 Instalación y Configuración
+## 📚 Documentación (Wiki)
 
-### Requisitos Previos
+Toda la documentación detallada sobre la **arquitectura, funcionalidades y planes futuros** del proyecto se encuentra en la **[Wiki oficial del repositorio](https://github.com/tu-usuario/djconnect/wiki)**.
 
-- **Node.js** v14 o superior
-- **MongoDB** v4.4 o superior
-- **npm** o **yarn**
-
-### Instalación Paso a Paso
-
-1. **Clonar el repositorio**
-```bash
-git clone https://github.com/tu-usuario/djconnect.git
-cd djconnect
-```
-
-2. **Instalar dependencias**
-```bash
-npm install
-```
-
-3. **Configurar variables de entorno**
-```bash
-cp .env.example .env
-```
-
-Edita el archivo `.env` con tus credenciales:
-```env
-MONGO_URI=mongodb://localhost:27017/djconnect
-JWT_SECRET=tu_clave_secreta_muy_segura
-SPOTIFY_CLIENT_ID=tu_spotify_client_id
-SPOTIFY_CLIENT_SECRET=tu_spotify_client_secret
-SENDGRID_API_KEY=tu_sendgrid_api_key
-APP_BASE_URL=http://localhost:8001
-PORT=8001
-```
-
-4. **Obtener credenciales de Spotify**
-   - Ve a [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/)
-   - Crea una nueva aplicación
-   - Copia el Client ID y Client Secret
-
-5. **Iniciar MongoDB**
-```bash
-# Linux/Mac
-sudo systemctl start mongod
-
-# Windows
-net start MongoDB
-```
-
-6. **Iniciar el servidor**
-```bash
-npm start
-# o con nodemon para desarrollo
-npm run dev
-```
-
-7. **Acceder a la aplicación**
-   - Abre tu navegador en `http://localhost:8001`
-   - Regístrate como DJ
-   - ¡Comienza a usar DJConnect!
-
-### 📝 Scripts Útiles
-
-```bash
-# Crear usuario de prueba
-./register_user.sh "djtest" "test@example.com" "password123"
-
-# Ver logs del servidor
-tail -f server.log
-
-# Reiniciar servicios
-pkill -f "node server.js" && npm start
-```
-
-<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
-
-## 🎮 Uso de la Aplicación
-
-### Para DJs
-
-1. **Registro e Inicio de Sesión**
-   - Regístrate con usuario, email y contraseña
-   - Inicia sesión en el panel del DJ
-
-2. **Crear una Fiesta**
-   - Da un nombre a tu evento
-   - Se generará automáticamente un código QR único
-   - Comparte el QR con tus invitados
-
-3. **Gestionar Peticiones**
-   - Visualiza peticiones en tiempo real
-   - Marca canciones como "Puestas"
-   - Oculta canciones que no quieras tocar
-   - Observa estadísticas en vivo
-
-4. **Finalizar Evento**
-   - Clic en "Finalizar Fiesta"
-   - Se guardan automáticamente todas las estadísticas
-   - Consulta el historial cuando quieras
-
-### Para Invitados
-
-1. **Escanear QR** o acceder al link compartido
-2. **Buscar canciones** por título o artista
-3. **Seleccionar tu canción** favorita
-4. **Valorar al DJ** (1-5 estrellas)
-5. ¡La petición llega instantáneamente!
+Con el objetivo de proteger la propiedad intelectual del proyecto, **no se proporcionan guías de instalación o uso directo**. La Wiki sirve como un escaparate de la arquitectura del software para fines de portafolio y evaluación.
 
 <img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
 ## 🗺️ Hoja de Ruta
-
-### ✅ v2.0 - Completado (Actual)
-- [x] Diseño responsive completo
-- [x] Sistema de géneros musicales
-- [x] Analytics y estadísticas avanzadas
-- [x] Historial de fiestas
-- [x] Mejoras en gestión de peticiones
-- [x] Espacios publicitarios
 
 ### ✅ v2.1 - Completado (Actual)
 - [x] **Wishlists Pre-Evento** - Sistema completo de listas de deseos
@@ -319,65 +206,70 @@ pkill -f "node server.js" && npm start
 ├── CHANGELOG.md               # Registro de cambios
 ├── GUIA_INICIO.md            # Guía de inicio rápido
 └── README.md                  # Este archivo
-```
-
 <img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
-## 🤝 Contribuir
-
+🤝 Contribuir
 ¡Las contribuciones son bienvenidas! Si deseas mejorar DJConnect:
 
-1. **Fork** el proyecto
-2. Crea una **rama** para tu feature (`git checkout -b feature/AmazingFeature`)
-3. **Commit** tus cambios (`git commit -m 'Add: Amazing Feature'`)
-4. **Push** a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un **Pull Request**
+Fork el proyecto
 
-### 📝 Guías de Contribución
+Crea una rama para tu feature (git checkout -b feature/AmazingFeature)
 
-- Sigue el estilo de código existente
-- Escribe commits descriptivos
-- Documenta nuevas funcionalidades
-- Agrega tests cuando sea posible
-- Actualiza el CHANGELOG.md
+Commit tus cambios (git commit -m 'Add: Amazing Feature')
 
-### 🐛 Reportar Bugs
+Push a la rama (git push origin feature/AmazingFeature)
 
-Si encuentras un bug, por favor [abre un Issue](https://github.com/tu-usuario/djconnect/issues) con:
-- Descripción del problema
-- Pasos para reproducirlo
-- Comportamiento esperado vs actual
-- Screenshots si es aplicable
-- Información del entorno (OS, navegador, versión)
+Abre un Pull Request
 
-<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
+📝 Guías de Contribución
+Sigue el estilo de código existente
 
-## 📄 Licencia
+Escribe commits descriptivos
 
-Este proyecto se distribuye bajo una licencia propietaria. Consulta el archivo `LICENSE.md` para más detalles.
+Documenta nuevas funcionalidades
 
-<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
+Agrega tests cuando sea posible
 
-## 🌟 Agradecimientos
+Actualiza el CHANGELOG.md
 
-- [Spotify Web API](https://developer.spotify.com/documentation/web-api/) por su increíble catálogo musical
-- [Socket.IO](https://socket.io/) por la comunicación en tiempo real
-- [MongoDB](https://www.mongodb.com/) por la base de datos flexible
-- A todos los DJs que han probado y mejorado esta aplicación
+🐛 Reportar Bugs
+Si encuentras un bug, por favor abre un Issue con:
+
+Descripción del problema
+
+Pasos para reproducirlo
+
+Comportamiento esperado vs actual
+
+Screenshots si es aplicable
+
+Información del entorno (OS, navegador, versión)
 
 <img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
-## 📞 Contacto & Soporte
+📄 Licencia
+Este proyecto se distribuye bajo una licencia propietaria. Consulta el archivo LICENSE.md para más detalles.
 
-- **Email**: soporte@djconnect.app
-- **Issues**: [GitHub Issues](https://github.com/tu-usuario/djconnect/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/tu-usuario/djconnect/discussions)
-- **Wiki**: [Documentación Completa](https://github.com/tu-usuario/djconnect/wiki)
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
----
+🌟 Agradecimientos
+Spotify Web API por su increíble catálogo musical
 
-<div align="center">
-  <p>Hecho con ❤️ para la comunidad de DJs</p>
-  <p>⭐ Si te gusta DJConnect, dale una estrella en GitHub!</p>
-</div>
+Socket.IO por la comunicación en tiempo real
 
+MongoDB por la base de datos flexible
+
+A todos los DJs que han probado y mejorado esta aplicación
+
+<img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
+
+📞 Contacto & Soporte
+Email: soporte@djconnect.app
+
+Issues: GitHub Issues
+
+Discussions: GitHub Discussions
+
+Wiki: Documentación Completa
+
+<div align="center"> <p>Hecho con ❤️ para la comunidad de DJs</p> <p>⭐ Si te gusta DJConnect, dale una estrella en GitHub!</p> </div>
