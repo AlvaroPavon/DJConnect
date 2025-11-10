@@ -101,10 +101,26 @@ function runDashboard(currentPartyId) {
     const shareQrBtn = document.getElementById('share-qr-btn');
     const qrcodeContainer = document.getElementById('qrcode-container');
     
+    // ===== NUEVO BOTÓN DE VOLVER AL MENÚ =====
+    const backToMenuBtn = document.getElementById('back-to-menu-btn');
+    
     const socket = io(serverUrl, { 
         auth: { token }, 
         transports: ["websocket"] 
     });
+
+    // ===== LISTENER DEL BOTÓN DE VOLVER =====
+    backToMenuBtn.addEventListener('click', () => {
+        // 1. Desconectar el socket de esta fiesta
+        socket.disconnect();
+        
+        // 2. Ocultar el dashboard
+        dashboardContentSection.style.display = 'none';
+        
+        // 3. Mostrar el menú principal
+        mainMenuSection.style.display = 'block';
+    });
+    // ========================================
 
     socket.on('connect_error', (err) => {
         if (err.message.includes('Authentication error')) {
