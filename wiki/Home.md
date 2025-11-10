@@ -1,65 +1,20 @@
-# Bienvenido a la Wiki de DJConnect
+# 🏠 Home: Bienvenido a DJConnect
 
-¡Bienvenido a la documentación oficial de **DJConnect**! Esta wiki contiene toda la información que necesitas para instalar, configurar, usar y contribuir al proyecto.
+**DJConnect** es una plataforma web en tiempo real diseñada para digitalizar y simplificar la interacción entre los DJs y los asistentes a un evento.
 
-## 📚 Contenido de la Wiki
+La aplicación elimina las barreras de la comunicación tradicional (peticiones verbales o en papel) al proporcionar una plataforma centralizada, interactiva y en tiempo real.
 
-### Para Empezar
-- [🚀 Guía de Instalación](./Instalacion.md)
-- [⚙️ Configuración Inicial](./Configuracion.md)
-- [🎮 Primeros Pasos](./Primeros-Pasos.md)
+## 🎯 El Problema que Resuelve
 
-### Guías de Usuario
-- [🎛️ Panel del DJ](./Panel-DJ.md)
-- [📱 Aplicación de Invitados](./App-Invitados.md)
-- [📊 Analytics y Estadísticas](./Analytics.md)
-- [📜 Historial de Fiestas](./Historial.md)
+En cualquier evento en vivo, la comunicación entre el DJ y la audiencia es clave. Tradicionalmente, esto implica gritos, gestos o notas en servilletas, lo cual es ineficiente y distrae.
 
-### Desarrollo
-- [🏗️ Arquitectura del Sistema](./Arquitectura.md)
-- [🔌 API Reference](./API-Reference.md)
-- [💾 Modelos de Datos](./Modelos-Datos.md)
-- [🔄 WebSocket Events](./WebSocket-Events.md)
+DJConnect soluciona esto permitiendo a los invitados escanear un código QR y enviar peticiones de canciones directamente desde sus móviles al panel de control del DJ.
 
-### Integraciones
-- [🎵 Spotify API](./Spotify-Integration.md)
-- [📧 SendGrid Email](./SendGrid-Integration.md)
-- [📱 Capacitor JS](./Capacitor-Integration.md)
+## 🧭 Navegación
 
-### Despliegue
-- [🚀 Deployment en Producción](./Deployment.md)
-- [🐳 Docker Setup](./Docker.md)
-- [☸️ Kubernetes](./Kubernetes.md)
-- [🌐 Variables de Entorno](./Environment-Variables.md)
+Usa la barra lateral para explorar las diferentes secciones de esta Wiki:
 
-### Solución de Problemas
-- [🐛 Problemas Comunes](./Troubleshooting.md)
-- [❓ FAQ](./FAQ.md)
-- [🔧 Debugging](./Debugging.md)
-
-### Contribución
-- [🤝 Guía de Contribución](./Contribuir.md)
-- [📝 Estilo de Código](./Code-Style.md)
-- [✅ Testing Guidelines](./Testing.md)
-
-## 🎯 Enlaces Rápidos
-
-- [📖 README Principal](../README.md)
-- [📝 Changelog](../CHANGELOG.md)
-- [🗺️ Roadmap](../README.md#-hoja-de-ruta)
-- [💬 Discussions](https://github.com/tu-usuario/djconnect/discussions)
-- [🐛 Report Issues](https://github.com/tu-usuario/djconnect/issues)
-
-## 🆘 ¿Necesitas Ayuda?
-
-Si no encuentras lo que buscas en la wiki:
-
-1. Revisa la sección de [FAQ](./FAQ.md)
-2. Busca en [Issues cerrados](https://github.com/tu-usuario/djconnect/issues?q=is%3Aissue+is%3Aclosed)
-3. Pregunta en [Discussions](https://github.com/tu-usuario/djconnect/discussions)
-4. Crea un nuevo [Issue](https://github.com/tu-usuario/djconnect/issues/new)
-
----
-
-**Última actualización:** Enero 2025  
-**Versión:** 2.0
+- **[✨ Funcionalidades Actuales](./Funcionalidades-Actuales)**: Descubre lo que la aplicación puede hacer hoy.
+- **[🛠️ Tecnología y Arquitectura](./Tecnologia-y-Arquitectura)**: Conoce cómo está construido el proyecto.
+- **[🗺️ Hoja de Ruta](./Hoja-de-Ruta)**: Ve los planes para futuras versiones.
+- **[⚖️ Licencia](./Licencia)**: Entiende los términos de uso de este software.
