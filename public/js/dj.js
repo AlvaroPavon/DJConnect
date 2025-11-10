@@ -8,59 +8,92 @@ if (!token) {
 
 const serverUrl = window.SERVER_URL || window.location.origin;
 
-const partySetupSection = document.getElementById('party-setup');
+// --- Seleccion de elementos del DOM ---
+const mainMenuSection = document.getElementById('main-menu');
 const dashboardContentSection = document.getElementById('dashboard-content');
 const createPartyBtn = document.getElementById('create-party-btn');
 const partyNameInput = document.getElementById('party-name-input');
+const joinActivePartyBtn = document.getElementById('join-active-party-btn');
 
+let activePartyId = null;
+
+// --- 1. INICIALIZACIÓN: Carga el menú principal ---
 async function initialize() {
-    const urlParams = new URLSearchParams(window.location.search);
-    let partyId = urlParams.get('dj');
-
-    if (!partyId) {
-        try {
-            const response = await fetch(`${serverUrl}/api/active-party`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (response.ok) {
-                const data = await response.json();
-                partyId = data.activePartyId;
+    // Comprobar si ya hay una fiesta activa en el backend
+    try {
+        const response = await fetch(`${serverUrl}/api/active-party`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            if (data.activePartyId) {
+                activePartyId = data.activePartyId;
+                // Si hay fiesta activa, mostramos el botón de "Unirse"
+                joinActivePartyBtn.style.display = 'block';
             }
-        } catch (error) {
-            console.error('Error al obtener la fiesta activa:', error);
         }
+    } catch (error) {
+        console.error('Error al obtener la fiesta activa:', error);
     }
-    
-    if (partyId) {
-        partySetupSection.style.display = 'none';
-        dashboardContentSection.style.display = 'block';
-        runDashboard(partyId);
-    } else {
-        partySetupSection.style.display = 'block';
-        dashboardContentSection.style.display = 'none';
-    }
+
+    // Asegurarse de que el menú es visible y el dashboard oculto
+    mainMenuSection.style.display = 'block';
+    dashboardContentSection.style.display = 'none';
+
+    // Configurar los listeners del menú
+    setupMenuListeners();
 }
 
+// --- 2. LISTENERS DEL MENÚ ---
+function setupMenuListeners() {
+    // Listener para el botón "Unirse a Fiesta Activa"
+    joinActivePartyBtn.addEventListener('click', () => {
+        if (activePartyId) {
+            // Ocultar menú y mostrar dashboard
+            mainMenuSection.style.display = 'none';
+            dashboardContentSection.style.display = 'block';
+            runDashboard(activePartyId);
+        }
+    });
+
+    // Listener para el botón "Crear Nueva Fiesta"
+    createPartyBtn.addEventListener('click', () => {
+        const customName = partyNameInput.value.trim();
+        if (!customName) {
+            alert('Por favor, escribe un nombre para la fiesta.');
+            return;
+        }
+        
+        if (activePartyId) {
+            if (!confirm('Ya tienes una fiesta activa. ¿Estás seguro de que quieres finalizarla y crear una nueva?')) {
+                return;
+            }
+        }
+
+        const cleanName = customName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        const randomString = Math.random().toString(36).substring(2, 8);
+        const uniquePartyId = `${cleanName}-${randomString}`;
+        
+        // Ocultar menú y mostrar dashboard con la NUEVA fiesta
+        mainMenuSection.style.display = 'none';
+        dashboardContentSection.style.display = 'block';
+        runDashboard(uniquePartyId);
+    });
+}
+
+// Iniciar la lógica del menú al cargar la página
 initialize();
 
 if (Capacitor.isNativePlatform()) {
     App.addListener('resume', () => {
+        // Al volver a la app, siempre volvemos al menú
         initialize();
     });
 }
 
-createPartyBtn.addEventListener('click', () => {
-    const customName = partyNameInput.value.trim();
-    if (!customName) {
-        alert('Por favor, escribe un nombre para la fiesta.');
-        return;
-    }
-    const cleanName = customName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-    const randomString = Math.random().toString(36).substring(2, 8);
-    const uniquePartyId = `${cleanName}-${randomString}`;
-    window.location.href = `/html/dj.html?dj=${uniquePartyId}`;
-});
 
+// --- 3. LÓGICA DEL DASHBOARD (La fiesta en sí) ---
+// (Esta función solo se llama cuando haces clic en "Crear" o "Unirse")
 function runDashboard(currentPartyId) {
     document.getElementById('dj-name').textContent = `ID del Evento: ${currentPartyId}`;
     const listaCanciones = document.getElementById('lista-canciones');
@@ -261,6 +294,7 @@ function runDashboard(currentPartyId) {
 
                 if (response.ok) {
                     alert('¡Fiesta finalizada! Las estadísticas se han guardado.');
+                    // Recargamos la página, lo que nos devolverá al menú principal
                     window.location.href = '/html/dj.html';
                 } else {
                     const errorData = await response.json();

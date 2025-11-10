@@ -36,22 +36,32 @@
         </div>
 
     <div class="container">
-        <h1>Panel de Peticiones</h1>
-        
-        <div id="party-setup">
-            <h3>Crea tu Evento</h3>
-            <p>Dale un nombre a tu fiesta. El sistema añadirá un código único para asegurar que no se repita.</p>
+
+        <div id="main-menu">
+            <h1>Panel de DJ</h1>
+            <p>Selecciona una opción para empezar.</p>
+
+            <div class="nav-links">
+                <a id="wishlist-link" href="/html/wishlist-manager.html" style="background-color: rgba(3, 218, 198, 0.2); border-color: var(--color-secondary);">🎵 Wishlists Pre-Evento</a>
+                <a id="history-link" href="/html/history.html">📊 Historial de Fiestas</a>
+                <a id="ranking-link" href="/html/ranking.html">🏆 Ver Ranking</a>
+            </div>
+
+            <hr>
+
+            <h3>Evento en Vivo</h3>
+            <p>Crea un nuevo evento o únete al que ya está activo.</p>
+            
+            <button id="join-active-party-btn" style="display: none; background-color: var(--color-primary); margin-bottom: 10px;">
+                🎉 Unirse a la Fiesta Activa
+            </button>
+            
             <input type="text" id="party-name-input" placeholder="Ej: Boda de Ana y Luis">
-            <button id="create-party-btn">Crear Fiesta y Generar QR</button>
+            <button id="create-party-btn">Crear Nueva Fiesta</button>
         </div>
 
         <div id="dashboard-content" style="display: none;">
             <h2 id="dj-name"></h2>
-            <div class="nav-links">
-                <a id="ranking-link" href="/html/ranking.html">Ver Ranking</a>
-                <a id="wishlist-link" href="/html/wishlist-manager.html" style="background-color: rgba(3, 218, 198, 0.2); border-color: var(--color-secondary);">🎵 Wishlists Pre-Evento</a>
-                <a id="history-link" href="/html/history.html">Historial de Fiestas</a>
-            </div>
             
             <div class="stats-panel">
                 <h3>📊 Estadísticas en Vivo</h3>
@@ -71,7 +81,7 @@
                 <button id="share-qr-btn" style="display: none;">Compartir / Guardar QR</button>
             </div>
             <button id="btn-nueva-fiesta" style="margin-top: 20px;">🎉 Limpiar Lista</button>
-            <button id="end-party-btn" style="background-color: var(--color-error); margin-top: 10px;">Finalizar y Crear Nueva Fiesta</button>
+            <button id="end-party-btn" style="background-color: var(--color-error); margin-top: 10px;">Finalizar Fiesta y Volver al Menú</button>
         </div>
     </div>
 
