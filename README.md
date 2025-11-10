@@ -206,6 +206,7 @@ Con el objetivo de proteger la propiedad intelectual del proyecto, **no se propo
 ├── CHANGELOG.md               # Registro de cambios
 ├── GUIA_INICIO.md            # Guía de inicio rápido
 └── README.md                  # Este archivo
+```
 <img src="assets/wave_divider.gif" alt="Sound Wave Divider" width="100%" height="40px"/>
 
 🤝 Contribuir
