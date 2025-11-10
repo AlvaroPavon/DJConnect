@@ -193,7 +193,7 @@ Este proyecto se distribuye bajo una licencia propietaria. Consulta el archivo `
 * A todos los DJs que han probado y aportado feedback.
 
 ### Contacto
-* **Soporte / Email**: `soporte@djconnect.app`
+* **Soporte / Email**: `alvaropavonmartinez7@gmail.com`
 * **Bugs / Issues**: [GitHub Issues](https://github.com/tu-usuario/djconnect/issues)
 * **Ideas / Dudas**: [GitHub Discussions](https://github.com/tu-usuario/djconnect/discussions)
 * **Documentación**: [Project Wiki](https://github.com/tu-usuario/djconnect/wiki)
