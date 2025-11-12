@@ -193,6 +193,71 @@ async function initializeAdminUser() {
     }
 }
 
+// === SEGURIDAD: Función de validación de imágenes Base64 ===
+function validateBase64Image(base64String) {
+    try {
+        // Verificar que es un string válido
+        if (!base64String || typeof base64String !== 'string') {
+            return { valid: false, error: 'Formato de imagen inválido' };
+        }
+
+        // Verificar formato data:image
+        const matches = base64String.match(/^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/);
+        if (!matches) {
+            return { valid: false, error: 'Tipo de imagen no permitido. Solo PNG, JPEG, JPG o WebP.' };
+        }
+
+        const imageType = matches[1];
+        const base64Data = matches[2];
+
+        // Decodificar el base64
+        const buffer = Buffer.from(base64Data, 'base64');
+
+        // Verificar tamaño (máximo 3MB)
+        const maxSize = 3 * 1024 * 1024;
+        if (buffer.length > maxSize) {
+            return { valid: false, error: 'La imagen excede el tamaño máximo de 3MB' };
+        }
+
+        // Verificar magic numbers (firmas de archivo) para prevenir uploads maliciosos
+        const magicNumbers = {
+            'png': [0x89, 0x50, 0x4E, 0x47],
+            'jpeg': [0xFF, 0xD8, 0xFF],
+            'jpg': [0xFF, 0xD8, 0xFF],
+            'webp': [0x52, 0x49, 0x46, 0x46]
+        };
+
+        const signature = magicNumbers[imageType];
+        if (!signature) {
+            return { valid: false, error: 'Tipo de imagen no soportado' };
+        }
+
+        // Verificar los primeros bytes del buffer
+        for (let i = 0; i < signature.length; i++) {
+            if (buffer[i] !== signature[i]) {
+                return { valid: false, error: 'El archivo no corresponde al tipo de imagen declarado' };
+            }
+        }
+
+        // Todo OK
+        return { valid: true, imageType, size: buffer.length };
+
+    } catch (error) {
+        console.error('Error validando imagen:', error);
+        return { valid: false, error: 'Error al procesar la imagen' };
+    }
+}
+
+// === SEGURIDAD: Función de sanitización de inputs ===
+function sanitizeInput(input) {
+    if (typeof input === 'string') {
+        // Remover caracteres peligrosos
+        return input.replace(/[<>\"']/g, '');
+    }
+    return input;
+}
+
+
 // --- 5. MIDDLEWARES DE AUTENTICACIÓN ---
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
