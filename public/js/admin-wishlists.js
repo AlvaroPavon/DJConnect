@@ -217,6 +217,9 @@ function showWishlistModal(wishlist) {
         `).join('')
         : '<p style="text-align: center; color: var(--color-text-secondary);">No hay canciones aún</p>';
     
+    // Guardar wishlist en variable temporal para PDF
+    window.currentWishlistForPDF = wishlist;
+    
     modal.innerHTML = `
         <div style="background: var(--color-surface); padding: 30px; border-radius: 12px; max-width: 800px; max-height: 90vh; overflow-y: auto; width: 90%;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -348,6 +351,9 @@ function showWishlistModal(wishlist) {
             </div>
         `).join('')
         : '<p style="text-align: center; color: var(--color-text-secondary);">No hay canciones aún</p>';
+    
+    // Guardar wishlist en variable temporal para PDF
+    window.currentWishlistForPDF = wishlist;
     
     modal.innerHTML = `
         <div style="background: var(--color-surface); padding: 30px; border-radius: 12px; max-width: 800px; max-height: 90vh; overflow-y: auto; width: 90%;">
