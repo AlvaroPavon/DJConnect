@@ -104,6 +104,23 @@ Esta versión introduce mejoras masivas en la administración, gestión de event
 - **Sin límites**: Solucionado bug de carga máxima de 100 peticiones.
 - **Mejor scroll**: Lista optimizada para cientos de peticiones.
 
+### 📱 **Progressive Web App (PWA) (¡Nuevo!)**
+- **Instalable**: Instala DJConnect como app nativa desde el navegador.
+- **Sin Tiendas**: No requiere App Store ni Google Play.
+- **Actualizaciones Automáticas**: Sin aprobaciones ni delays.
+- **Ícono en Pantalla de Inicio**: Como cualquier app nativa.
+- **Experiencia Standalone**: Sin barra del navegador.
+- **Compatible**: Android (Chrome) e iOS (Safari).
+
+### 🔒 **Securización Completa (¡Nuevo!)**
+- **Headers de Seguridad**: Helmet.js con CSP, HSTS, X-Frame-Options.
+- **Rate Limiting**: Protección contra fuerza bruta y DDoS.
+- **Validación de Inputs**: Sanitización completa con express-validator.
+- **NoSQL Injection**: Protección contra inyecciones en MongoDB.
+- **Subida de Archivos Segura**: Validación de magic numbers, tipos y tamaños.
+- **JWT Cortos**: Tokens de 2 horas (reducido de 24h).
+- **HTTPS Obligatorio**: Certificado SSL válido.
+
 ---
 
 ## 🛠️ Stack Tecnológico
