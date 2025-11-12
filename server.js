@@ -80,10 +80,27 @@ app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ limit: '5mb', extended: true }));
 
 // === SEGURIDAD: Rate Limiters ===
-// Rate limiter general para todas las rutas
+// Rate limiter MUY PERMISIVO para invitados (muchos en misma IP en eventos)
+const guestLimiter = rateLimit({
+    windowMs: 5 * 60 * 1000, // 5 minutos
+    max: 500, // 500 requests por IP (para eventos grandes)
+    message: 'Demasiadas peticiones. Por favor, espera un momento.',
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: (req) => {
+        // No limitar páginas estáticas
+        return req.path.endsWith('.html') || 
+               req.path.endsWith('.css') || 
+               req.path.endsWith('.js') ||
+               req.path.endsWith('.png') ||
+               req.path.endsWith('.jpg');
+    }
+});
+
+// Rate limiter moderado para operaciones normales
 const generalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutos
-    max: 100, // máximo 100 requests por IP
+    max: 200, // aumentado a 200 para eventos
     message: 'Demasiadas peticiones desde esta IP, por favor intenta de nuevo más tarde.',
     standardHeaders: true,
     legacyHeaders: false,
@@ -92,7 +109,7 @@ const generalLimiter = rateLimit({
 // Rate limiter estricto para login (prevenir fuerza bruta)
 const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutos
-    max: 5, // máximo 5 intentos de login
+    max: 10, // aumentado a 10 intentos (para no bloquear DJs legítimos)
     message: 'Demasiados intentos de inicio de sesión. Por favor, intenta de nuevo en 15 minutos.',
     skipSuccessfulRequests: true
 });
