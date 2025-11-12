@@ -109,10 +109,12 @@ DJConnect proporciona datos valiosos sobre cada evento.
 - **Sistema de Ranking**: Los invitados pueden valorar al DJ (1-5 estrellas), y estos datos alimentan un ranking de DJs.
 - **Detección de Géneros**: La app se integra con la API de Spotify para identificar el género de cada canción.
 
-## 🔐 Autenticación y Seguridad
+## 🔐 Autenticación Mejorada
 
-- **Sistema de Cuentas para DJs**: Registro, inicio de sesión y recuperación de contraseña (vía SendGrid).
-- **Protección de Rutas**: Se utiliza `bcryptjs` para hashear contraseñas y `JWT` (JSON Web Tokens) para asegurar las rutas del panel del DJ.
+- **Sistema de Cuentas Multi-Rol**: Admin y DJ con permisos diferenciados.
+- **Protección de Rutas**: Usa `bcryptjs` para hashear contraseñas y `JWT` con expiración de 2 horas.
+- **Recuperación de Contraseña**: Sistema seguro con tokens temporales vía SendGrid.
+- **Rate Limiting en Login**: Protección contra ataques de fuerza bruta.
 
 ## 📱 Diseño Adaptativo (Responsive)
 
