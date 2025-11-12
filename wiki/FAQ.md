@@ -217,6 +217,115 @@ La aplicación es gratuita. Los únicos costos opcionales son:
 
 ---
 
+## 📱 Progressive Web App (PWA)
+
+### ¿Qué es una PWA?
+
+Una PWA (Progressive Web App) es una aplicación web que puede instalarse en tu dispositivo como si fuera una app nativa, pero sin necesidad de tiendas de aplicaciones (App Store/Google Play).
+
+### ¿Cómo instalo DJConnect como app?
+
+**Android (Chrome):**
+1. Abre DJConnect en Chrome
+2. Menú (⋮) → "Instalar app"
+3. Confirma y listo
+
+**iOS (Safari):**
+1. Abre DJConnect en Safari (solo Safari funciona)
+2. Botón compartir 📤 → "Añadir a pantalla de inicio"
+3. Toca "Añadir"
+
+**Escritorio:**
+1. Chrome/Edge → Ícono de instalación en barra de direcciones
+2. Click "Instalar"
+
+### ¿Funciona sin conexión la PWA?
+
+No. DJConnect PWA requiere internet porque:
+- Socket.IO necesita conexión en tiempo real
+- Spotify API requiere internet
+- MongoDB está en la nube
+
+Si pierdes conexión, verás un mensaje claro indicándolo.
+
+### ¿Cuál es la diferencia entre la web y la PWA?
+
+La funcionalidad es idéntica, pero la PWA ofrece:
+- ✅ Ícono en pantalla de inicio
+- ✅ Abre en ventana propia (sin barra del navegador)
+- ✅ Experiencia más rápida
+- ✅ Actualizaciones automáticas
+
+### ¿Cuesta algo instalar la PWA?
+
+No, es completamente gratis. No hay costos de App Store ($99/año) ni Google Play ($25 único).
+
+### ¿Puedo desinstalar la PWA?
+
+Sí, como cualquier app:
+- **Android:** Mantén presionado el ícono → Desinstalar
+- **iOS:** Mantén presionado → Eliminar app
+- **Escritorio:** Click derecho → Desinstalar
+
+### ¿La PWA recibe actualizaciones?
+
+Sí, automáticamente. Cuando el desarrollador actualiza el código, tu PWA se actualiza sola en la próxima apertura. No necesitas reinstalar.
+
+### ¿Por qué no aparece en App Store/Google Play?
+
+Porque es una PWA, no una app nativa. Las ventajas:
+- ✅ No paga comisiones a Apple/Google
+- ✅ Actualizaciones instantáneas (sin aprobación)
+- ✅ Instalación directa desde web
+- ✅ Funciona en todos los dispositivos
+
+Si necesitas una app nativa está en el roadmap v4.0.
+
+---
+
+## 🔒 Seguridad
+
+### ¿Es seguro usar DJConnect?
+
+Sí. Desde v2.2 implementa seguridad de nivel empresarial:
+- ✅ HTTPS obligatorio con certificado SSL
+- ✅ Headers HTTP seguros (CSP, HSTS, X-Frame-Options)
+- ✅ Rate limiting contra fuerza bruta
+- ✅ Validación estricta de todos los inputs
+- ✅ Protección contra NoSQL injection
+- ✅ JWT con tokens de 2 horas
+- ✅ Passwords hasheados con bcrypt
+
+Consulta [Seguridad](./Seguridad) para detalles completos.
+
+### ¿Qué pasa si alguien intenta hackear mi cuenta?
+
+El sistema te protege automáticamente:
+- Después de 5 intentos fallidos de login, tu IP queda bloqueada 15 minutos
+- Los passwords están hasheados (no se pueden "descifrar")
+- Los tokens expiran en 2 horas
+- Todas las peticiones se validan y sanitizan
+
+### ¿Puedo subir archivos maliciosos?
+
+No. El sistema valida:
+1. Tipo de archivo (solo imágenes)
+2. Magic numbers (primeros bytes del archivo)
+3. Tamaño (máximo 3MB)
+4. Rate limiting (10 subidas/15min)
+
+Cualquier archivo sospechoso es rechazado automáticamente.
+
+### ¿Mis datos están seguros?
+
+Sí:
+- Passwords hasheados con bcrypt (no texto plano)
+- Comunicación HTTPS encriptada
+- Base de datos con queries sanitizadas
+- Variables sensibles en .env (no en código)
+
+---
+
 ## 🚀 Deployment
 
 ### ¿Dónde puedo desplegar DJConnect?
