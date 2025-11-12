@@ -366,7 +366,11 @@ function runDashboard(currentPartyId) {
             try {
                 const response = await fetch(`${serverUrl}/api/end-party`, {
                     method: 'POST',
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` 
+                    },
+                    body: JSON.stringify({ partyId: currentPartyId })
                 });
 
                 if (response.ok) {
