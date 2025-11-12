@@ -54,14 +54,24 @@
             <hr>
 
             <h3>Evento en Vivo</h3>
-            <p>Crea un nuevo evento o únete al que ya está activo.</p>
             
-            <button id="join-active-party-btn" style="display: none; background-color: var(--color-primary); margin-bottom: 10px;">
-                🎉 Unirse a la Fiesta Activa
-            </button>
+            <!-- Sección de fiestas activas -->
+            <div id="active-parties-section" style="display: none; margin-bottom: 20px;">
+                <p>Tienes <strong id="active-parties-count">0</strong> fiesta(s) activa(s):</p>
+                <div id="active-parties-list" class="stats-panel" style="padding: 15px;">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+            </div>
             
-            <input type="text" id="party-name-input" placeholder="Ej: Boda de Ana y Luis">
-            <button id="create-party-btn">Crear Nueva Fiesta</button>
+            <!-- Formulario para crear nueva fiesta -->
+            <div id="create-party-section">
+                <p>Crea un nuevo evento (máximo 3 simultáneas):</p>
+                <input type="text" id="party-name-input" placeholder="Ej: Boda de Ana y Luis">
+                <button id="create-party-btn">Crear Nueva Fiesta</button>
+                <p id="party-limit-message" style="display: none; color: var(--color-error); text-align: center; margin-top: 10px;">
+                    Has alcanzado el límite de 3 fiestas simultáneas. Finaliza una para crear otra.
+                </p>
+            </div>
         </div>
 
         <div id="dashboard-content" style="display: none;">
