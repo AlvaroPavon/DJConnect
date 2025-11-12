@@ -135,8 +135,17 @@ const uploadLimiter = rateLimit({
     message: 'Demasiadas subidas de archivos. Por favor, intenta de nuevo más tarde.'
 });
 
-// Aplicar rate limiter general a todas las rutas
-app.use(generalLimiter);
+// Aplicar rate limiters selectivos
+// Para rutas de invitados (peticiones), usar limiter permisivo
+app.use('/api/party', guestLimiter);
+app.use('/api/wishlist', guestLimiter);
+
+// Para rutas administrativas y de DJ, usar limiter general
+app.use('/api/admin', generalLimiter);
+app.use('/api/dj', generalLimiter);
+
+// Para el resto, limiter permisivo (páginas estáticas, etc.)
+app.use(guestLimiter);
 
 // Opciones de CORS
 const allowedOrigins = [
