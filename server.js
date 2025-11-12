@@ -411,24 +411,42 @@ app.post('/forgot-password',
         }
 });
 
-app.post('/reset-password', async (req, res) => {
-    try {
-        const { token, password } = req.body;
-        const dj = await DJ.findOne({
-            passwordResetToken: token,
-            passwordResetExpires: { $gt: Date.now() }
-        });
-        if (!dj) {
-            return res.status(400).json({ message: 'El token no es válido o ha expirado.' });
+app.post('/reset-password', 
+    passwordResetLimiter,
+    [
+        body('token').trim().notEmpty(),
+        body('password').isLength({ min: 6, max: 100 })
+    ],
+    async (req, res) => {
+        try {
+            // Validar inputs
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ message: 'Datos inválidos' });
+            }
+
+            const { token, password } = req.body;
+            const sanitizedToken = sanitizeInput(token);
+            
+            const dj = await DJ.findOne({
+                passwordResetToken: sanitizedToken,
+                passwordResetExpires: { $gt: Date.now() }
+            });
+            
+            if (!dj) {
+                return res.status(400).json({ message: 'El token no es válido o ha expirado.' });
+            }
+            
+            dj.password = await bcrypt.hash(password, 10);
+            dj.passwordResetToken = undefined;
+            dj.passwordResetExpires = undefined;
+            await dj.save();
+            
+            res.json({ message: '¡Contraseña actualizada con éxito! Ya puedes iniciar sesión.' });
+        } catch (error) {
+            console.error('Error en reset-password:', error);
+            res.status(500).json({ message: 'Error en el servidor.' });
         }
-        dj.password = await bcrypt.hash(password, 10);
-        dj.passwordResetToken = undefined;
-        dj.passwordResetExpires = undefined;
-        await dj.save();
-        res.json({ message: '¡Contraseña actualizada con éxito! Ya puedes iniciar sesión.' });
-    } catch (error) {
-        res.status(500).json({ message: 'Error en el servidor.' });
-    }
 });
 
 const getSpotifyToken = async () => {
