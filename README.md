@@ -140,25 +140,30 @@ Esta versión introduce mejoras masivas en la administración, gestión de event
 
 ### Guías Disponibles
 
-- **[PWA-GUIDE.md](./PWA-GUIDE.md)** - Guía completa de instalación de la Progressive Web App
-- **[SECURITY.md](./SECURITY.md)** - Documento detallado de todas las medidas de seguridad implementadas
-- **[Wiki oficial](https://github.com/tu-usuario/djconnect/wiki)** - Documentación completa de arquitectura y funcionalidades
+- **[PWA-GUIDE.md](./PWA-GUIDE.md)** - Guía completa de la Progressive Web App
+- **[SECURITY.md](./SECURITY.md)** - Documentación de medidas de seguridad implementadas
+- **[NGINX-SETUP-GUIDE.md](./NGINX-SETUP-GUIDE.md)** - Guía de configuración de proxy reverso
 
-### Instalación PWA
+### Progressive Web App (PWA)
 
-DJConnect puede instalarse como aplicación nativa en Android e iOS:
+DJConnect es una aplicación web progresiva instalable en dispositivos móviles sin necesidad de tiendas de aplicaciones. Proporciona una experiencia similar a las aplicaciones nativas con actualizaciones instantáneas y acceso directo desde la pantalla de inicio.
 
-**Android:**
-1. Abrir `https://djapp.duckdns.org` en Chrome
-2. Menú (⋮) → "Instalar app"
-3. ¡Listo!
+**Características PWA:**
+- 📱 Instalable en Android e iOS
+- 🚀 Carga rápida y optimizada
+- 🎨 Interfaz de aplicación nativa
+- 🔄 Actualizaciones automáticas
+- 🔒 Requiere conexión a internet
 
-**iOS:**
-1. Abrir `https://djapp.duckdns.org` en Safari
-2. Compartir 📤 → "Añadir a pantalla de inicio"
-3. ¡Listo!
+### Seguridad
 
-Consulta **[PWA-GUIDE.md](./PWA-GUIDE.md)** para más detalles.
+La aplicación implementa múltiples capas de seguridad empresarial:
+- 🛡️ Headers HTTP seguros (CSP, HSTS, X-Frame-Options)
+- 🚫 Rate limiting contra ataques de fuerza bruta
+- ✅ Validación y sanitización de inputs
+- 🔐 Protección contra inyección NoSQL
+- 📁 Validación estricta de archivos subidos
+- 🔑 Autenticación JWT con tokens de corta duración
 
 ---
 
