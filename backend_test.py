@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-DJConnect Security Testing Suite
-Tests all security features of the DJConnect backend running at https://djapp.duckdns.org
+DJConnect Comprehensive Backend Testing Suite
+Tests all API endpoints of the DJConnect backend running at https://djapp.duckdns.org
 """
 
 import requests
