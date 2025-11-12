@@ -23,6 +23,9 @@ async function initialize() {
     // Cargar logo de la empresa
     loadCompanyLogo();
     
+    // Cargar perfil del DJ (incluyendo Instagram)
+    loadDJProfile();
+    
     // Comprobar si ya hay fiestas activas en el backend
     try {
         const response = await fetch(`${serverUrl}/api/active-party`, {
@@ -60,6 +63,25 @@ async function initialize() {
 
     // Configurar los listeners del menú
     setupMenuListeners();
+}
+
+// Cargar perfil del DJ
+async function loadDJProfile() {
+    try {
+        const response = await fetch(`${serverUrl}/api/dj/profile`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (response.ok) {
+            const profile = await response.json();
+            const instagramInput = document.getElementById('instagram-input');
+            if (instagramInput && profile.instagram) {
+                instagramInput.value = profile.instagram;
+            }
+        }
+    } catch (error) {
+        console.error('Error al cargar perfil:', error);
+    }
 }
 
 // Mostrar lista de fiestas activas
