@@ -371,28 +371,44 @@ app.post('/login',
         }
 });
 
-app.post('/forgot-password', async (req, res) => {
-    try {
-        const { email } = req.body;
-        const dj = await DJ.findOne({ email });
-        if (!dj) {
-            return res.json({ message: 'Si tu email está registrado, recibirás un enlace de recuperación.' });
+app.post('/forgot-password', 
+    passwordResetLimiter,
+    [
+        body('email').isEmail().normalizeEmail()
+    ],
+    async (req, res) => {
+        try {
+            // Validar inputs
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ message: 'Email inválido' });
+            }
+
+            const { email } = req.body;
+            const sanitizedEmail = sanitizeInput(email);
+            
+            const dj = await DJ.findOne({ email: sanitizedEmail });
+            if (!dj) {
+                return res.json({ message: 'Si tu email está registrado, recibirás un enlace de recuperación.' });
+            }
+            
+            const resetToken = crypto.randomBytes(32).toString('hex');
+            dj.passwordResetToken = resetToken;
+            dj.passwordResetExpires = Date.now() + 3600000;
+            await dj.save();
+            
+            const resetUrl = `${process.env.APP_BASE_URL}/html/reset-password.html?token=${resetToken}`;
+            await transporter.sendMail({
+                from: '"DJ Connect App" <alvaropavonmartinez7@gmail.com>',
+                to: dj.email,
+                subject: 'Recuperación de Contraseña',
+                html: `<h1>Recuperación de Contraseña</h1><p>Haz clic en el siguiente enlace para continuar:</p><a href="${resetUrl}">${resetUrl}</a><p>Si no has sido tú, ignora este correo.</p>`
+            });
+            res.json({ message: 'Si tu email está registrado, recibirás un enlace de recuperación.' });
+        } catch (error) {
+            console.error('Error en forgot-password:', error);
+            res.status(500).json({ message: 'Error en el servidor.' });
         }
-        const resetToken = crypto.randomBytes(32).toString('hex');
-        dj.passwordResetToken = resetToken;
-        dj.passwordResetExpires = Date.now() + 3600000;
-        await dj.save();
-        const resetUrl = `${process.env.APP_BASE_URL}/html/reset-password.html?token=${resetToken}`;
-        await transporter.sendMail({
-            from: '"DJ Connect App" <alvaropavonmartinez7@gmail.com>',
-            to: dj.email,
-            subject: 'Recuperación de Contraseña',
-            html: `<h1>Recuperación de Contraseña</h1><p>Haz clic en el siguiente enlace para continuar:</p><a href="${resetUrl}">${resetUrl}</a><p>Si no has sido tú, ignora este correo.</p>`
-        });
-        res.json({ message: 'Si tu email está registrado, recibirás un enlace de recuperación.' });
-    } catch (error) {
-        res.status(500).json({ message: 'Error en el servidor.' });
-    }
 });
 
 app.post('/reset-password', async (req, res) => {
