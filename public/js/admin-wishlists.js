@@ -401,3 +401,136 @@ async function loadCompanyLogo() {
         console.error('Error loading logo:', error);
     }
 }
+
+// PDF Export functionality
+async function exportWishlistToPDF() {
+    const wishlist = window.currentWishlistForPDF;
+    if (!wishlist) {
+        alert('❌ Error: No hay datos de wishlist disponibles');
+        return;
+    }
+
+    try {
+        // Cargar jsPDF
+        if (typeof window.jsPDF === 'undefined') {
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+            document.head.appendChild(script);
+            
+            await new Promise((resolve, reject) => {
+                script.onload = resolve;
+                script.onerror = reject;
+            });
+        }
+
+        const { jsPDF } = window.jsPDF;
+        const doc = new jsPDF();
+
+        // Configuración
+        const pageWidth = doc.internal.pageSize.width;
+        const margin = 20;
+        let yPosition = margin;
+
+        // Función para añadir texto con salto de línea automático
+        function addText(text, x, y, maxWidth, fontSize = 12) {
+            doc.setFontSize(fontSize);
+            const lines = doc.splitTextToSize(text, maxWidth);
+            doc.text(lines, x, y);
+            return y + (lines.length * fontSize * 0.4);
+        }
+
+        // Cargar logo si existe
+        try {
+            const logoResponse = await fetch(`${serverUrl}/api/config/logo`);
+            if (logoResponse.ok) {
+                const logoData = await logoResponse.json();
+                if (logoData.logoUrl) {
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    await new Promise((resolve, reject) => {
+                        img.onload = resolve;
+                        img.onerror = resolve; // Continuar aunque falle el logo
+                        img.src = logoData.logoUrl;
+                    });
+                    
+                    if (img.complete && img.naturalWidth > 0) {
+                        const logoWidth = 40;
+                        const logoHeight = (img.naturalHeight / img.naturalWidth) * logoWidth;
+                        doc.addImage(img, 'PNG', pageWidth - margin - logoWidth, yPosition, logoWidth, logoHeight);
+                    }
+                }
+            }
+        } catch (error) {
+            console.log('Logo no disponible, continuando sin logo');
+        }
+
+        // Título
+        doc.setFontSize(20);
+        doc.setFont(undefined, 'bold');
+        yPosition = addText(`Wishlist: ${wishlist.name}`, margin, yPosition + 10, pageWidth - 2 * margin, 20);
+        yPosition += 10;
+
+        // Información básica
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(12);
+        
+        const eventDate = wishlist.eventDate 
+            ? new Date(wishlist.eventDate).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })
+            : 'Sin fecha definida';
+        
+        const statusText = wishlist.isActive ? 'Activa (Invitados pueden agregar canciones)' : 'Cerrada (No se aceptan más canciones)';
+        
+        yPosition = addText(`DJ: ${wishlist.djUsername}`, margin, yPosition, pageWidth - 2 * margin);
+        yPosition = addText(`Estado: ${statusText}`, margin, yPosition + 5, pageWidth - 2 * margin);
+        yPosition = addText(`Fecha del evento: ${eventDate}`, margin, yPosition + 5, pageWidth - 2 * margin);
+        
+        if (wishlist.description) {
+            yPosition = addText(`Descripción: ${wishlist.description}`, margin, yPosition + 5, pageWidth - 2 * margin);
+        }
+        
+        yPosition += 15;
+
+        // Título de canciones
+        doc.setFont(undefined, 'bold');
+        yPosition = addText(`Canciones Sugeridas (${wishlist.songs.length})`, margin, yPosition, pageWidth - 2 * margin, 14);
+        yPosition += 10;
+
+        // Lista de canciones
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(10);
+        
+        if (wishlist.songs.length === 0) {
+            yPosition = addText('No hay canciones sugeridas aún.', margin, yPosition, pageWidth - 2 * margin, 10);
+        } else {
+            wishlist.songs.forEach((song, index) => {
+                // Verificar si necesitamos nueva página
+                if (yPosition > doc.internal.pageSize.height - 40) {
+                    doc.addPage();
+                    yPosition = margin;
+                }
+                
+                const songText = `${index + 1}. ${song.titulo} - ${song.artista}`;
+                yPosition = addText(songText, margin, yPosition, pageWidth - 2 * margin, 11);
+                
+                const detailsText = `   Género: ${song.genre} | Sugerida por: ${song.addedBy} | ${new Date(song.timestamp).toLocaleString('es-ES')}`;
+                yPosition = addText(detailsText, margin, yPosition + 2, pageWidth - 2 * margin, 9);
+                yPosition += 8;
+            });
+        }
+
+        // Pie de página
+        const now = new Date().toLocaleString('es-ES');
+        doc.setFontSize(8);
+        doc.text(`Generado el ${now}`, margin, doc.internal.pageSize.height - 10);
+
+        // Descargar PDF
+        const fileName = `wishlist_${wishlist.name.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+        doc.save(fileName);
+        
+        alert('✅ PDF generado exitosamente!');
+
+    } catch (error) {
+        console.error('Error generando PDF:', error);
+        alert('❌ Error al generar el PDF. Inténtalo de nuevo.');
+    }
+}
