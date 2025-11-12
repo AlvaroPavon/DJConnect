@@ -23,7 +23,16 @@ echo "✅ Backup guardado en: $BACKUP_FILE"
 # Copiar nueva configuración
 echo ""
 echo "📝 Instalando nueva configuración..."
-cp /app/nginx-dj-app-secure.conf /etc/nginx/sites-available/dj-app.conf
+# Detectar ruta del proyecto (puede ser /app o /var/www/DJConnect)
+if [ -f "/app/nginx-dj-app-secure.conf" ]; then
+    PROJECT_PATH="/app"
+elif [ -f "/var/www/DJConnect/nginx-dj-app-secure.conf" ]; then
+    PROJECT_PATH="/var/www/DJConnect"
+else
+    echo "❌ Error: No se encontró nginx-dj-app-secure.conf"
+    exit 1
+fi
+cp $PROJECT_PATH/nginx-dj-app-secure.conf /etc/nginx/sites-available/dj-app.conf
 echo "✅ Configuración actualizada"
 
 # Verificar sintaxis de nginx
