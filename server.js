@@ -191,6 +191,14 @@ app.use(express.static('public'));
 // --- LÍNEA MODIFICADA ---
 // La ruta raíz ahora siempre redirige a la página de login dentro de la carpeta html.
 app.get('/', (req, res) => {
+    // Si viene con código de fiesta en query params, ir directo a peticiones
+    if (req.query.party || req.query.partyCode) {
+        // Construir URL con parámetros
+        const partyCode = req.query.party || req.query.partyCode;
+        return res.redirect(`/index.html?party=${partyCode}`);
+    }
+    
+    // Si no hay código de fiesta, mostrar página de bienvenida
     res.redirect('/welcome.html');
 });
 
