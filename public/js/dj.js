@@ -19,6 +19,9 @@ let activePartyId = null;
 
 // --- 1. INICIALIZACIÓN: Carga el menú principal ---
 async function initialize() {
+    // Cargar logo de la empresa
+    loadCompanyLogo();
+    
     // Comprobar si ya hay una fiesta activa en el backend
     try {
         const response = await fetch(`${serverUrl}/api/active-party`, {
@@ -42,6 +45,25 @@ async function initialize() {
 
     // Configurar los listeners del menú
     setupMenuListeners();
+}
+
+// Función para cargar el logo de la empresa
+async function loadCompanyLogo() {
+    try {
+        const response = await fetch(`${serverUrl}/api/config/logo`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.logoUrl) {
+                const logo = document.getElementById('company-logo');
+                if (logo) {
+                    logo.src = data.logoUrl;
+                    logo.style.display = 'block';
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error loading logo:', error);
+    }
 }
 
 // --- 2. LISTENERS DEL MENÚ ---
