@@ -5,6 +5,7 @@ if (!token) {
 
 const serverUrl = window.SERVER_URL || window.location.origin;
 let currentWishlist = null;
+let socket = null;
 
 // Cargar wishlists al iniciar
 document.addEventListener('DOMContentLoaded', () => {
