@@ -1,6 +1,7 @@
 const serverUrl = window.SERVER_URL || window.location.origin;
 let currentWishlistId = null;
 let currentWishlist = null;
+let socket = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -15,7 +16,50 @@ document.addEventListener('DOMContentLoaded', () => {
     loadWishlist();
     setupEventListeners();
     loadCompanyLogo();
+    setupSocketIO();
 });
+
+// Configurar Socket.IO para actualizaciones en tiempo real
+function setupSocketIO() {
+    socket = io(serverUrl);
+    
+    socket.on('connect', () => {
+        console.log('✅ Conectado a Socket.IO');
+        socket.emit('join-wishlist-room', currentWishlistId);
+    });
+    
+    // Escuchar cuando se agrega una canción
+    socket.on('wishlist-song-added', (newSong) => {
+        console.log('🎵 Nueva canción recibida:', newSong);
+        if (currentWishlist) {
+            currentWishlist.songs.push(newSong);
+            displaySongs(currentWishlist.songs);
+            updateSongCounter();
+        }
+    });
+    
+    // Escuchar cuando se elimina una canción
+    socket.on('wishlist-song-deleted', (songId) => {
+        console.log('🗑️ Canción eliminada:', songId);
+        if (currentWishlist) {
+            currentWishlist.songs = currentWishlist.songs.filter(song => song._id !== songId);
+            displaySongs(currentWishlist.songs);
+            updateSongCounter();
+        }
+    });
+    
+    socket.on('disconnect', () => {
+        console.log('❌ Desconectado de Socket.IO');
+    });
+}
+
+// Actualizar contador de canciones
+function updateSongCounter() {
+    const counter = document.getElementById('song-counter');
+    if (counter && currentWishlist) {
+        counter.textContent = currentWishlist.songs.length;
+    }
+}
 
 async function loadCompanyLogo() {
     try {
