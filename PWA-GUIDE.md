@@ -26,7 +26,7 @@
 
 ### En Android (Chrome/Edge)
 
-1. **Abrir** `https://djapp.duckdns.org` en Chrome
+1. **Abrir** `https://tu-dominio.com` en Chrome
 2. **Buscar** el botón "Agregar a pantalla de inicio" en el menú
 3. **Tocar** "Instalar" o "Agregar"
 4. **Listo!** El ícono aparecerá en tu pantalla de inicio
@@ -36,7 +36,7 @@
 
 ### En iOS (Safari)
 
-1. **Abrir** `https://djapp.duckdns.org` en Safari
+1. **Abrir** `https://tu-dominio.com` en Safari
 2. **Tocar** el botón de compartir 📤 (abajo en el centro)
 3. **Desplazar** y tocar "Añadir a pantalla de inicio"
 4. **Tocar** "Añadir" en la esquina superior derecha
@@ -93,7 +93,7 @@
 ### Para que la PWA funcione:
 
 ✅ **HTTPS obligatorio**
-- URL: `https://djapp.duckdns.org`
+- URL: `https://tu-dominio.com`
 - Certificado SSL válido
 
 ✅ **Manifest.json accesible**
@@ -211,7 +211,7 @@ Editar `manifest.json`:
 
 ### Probar en Producción
 
-1. Abrir `https://djapp.duckdns.org` en móvil
+1. Abrir `https://tu-dominio.com` en móvil
 2. Chrome DevTools → Device Mode (emulación)
 3. Verificar instalabilidad
 4. Probar instalación real en dispositivo físico
@@ -284,7 +284,7 @@ Cada vez que actualices el código:
 **Soluciones:**
 ```bash
 # Verificar que sw.js existe y es accesible
-curl https://djapp.duckdns.org/sw.js
+curl https://tu-dominio.com/sw.js
 
 # Verificar logs del navegador
 Console → Buscar errores de SW

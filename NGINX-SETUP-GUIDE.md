@@ -13,7 +13,7 @@ Esta guía asume que:
 - ✅ Tienes permisos de root/sudo
 - ✅ Nginx ya está instalado y funcionando
 - ✅ DJConnect corre en `localhost:3000`
-- ✅ El dominio `djapp.duckdns.org` apunta a tu VPS
+- ✅ El dominio `tu-dominio.com` apunta a tu VPS
 
 ---
 
@@ -95,7 +95,7 @@ sudo systemctl status nginx
 ### Verificar Headers de Seguridad
 
 ```bash
-curl -I https://djapp.duckdns.org
+curl -I https://tu-dominio.com
 ```
 
 Debes ver estos headers:
@@ -114,7 +114,7 @@ Intenta hacer login 6 veces seguidas con datos incorrectos:
 ```bash
 for i in {1..6}; do
   echo "Intento $i:"
-  curl -X POST https://djapp.duckdns.org/login \
+  curl -X POST https://tu-dominio.com/login \
     -H "Content-Type: application/json" \
     -d '{"username":"test","password":"wrong"}' \
     -w "\nStatus: %{http_code}\n\n"
@@ -130,12 +130,12 @@ done
 
 ```bash
 # 1. Hacer login como admin
-TOKEN=$(curl -X POST https://djapp.duckdns.org/login \
+TOKEN=$(curl -X POST https://tu-dominio.com/login \
   -H "Content-Type: application/json" \
   -d '{"username":"admin","password":"admin123"}' | jq -r '.token')
 
 # 2. Intentar subir un archivo inválido (texto como imagen)
-curl -X POST https://djapp.duckdns.org/api/admin/config/logo \
+curl -X POST https://tu-dominio.com/api/admin/config/logo \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d '{"logoData":"data:image/png;base64,VGhpcyBpcyBub3QgYW4gaW1hZ2U="}'
@@ -231,7 +231,7 @@ sudo systemctl reload nginx
 sudo systemctl reload nginx
 
 # Verificar desde servidor (sin caché)
-curl -I https://djapp.duckdns.org
+curl -I https://tu-dominio.com
 
 # Limpiar caché del navegador
 Ctrl + Shift + R (hard refresh)
@@ -307,24 +307,24 @@ pgrep -f "node server.js" > /dev/null && echo "✅ Servidor corriendo" || echo "
 # 3. Headers de seguridad
 echo ""
 echo "3. Headers de Seguridad:"
-curl -sI https://djapp.duckdns.org | grep -i "x-frame-options" && echo "✅ X-Frame-Options" || echo "❌ X-Frame-Options falta"
-curl -sI https://djapp.duckdns.org | grep -i "strict-transport" && echo "✅ HSTS" || echo "❌ HSTS falta"
-curl -sI https://djapp.duckdns.org | grep -i "x-content-type" && echo "✅ X-Content-Type-Options" || echo "❌ X-Content-Type-Options falta"
+curl -sI https://tu-dominio.com | grep -i "x-frame-options" && echo "✅ X-Frame-Options" || echo "❌ X-Frame-Options falta"
+curl -sI https://tu-dominio.com | grep -i "strict-transport" && echo "✅ HSTS" || echo "❌ HSTS falta"
+curl -sI https://tu-dominio.com | grep -i "x-content-type" && echo "✅ X-Content-Type-Options" || echo "❌ X-Content-Type-Options falta"
 
 # 4. SSL válido
 echo ""
 echo "4. Certificado SSL:"
-curl -sI https://djapp.duckdns.org > /dev/null 2>&1 && echo "✅ SSL válido" || echo "❌ Problema con SSL"
+curl -sI https://tu-dominio.com > /dev/null 2>&1 && echo "✅ SSL válido" || echo "❌ Problema con SSL"
 
 # 5. Manifest.json accesible
 echo ""
 echo "5. PWA (manifest.json):"
-curl -sI https://djapp.duckdns.org/manifest.json | grep "200 OK" && echo "✅ Manifest accesible" || echo "❌ Manifest no accesible"
+curl -sI https://tu-dominio.com/manifest.json | grep "200 OK" && echo "✅ Manifest accesible" || echo "❌ Manifest no accesible"
 
 # 6. Service Worker accesible
 echo ""
 echo "6. Service Worker:"
-curl -sI https://djapp.duckdns.org/sw.js | grep "200 OK" && echo "✅ Service Worker accesible" || echo "❌ Service Worker no accesible"
+curl -sI https://tu-dominio.com/sw.js | grep "200 OK" && echo "✅ Service Worker accesible" || echo "❌ Service Worker no accesible"
 
 echo ""
 echo "=================================================="
