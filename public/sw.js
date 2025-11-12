@@ -21,6 +21,12 @@ self.addEventListener('activate', (event) => {
 // Interceptar peticiones PERO NO CACHEAR NADA
 // Todas las peticiones van directo a la red
 self.addEventListener('fetch', (event) => {
+    // Ignorar Google Fonts desde el SW (se cargan directamente desde HTML)
+    if (event.request.url.includes('fonts.googleapis.com') || 
+        event.request.url.includes('fonts.gstatic.com')) {
+        return;
+    }
+    
     event.respondWith(
         fetch(event.request).catch(() => {
             // Si no hay conexión, mostrar mensaje
