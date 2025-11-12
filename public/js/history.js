@@ -97,5 +97,3 @@ async function loadHistory() {
         loadingMessage.style.color = 'var(--color-error)';
     }
 }
-
-loadHistory();
