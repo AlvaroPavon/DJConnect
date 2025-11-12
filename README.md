@@ -136,11 +136,29 @@ Esta versión introduce mejoras masivas en la administración, gestión de event
 
 ---
 
-## 📚 Instalación y Documentación
+## 📚 Documentación
 
-Con el objetivo de proteger la propiedad intelectual del proyecto, **no se proporcionan guías de instalación o uso directo**.
+### Guías Disponibles
 
-Este repositorio sirve como un **portafolio técnico** para demostrar la arquitectura del software. Toda la documentación detallada sobre la **arquitectura, decisiones de diseño y funcionalidades** se encuentra en la **[Wiki oficial del repositorio](https://github.com/tu-usuario/djconnect/wiki)**.
+- **[PWA-GUIDE.md](./PWA-GUIDE.md)** - Guía completa de instalación de la Progressive Web App
+- **[SECURITY.md](./SECURITY.md)** - Documento detallado de todas las medidas de seguridad implementadas
+- **[Wiki oficial](https://github.com/tu-usuario/djconnect/wiki)** - Documentación completa de arquitectura y funcionalidades
+
+### Instalación PWA
+
+DJConnect puede instalarse como aplicación nativa en Android e iOS:
+
+**Android:**
+1. Abrir `https://djapp.duckdns.org` en Chrome
+2. Menú (⋮) → "Instalar app"
+3. ¡Listo!
+
+**iOS:**
+1. Abrir `https://djapp.duckdns.org` en Safari
+2. Compartir 📤 → "Añadir a pantalla de inicio"
+3. ¡Listo!
+
+Consulta **[PWA-GUIDE.md](./PWA-GUIDE.md)** para más detalles.
 
 ---
 
