@@ -16,27 +16,42 @@ const partyNameInput = document.getElementById('party-name-input');
 const joinActivePartyBtn = document.getElementById('join-active-party-btn');
 
 let activePartyId = null;
+let activePartyIds = [];
 
 // --- 1. INICIALIZACIÓN: Carga el menú principal ---
 async function initialize() {
     // Cargar logo de la empresa
     loadCompanyLogo();
     
-    // Comprobar si ya hay una fiesta activa en el backend
+    // Comprobar si ya hay fiestas activas en el backend
     try {
         const response = await fetch(`${serverUrl}/api/active-party`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         if (response.ok) {
             const data = await response.json();
-            if (data.activePartyId) {
-                activePartyId = data.activePartyId;
-                // Si hay fiesta activa, mostramos el botón de "Unirse"
-                joinActivePartyBtn.style.display = 'block';
+            activePartyIds = data.activePartyIds || [];
+            
+            // Mostrar las fiestas activas
+            if (activePartyIds.length > 0) {
+                displayActiveParties(activePartyIds);
+            }
+            
+            // Mostrar/ocultar mensaje de límite
+            const limitMessage = document.getElementById('party-limit-message');
+            const createBtn = document.getElementById('create-party-btn');
+            if (activePartyIds.length >= 3) {
+                limitMessage.style.display = 'block';
+                createBtn.disabled = true;
+                createBtn.style.opacity = '0.5';
+            } else {
+                limitMessage.style.display = 'none';
+                createBtn.disabled = false;
+                createBtn.style.opacity = '1';
             }
         }
     } catch (error) {
-        console.error('Error al obtener la fiesta activa:', error);
+        console.error('Error al obtener las fiestas activas:', error);
     }
 
     // Asegurarse de que el menú es visible y el dashboard oculto
@@ -45,6 +60,40 @@ async function initialize() {
 
     // Configurar los listeners del menú
     setupMenuListeners();
+}
+
+// Mostrar lista de fiestas activas
+function displayActiveParties(partyIds) {
+    const section = document.getElementById('active-parties-section');
+    const count = document.getElementById('active-parties-count');
+    const list = document.getElementById('active-parties-list');
+    
+    count.textContent = partyIds.length;
+    section.style.display = 'block';
+    
+    list.innerHTML = '';
+    partyIds.forEach((partyId, index) => {
+        const partyDiv = document.createElement('div');
+        partyDiv.style.cssText = 'background-color: #2c2c2c; padding: 12px; margin: 8px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid var(--color-secondary);';
+        partyDiv.innerHTML = `
+            <div>
+                <strong style="color: var(--color-text-primary);">${partyId}</strong>
+                <small style="display: block; color: var(--color-text-secondary); margin-top: 5px;">Fiesta #${index + 1}</small>
+            </div>
+            <button onclick="joinParty('${partyId}')" style="width: auto; padding: 8px 15px; background-color: var(--color-primary); margin: 0;">
+                🎧 Entrar
+            </button>
+        `;
+        list.appendChild(partyDiv);
+    });
+}
+
+// Función para unirse a una fiesta específica
+function joinParty(partyId) {
+    activePartyId = partyId;
+    mainMenuSection.style.display = 'none';
+    dashboardContentSection.style.display = 'block';
+    runDashboard(partyId);
 }
 
 // Función para cargar el logo de la empresa
