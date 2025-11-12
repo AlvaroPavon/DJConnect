@@ -236,10 +236,11 @@ Consulta la [Guía de Deployment](./Deployment.md) para instrucciones específic
 
 ### ¿Necesito certificado SSL?
 
-En producción, sí. Es esencial para:
-- Seguridad de contraseñas
+✅ **Sí, obligatorio desde v2.2.** Es esencial para:
+- Seguridad de contraseñas y datos
 - WebSockets en HTTPS
-- Confianza de los usuarios
+- **PWA (no funciona sin HTTPS)**
+- Headers de seguridad (HSTS)
 
 Puedes obtener certificados gratuitos con [Let's Encrypt](https://letsencrypt.org/).
 
