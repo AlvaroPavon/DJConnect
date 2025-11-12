@@ -9,6 +9,9 @@ const djSchema = new mongoose.Schema({
     // Nuevo campo para roles
     role: { type: String, enum: ['dj', 'admin'], default: 'dj' },
     
+    // Usuario de Instagram
+    instagram: { type: String, default: '' },
+    
     passwordResetToken: { type: String },
     passwordResetExpires: { type: Date },
     
