@@ -39,10 +39,32 @@ app.use(helmet({
             defaultSrc: ["'self'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
-            scriptSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: [
+                "'self'", 
+                "'unsafe-inline'",
+                "https://cdn.jsdelivr.net",
+                "https://cdn.socket.io",
+                "https://pagead2.googlesyndication.com" // Google Ads si se usa
+            ],
+            scriptSrcElem: [
+                "'self'",
+                "https://cdn.jsdelivr.net",
+                "https://cdn.socket.io",
+                "https://pagead2.googlesyndication.com"
+            ],
             scriptSrcAttr: ["'unsafe-inline'"], // CRÍTICO: Permite onclick, onchange, etc.
             imgSrc: ["'self'", "data:", "https:", "blob:"],
-            connectSrc: ["'self'", "https://api.spotify.com", "https://accounts.spotify.com", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "wss://djapp.duckdns.org", "ws://localhost:*"],
+            connectSrc: [
+                "'self'", 
+                "https://api.spotify.com", 
+                "https://accounts.spotify.com", 
+                "https://fonts.googleapis.com", 
+                "https://fonts.gstatic.com", 
+                "wss://djapp.duckdns.org",
+                "wss://djapp.duckdns.org:443",
+                "ws://localhost:*",
+                "https://djapp.duckdns.org"
+            ],
             frameSrc: ["'none'"]
         }
     },
