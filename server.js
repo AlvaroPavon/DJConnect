@@ -27,6 +27,11 @@ const Config = require('./configModel.js');
 const app = express();
 const server = http.createServer(app);
 
+// === SEGURIDAD: Confiar en proxy (nginx) ===
+// Esto permite que Express lea la IP real del cliente desde X-Forwarded-For
+// CRÍTICO para que funcione el rate limiting con nginx como proxy
+app.set('trust proxy', 1);
+
 // === SEGURIDAD: Headers HTTP con Helmet ===
 app.use(helmet({
     contentSecurityPolicy: {
