@@ -611,6 +611,39 @@ app.get('/api/active-party', authenticateToken, async (req, res) => {
     }
 });
 
+// Obtener perfil del DJ
+app.get('/api/dj/profile', authenticateToken, async (req, res) => {
+    try {
+        const dj = await DJ.findById(req.user.id).select('-password');
+        if (!dj) {
+            return res.status(404).json({ message: 'DJ no encontrado.' });
+        }
+        res.json(dj);
+    } catch (error) {
+        res.status(500).json({ message: 'Error en el servidor.' });
+    }
+});
+
+// Actualizar Instagram del DJ
+app.patch('/api/dj/instagram', authenticateToken, async (req, res) => {
+    try {
+        const { instagram } = req.body;
+        
+        // Validar formato de Instagram (opcional)
+        const cleanInstagram = instagram.trim().replace('@', '');
+        
+        await DJ.updateOne(
+            { _id: req.user.id },
+            { instagram: cleanInstagram }
+        );
+        
+        res.json({ message: 'Instagram actualizado exitosamente', instagram: cleanInstagram });
+    } catch (error) {
+        console.error('Error al actualizar Instagram:', error);
+        res.status(500).json({ message: 'Error en el servidor.' });
+    }
+});
+
 app.post('/api/end-party', authenticateToken, async (req, res) => {
     try {
         const { partyId } = req.body;
