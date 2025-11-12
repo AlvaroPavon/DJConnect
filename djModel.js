@@ -28,4 +28,4 @@ const djSchema = new mongoose.Schema({
     maxSimultaneousParties: { type: Number, default: 3 }
 });
 
-module.exports = mongoose.model('DJ', djSchema);
+module.exports = mongoose.model('DJ', djSchema, 'djs');
