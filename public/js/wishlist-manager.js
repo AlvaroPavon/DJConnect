@@ -262,6 +262,12 @@ function showModal(wishlist) {
     const songsList = document.getElementById('modal-songs-list');
     const songCount = document.getElementById('song-count');
     
+    // Unirse a la sala de Socket.IO para esta wishlist
+    if (socket && socket.connected) {
+        socket.emit('join-wishlist-room', wishlist.wishlistId);
+        console.log(`📋 Uniéndose a sala de wishlist: ${wishlist.wishlistId}`);
+    }
+    
     modalTitle.textContent = wishlist.name;
     
     const eventDate = wishlist.eventDate 
