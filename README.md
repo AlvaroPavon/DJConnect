@@ -60,7 +60,7 @@
 
 ## 🆕 Novedades v2.2
 
-Esta versión introduce mejoras masivas en la administración, gestión de eventos múltiples y personalización.
+Esta versión introduce mejoras masivas en la administración, gestión de eventos múltiples, personalización, **Progressive Web App (PWA)** y **securización completa**.
 
 ### 👨‍💼 **Panel de Administración (¡Nuevo!)**
 - **Gestión Centralizada**: Panel completo para administrar toda la plataforma.
