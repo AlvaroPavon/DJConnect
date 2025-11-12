@@ -56,11 +56,29 @@
 
 ---
 
-## 🆕 Novedades v2.1
+## 🆕 Novedades v2.2
 
-Esta versión introduce mejoras masivas en la planificación y el análisis de eventos.
+Esta versión introduce mejoras masivas en la administración, gestión de eventos múltiples y personalización.
 
-### 📝 **Wishlists Pre-Evento (¡Nuevo!)**
+### 👨‍💼 **Panel de Administración (¡Nuevo!)**
+- **Gestión Centralizada**: Panel completo para administrar toda la plataforma.
+- **Control de DJs**: Administra usuarios DJ, gestiona perfiles y contraseñas.
+- **Gestión de Eventos**: Crea y asigna fiestas a DJs desde un único lugar.
+- **Vista Global de Wishlists**: Acceso a todas las wishlists de la plataforma.
+- **Estadísticas Globales**: Métricas del sistema (DJs totales, fiestas activas, wishlists).
+- **Configuración de Marca**: Personaliza el logo de la plataforma visible en toda la aplicación.
+
+### 🎉 **Multi-Fiesta para DJs (¡Nuevo!)**
+- **Hasta 3 Fiestas Simultáneas**: Gestiona múltiples eventos activos al mismo tiempo.
+- **Cambio Rápido**: Selector para cambiar entre eventos sin cerrar ninguno.
+- **Gestión Independiente**: Cada fiesta mantiene su propia lista de peticiones y wishlists.
+
+### 📸 **Integración Social y QR Mejorados (¡Nuevo!)**
+- **Perfil de Instagram**: Los DJs pueden añadir su usuario de Instagram a su perfil.
+- **QR Personalizados**: Códigos QR descargables con plantilla personalizada.
+- **Branding Completo**: Los QR incluyen el logo de la plataforma y el Instagram del DJ.
+
+### 📝 **Wishlists Pre-Evento**
 - **Planificación Anticipada**: Crea wishlists *antes* de tus eventos.
 - **Recopilación de Favoritas**: Los invitados sugieren canciones con antelación.
 - **Gestión Completa**: Crea, comparte (URL/QR), abre/cierra y edita listas.
@@ -72,11 +90,14 @@ Esta versión introduce mejoras masivas en la planificación y el análisis de e
 - **Analytics en Tiempo Real**: Panel con género más pedido durante el evento.
 - **Historial Completo**: Nueva sección con estadísticas de fiestas pasadas (total de canciones, género top, valoración media).
 
-### 📱 **Diseño Responsive Mejorado**
-- Media queries completas para smartphones y tablets.
-- Optimización táctil para interfaces móviles y QR codes adaptables.
+### 📱 **Diseño Responsive y UX Mejorado**
+- **Mobile-First**: Diseño optimizado primero para dispositivos móviles.
+- **Media Queries Completas**: Adaptación perfecta para smartphones y tablets.
+- **Optimización Táctil**: Interfaces móviles y QR codes adaptables.
+- **Centrado y Consistencia**: Diseño uniforme en todas las vistas.
 
 ### 🎵 **Gestión Mejorada de Peticiones**
+- **Actualización en Tiempo Real**: Cambios instantáneos sin recargar la página (Socket.IO).
 - **Ocultar canciones**: Elimina peticiones de la vista sin borrarlas.
 - **Sin límites**: Solucionado bug de carga máxima de 100 peticiones.
 - **Mejor scroll**: Lista optimizada para cientos de peticiones.
