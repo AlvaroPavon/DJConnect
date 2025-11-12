@@ -348,8 +348,8 @@ Console → Buscar errores de SW
 ## 📞 Soporte
 
 Para problemas con la PWA:
-- **Email**: alvaropavonmartinez7@gmail.com
-- **Asunto**: [PWA] Descripción del problema
+- **GitHub Issues**: [Reportar problema](https://github.com/tu-usuario/djconnect/issues)
+- **Etiqueta**: PWA
 
 ---
 
