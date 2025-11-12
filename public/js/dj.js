@@ -570,29 +570,3 @@ async function generateQRTemplate(qrCanvas, partyId) {
     
     return templateCanvas;
 }
-
-            try {
-                const response = await fetch(`${serverUrl}/api/end-party`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}` 
-                    },
-                    body: JSON.stringify({ partyId: currentPartyId })
-                });
-
-                if (response.ok) {
-                    alert('¡Fiesta finalizada! Las estadísticas se han guardado.');
-                    // Recargamos la página, lo que nos devolverá al menú principal
-                    window.location.href = '/html/dj.html';
-                } else {
-                    const errorData = await response.json();
-                    alert(`Error al finalizar la fiesta: ${errorData.message || 'Respuesta no válida del servidor.'}`);
-                }
-            } catch (error) {
-                console.error('Error de red al finalizar la fiesta:', error);
-                alert('No se pudo finalizar la fiesta. Revisa tu conexión.');
-            }
-        }
-    });
-}
