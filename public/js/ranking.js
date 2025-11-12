@@ -76,9 +76,14 @@ function createRankingCard(dj, position) {
         positionBadge = '<span style="font-size: 2em;">🥉</span>';
     }
     
-    // Estrellas según la valoración
+    // Calcular estrellas según la valoración
     const rating = dj.averageRating !== 'Sin valoraciones' ? parseFloat(dj.averageRating) : 0;
     const stars = rating > 0 ? '⭐'.repeat(Math.round(rating)) : '☆☆☆☆☆';
+    
+    // Formatear la puntuación media
+    const averageRatingText = dj.averageRating !== 'Sin valoraciones' 
+        ? `${dj.averageRating} / 5.0` 
+        : 'Sin valoraciones';
     
     card.innerHTML = `
         <div style="display: flex; align-items: center; gap: 15px;">
@@ -86,18 +91,45 @@ function createRankingCard(dj, position) {
                 ${positionBadge}
             </div>
             <div style="flex: 1;">
-                <h3 style="margin: 0 0 8px 0; color: var(--color-secondary); font-size: 1.2em;">
+                <h3 style="margin: 0 0 12px 0; color: var(--color-secondary); font-size: 1.3em;">
                     ${dj.username}
                 </h3>
-                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
-                    <span style="font-size: 1.3em;">${stars}</span>
-                    <span style="color: var(--color-primary); font-weight: bold;">
-                        ${dj.averageRating !== 'Sin valoraciones' ? dj.averageRating : 'N/A'}
-                    </span>
+                
+                <!-- Puntuación Media -->
+                <div style="background-color: rgba(187, 134, 252, 0.15); padding: 10px; border-radius: 6px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <div style="font-size: 0.85em; color: var(--color-text-secondary); margin-bottom: 4px;">
+                                ⭐ Puntuación Media
+                            </div>
+                            <div style="font-size: 1.4em; color: var(--color-primary); font-weight: bold;">
+                                ${averageRatingText}
+                            </div>
+                        </div>
+                        <div style="font-size: 1.5em;">
+                            ${stars}
+                        </div>
+                    </div>
                 </div>
-                <div style="display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.9em; color: var(--color-text-secondary);">
-                    <span>📊 ${dj.totalRatings} valoraciones</span>
-                    <span>🎉 ${dj.partyCount} fiestas</span>
+                
+                <!-- Estadísticas -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.95em;">
+                    <div style="background-color: rgba(3, 218, 198, 0.15); padding: 8px; border-radius: 6px; text-align: center;">
+                        <div style="color: var(--color-text-secondary); font-size: 0.85em; margin-bottom: 2px;">
+                            📊 Valoraciones
+                        </div>
+                        <div style="color: var(--color-text-primary); font-weight: bold; font-size: 1.2em;">
+                            ${dj.totalRatings}
+                        </div>
+                    </div>
+                    <div style="background-color: rgba(207, 102, 121, 0.15); padding: 8px; border-radius: 6px; text-align: center;">
+                        <div style="color: var(--color-text-secondary); font-size: 0.85em; margin-bottom: 2px;">
+                            🎉 Fiestas
+                        </div>
+                        <div style="color: var(--color-text-primary); font-weight: bold; font-size: 1.2em;">
+                            ${dj.partyCount}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
