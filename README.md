@@ -22,9 +22,9 @@
 
 1.  [**Acerca del Proyecto y Funcionalidades**](#-acerca-del-proyecto-y-funcionalidades)
 2.  [**Vistazo Rápido**](#-vistazo-rápido)
-3.  [**Novedades v2.1**](#-novedades-v21)
+3.  [**Novedades v2.2**](#-novedades-v22)
 4.  [**Stack Tecnológico**](#️-stack-tecnológico)
-5.  [**Instalación y Documentación**](#-instalación-y-documentación)
+5.  [**Documentación**](#-documentación)
 6.  [**Hoja de Ruta**](#-hoja-de-ruta)
 7.  [**Estructura del Directorio**](#-estructura-del-directorio)
 8.  [**Contribuir**](#-contribuir)
