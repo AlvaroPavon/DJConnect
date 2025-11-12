@@ -927,4 +927,201 @@ table tr:hover { background-color: #2c2c2c; }
         font-size: 13px;
         padding: 10px 8px;
     }
+
+/* ==========================================
+   MEJORAS COMPLETAS PARA MÓVIL
+   ========================================== */
+
+/* Asegurar que todo el contenido sea scrollable en móvil */
+@media screen and (max-width: 768px) {
+    * {
+        -webkit-tap-highlight-color: rgba(187, 134, 252, 0.3);
+    }
+    
+    /* Prevenir overflow horizontal */
+    body, html {
+        overflow-x: hidden;
+        width: 100%;
+    }
+    
+    /* Mejorar modales en móvil */
+    .modal {
+        padding: 10px;
+    }
+    
+    .modal .modal-content {
+        max-width: 95%;
+        max-height: 85vh;
+        padding: 20px 15px;
+        margin: 10px;
+    }
+    
+    .modal h2 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+    
+    .modal h3 {
+        font-size: 1.2em;
+        margin-bottom: 12px;
+    }
+    
+    /* Mejorar estrellas de rating en móvil */
+    .stars span {
+        font-size: 3em;
+        padding: 10px;
+    }
+    
+    /* Mejorar listas de canciones en móvil */
+    .cancion-item {
+        padding: 15px 10px;
+        gap: 10px;
+    }
+    
+    .cancion-info {
+        font-size: 0.95em;
+    }
+    
+    /* Mejorar QR en móvil */
+    #qrcode-container {
+        padding: 15px;
+        max-width: 100%;
+    }
+    
+    #qrcode-container canvas {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+    
+    /* Mejorar tablas en móvil si existen */
+    table {
+        font-size: 0.9em;
+    }
+    
+    /* Mejorar inputs de búsqueda en móvil */
+    #search-input,
+    input[type="search"] {
+        font-size: 18px;
+        padding: 18px;
+    }
+    
+    /* Mejorar selects en móvil */
+    select {
+        font-size: 18px;
+        padding: 18px;
+        min-height: 60px;
+    }
+    
+    /* Mejorar textarea en móvil */
+    textarea {
+        font-size: 18px;
+        padding: 18px;
+        min-height: 100px;
+    }
+    
+    /* Mejorar formularios en móvil */
+    form {
+        width: 100%;
+    }
+    
+    /* Espaciado entre elementos */
+    * + * {
+        margin-top: 0;
+    }
+    
+    /* Mejorar hr en móvil */
+    hr {
+        margin: 20px 0;
+        border-width: 1px;
+    }
+}
+
+/* Optimizaciones específicas para pantallas muy pequeñas */
+@media screen and (max-width: 400px) {
+    .modal .modal-content {
+        padding: 15px 10px;
+    }
+    
+    .stars span {
+        font-size: 2.5em;
+        padding: 8px;
+    }
+    
+    .cancion-item {
+        padding: 12px 8px;
+    }
+    
+    table {
+        font-size: 0.85em;
+    }
+}
+
+/* Mejorar accesibilidad táctil en toda la app */
+@media (hover: none) and (pointer: coarse) {
+    /* Dispositivos táctiles */
+    button,
+    a,
+    .btn,
+    [role="button"],
+    .clickable {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 12px;
+    }
+    
+    /* Feedback táctil */
+    button:active,
+    a:active,
+    .btn:active {
+        opacity: 0.8;
+        transform: scale(0.98);
+    }
+    
+    /* Eliminar hover effects en táctiles */
+    button:hover {
+        transform: none;
+    }
+}
+
+/* Landscape mode en móviles */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .container {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 15px;
+    }
+    
+    .modal .modal-content {
+        max-height: 80vh;
+    }
+}
+
+/* Prevenir zoom en double-tap en iOS */
+@media screen and (max-width: 768px) {
+    button,
+    a {
+        touch-action: manipulation;
+    }
+}
+
+/* Mejorar rendimiento en móvil */
+@media screen and (max-width: 768px) {
+    * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Optimizar animaciones en móvil */
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
 }
