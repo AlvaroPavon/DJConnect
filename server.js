@@ -48,9 +48,27 @@ app.use(helmet({
 }));
 
 // === SEGURIDAD: Sanitización contra NoSQL Injection ===
-app.use(mongoSanitize({
-    replaceWith: '_'
-}));
+// Middleware personalizado para prevenir NoSQL injection
+app.use((req, res, next) => {
+    const sanitizeObject = (obj) => {
+        if (typeof obj !== 'object' || obj === null) return obj;
+        
+        for (let key in obj) {
+            if (key.startsWith('$')) {
+                delete obj[key];
+            } else if (typeof obj[key] === 'object') {
+                sanitizeObject(obj[key]);
+            }
+        }
+        return obj;
+    };
+    
+    if (req.body) sanitizeObject(req.body);
+    if (req.query) sanitizeObject(req.query);
+    if (req.params) sanitizeObject(req.params);
+    
+    next();
+});
 
 // Aumentar límite de body size para subir imágenes (máximo 5MB por seguridad)
 app.use(express.json({ limit: '5mb' }));
