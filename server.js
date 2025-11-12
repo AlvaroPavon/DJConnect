@@ -762,6 +762,10 @@ app.post('/api/wishlists/:wishlistId/songs', async (req, res) => {
         wishlist.songs.push(newSong);
         await wishlist.save();
         
+        // Emitir evento Socket.IO para actualización en tiempo real
+        io.to(`wishlist-${wishlistId}`).emit('wishlist-song-added', newSong);
+        console.log(`🎵 Nueva canción añadida a wishlist [${wishlistId}]: ${titulo}`);
+        
         res.status(201).json(newSong);
     } catch (error) {
         console.error('Error al agregar canción:', error);
