@@ -363,6 +363,58 @@ button:active {
     }
 }
 
+/* Mejorar stats-panel para móvil */
+@media screen and (max-width: 768px) {
+    .stats-panel {
+        padding: 15px 12px;
+        margin-bottom: 15px;
+    }
+    
+    .stats-panel h3 {
+        font-size: 1.2em;
+        margin-bottom: 12px;
+    }
+    
+    /* Mejorar nav-links para móvil */
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .nav-links a {
+        display: block;
+        padding: 15px;
+        text-align: center;
+        background-color: rgba(187, 134, 252, 0.1);
+        border-radius: 8px;
+        border: 1px solid var(--color-border);
+        font-size: 16px;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .nav-links a:active {
+        background-color: rgba(187, 134, 252, 0.2);
+        transform: scale(0.98);
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .stats-panel {
+        padding: 12px 10px;
+    }
+    
+    .nav-links a {
+        padding: 12px;
+        font-size: 15px;
+        min-height: 48px;
+    }
+}
+
 /* --- Listas Dinámicas (Sugerencias y Peticiones) --- */
 #suggestions li, .cancion-item {
     animation: slideDown 0.5s ease-out forwards;
