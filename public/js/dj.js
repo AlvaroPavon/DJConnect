@@ -117,16 +117,6 @@ async function loadCompanyLogo() {
 
 // --- 2. LISTENERS DEL MENÚ ---
 function setupMenuListeners() {
-    // Listener para el botón "Unirse a Fiesta Activa"
-    joinActivePartyBtn.addEventListener('click', () => {
-        if (activePartyId) {
-            // Ocultar menú y mostrar dashboard
-            mainMenuSection.style.display = 'none';
-            dashboardContentSection.style.display = 'block';
-            runDashboard(activePartyId);
-        }
-    });
-
     // Listener para el botón "Crear Nueva Fiesta"
     createPartyBtn.addEventListener('click', () => {
         const customName = partyNameInput.value.trim();
@@ -135,10 +125,10 @@ function setupMenuListeners() {
             return;
         }
         
-        if (activePartyId) {
-            if (!confirm('Ya tienes una fiesta activa. ¿Estás seguro de que quieres finalizarla y crear una nueva?')) {
-                return;
-            }
+        // Verificar límite
+        if (activePartyIds.length >= 3) {
+            alert('Has alcanzado el límite de 3 fiestas simultáneas. Finaliza una antes de crear otra.');
+            return;
         }
 
         const cleanName = customName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
