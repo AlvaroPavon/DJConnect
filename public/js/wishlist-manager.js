@@ -379,7 +379,7 @@ async function deleteSong(wishlistId, songId) {
         
         if (!response.ok) throw new Error('Error al eliminar canción');
         
-        viewWishlist(wishlistId);
+        // NO recargar - Socket.IO actualizará automáticamente
         
     } catch (error) {
         console.error('Error:', error);
