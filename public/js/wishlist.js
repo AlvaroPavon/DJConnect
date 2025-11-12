@@ -257,8 +257,7 @@ async function addSongToWishlist(song) {
         // Mostrar modal de éxito
         document.getElementById('success-modal').style.display = 'flex';
         
-        // Recargar wishlist
-        await loadWishlist();
+        // NO recargar - Socket.IO actualizará automáticamente
         
     } catch (error) {
         console.error('Error:', error);
