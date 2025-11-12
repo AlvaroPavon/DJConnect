@@ -16,7 +16,6 @@ const path = require('path');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { body, validationResult } = require('express-validator');
-const mongoSanitize = require('express-mongo-sanitize');
 
 // Modelos de la base de datos
 const DJ = require('./djModel.js');
