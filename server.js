@@ -165,7 +165,7 @@ app.use(express.static('public'));
 // --- LÍNEA MODIFICADA ---
 // La ruta raíz ahora siempre redirige a la página de login dentro de la carpeta html.
 app.get('/', (req, res) => {
-    res.redirect('/html/login.html');
+    res.redirect('/welcome.html');
 });
 
 
