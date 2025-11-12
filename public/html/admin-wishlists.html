@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Wishlists</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/config.js"></script>
+    <script src="/js/admin-wishlists.js" defer></script>
+</head>
+<body>
+    <div class="container" style="max-width: 1200px;">
+        <!-- Logo de la empresa -->
+        <div id="company-logo-container" style="text-align: center; margin-bottom: 20px;">
+            <img id="company-logo" src="" alt="" style="max-width: 200px; max-height: 80px; display: none;">
+        </div>
+
+        <h1>🎵 Gestión de Wishlists</h1>
+        
+        <div class="nav-links">
+            <a href="/html/admin.html">← Volver al Panel</a>
+        </div>
+
+        <div class="stats-panel">
+            <h3>➕ Crear Nueva Wishlist y Asignar a DJ</h3>
+            <form id="create-wishlist-form">
+                <input type="text" id="wishlist-name" placeholder="Nombre de la wishlist" required>
+                <input type="text" id="wishlist-description" placeholder="Descripción (opcional)">
+                <input type="date" id="wishlist-date" placeholder="Fecha del evento (opcional)">
+                <select id="dj-select" required>
+                    <option value="">Selecciona un DJ...</option>
+                </select>
+                <button type="submit" style="background-color: var(--color-secondary);">Crear y Asignar Wishlist</button>
+            </form>
+        </div>
+
+        <div id="wishlists-container">
+            <h3>📋 Todas las Wishlists</h3>
+            <p id="loading-message">Cargando wishlists...</p>
+            <div id="wishlists-list"></div>
+        </div>
+    </div>
+</body>
+</html>

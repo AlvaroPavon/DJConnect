@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Fiestas</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/config.js"></script>
+    <script src="/js/admin-parties.js" defer></script>
+</head>
+<body>
+    <div class="container" style="max-width: 1200px;">
+        <!-- Logo de la empresa -->
+        <div id="company-logo-container" style="text-align: center; margin-bottom: 20px;">
+            <img id="company-logo" src="" alt="" style="max-width: 200px; max-height: 80px; display: none;">
+        </div>
+
+        <h1>🎉 Gestión de Fiestas</h1>
+        
+        <div class="nav-links">
+            <a href="/html/admin.html">← Volver al Panel</a>
+        </div>
+
+        <div class="stats-panel">
+            <h3>➕ Crear Nueva Fiesta y Asignar a DJ</h3>
+            <form id="create-party-form">
+                <input type="text" id="party-name" placeholder="Nombre de la fiesta" required>
+                <select id="dj-select" required>
+                    <option value="">Selecciona un DJ...</option>
+                </select>
+                <button type="submit" style="background-color: var(--color-secondary);">Crear y Asignar Fiesta</button>
+            </form>
+        </div>
+
+        <div id="parties-container">
+            <h3>📋 Fiestas Activas</h3>
+            <p id="loading-message">Cargando fiestas...</p>
+            <div id="parties-list"></div>
+        </div>
+    </div>
+</body>
+</html>

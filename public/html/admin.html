@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/config.js"></script>
+    <script src="/js/admin.js" defer></script>
+</head>
+<body>
+    <div class="container" style="max-width: 1200px;">
+        <!-- Logo de la empresa -->
+        <div id="company-logo-container" style="text-align: center; margin-bottom: 20px;">
+            <img id="company-logo" src="" alt="" style="max-width: 200px; max-height: 80px; display: none;">
+        </div>
+
+        <h1>🛡️ Panel de Administración</h1>
+        <p id="admin-welcome">Bienvenido, <strong id="admin-name"></strong></p>
+
+        <div class="nav-links">
+            <a href="/html/admin-djs.html">🎧 Gestionar DJs</a>
+            <a href="/html/admin-parties.html">🎉 Ver Fiestas Activas</a>
+            <a href="/html/admin-wishlists.html">🎵 Ver Wishlists</a>
+            <a href="/html/admin-settings.html">⚙️ Configuración</a>
+        </div>
+
+        <hr>
+
+        <div class="stats-panel">
+            <h3>📊 Estadísticas Generales</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                <div style="background-color: rgba(187, 134, 252, 0.1); padding: 20px; border-radius: 8px; text-align: center;">
+                    <h2 id="total-djs" style="color: var(--color-primary); margin: 0;">0</h2>
+                    <p style="margin: 5px 0 0 0;">DJs Registrados</p>
+                </div>
+                <div style="background-color: rgba(3, 218, 198, 0.1); padding: 20px; border-radius: 8px; text-align: center;">
+                    <h2 id="active-parties" style="color: var(--color-secondary); margin: 0;">0</h2>
+                    <p style="margin: 5px 0 0 0;">Fiestas Activas</p>
+                </div>
+                <div style="background-color: rgba(207, 102, 121, 0.1); padding: 20px; border-radius: 8px; text-align: center;">
+                    <h2 id="total-wishlists" style="color: var(--color-error); margin: 0;">0</h2>
+                    <p style="margin: 5px 0 0 0;">Wishlists Activas</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-panel" style="margin-top: 20px;">
+            <h3>🎯 Acciones Rápidas</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                <button onclick="window.location.href='/html/admin-djs.html'" style="background-color: var(--color-primary);">
+                    ➕ Crear Nuevo DJ
+                </button>
+                <button onclick="window.location.href='/html/admin-parties.html'" style="background-color: var(--color-secondary);">
+                    🎉 Crear Nueva Fiesta
+                </button>
+                <button onclick="window.location.href='/html/admin-wishlists.html'" style="background-color: #03dac6;">
+                    🎵 Crear Nueva Wishlist
+                </button>
+            </div>
+        </div>
+
+        <button onclick="logout()" style="background-color: var(--color-error); margin-top: 30px;">
+            🚪 Cerrar Sesión
+        </button>
+    </div>
+</body>
+</html>

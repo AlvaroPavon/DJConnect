@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar DJs</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/config.js"></script>
+    <script src="/js/admin-djs.js" defer></script>
+</head>
+<body>
+    <div class="container" style="max-width: 1200px;">
+        <!-- Logo de la empresa -->
+        <div id="company-logo-container" style="text-align: center; margin-bottom: 20px;">
+            <img id="company-logo" src="" alt="" style="max-width: 200px; max-height: 80px; display: none;">
+        </div>
+
+        <h1>🎧 Gestión de DJs</h1>
+        
+        <div class="nav-links">
+            <a href="/html/admin.html">← Volver al Panel</a>
+        </div>
+
+        <div class="stats-panel">
+            <h3>➕ Crear Nuevo DJ</h3>
+            <form id="create-dj-form">
+                <input type="text" id="dj-username" placeholder="Nombre de usuario" required>
+                <input type="email" id="dj-email" placeholder="Email" required>
+                <input type="password" id="dj-password" placeholder="Contraseña" required>
+                <button type="submit" style="background-color: var(--color-secondary);">Crear DJ</button>
+            </form>
+        </div>
+
+        <div id="djs-container">
+            <h3>📋 Lista de DJs</h3>
+            <p id="loading-message">Cargando DJs...</p>
+            <div id="djs-list"></div>
+        </div>
+    </div>
+
+    <!-- Modal para cambiar contraseña -->
+    <div id="password-modal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <h2>🔑 Cambiar Contraseña</h2>
+            <p id="password-dj-name"></p>
+            <form id="change-password-form">
+                <input type="password" id="new-password" placeholder="Nueva contraseña" required>
+                <input type="password" id="confirm-password" placeholder="Confirmar contraseña" required>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" style="flex: 1; background-color: var(--color-secondary);">Cambiar</button>
+                    <button type="button" onclick="closePasswordModal()" style="flex: 1; background-color: var(--color-error);">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

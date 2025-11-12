@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/config.js"></script>
+    <script src="/js/admin-settings.js" defer></script>
+</head>
+<body>
+    <div class="container" style="max-width: 800px;">
+        <!-- Logo de la empresa -->
+        <div id="company-logo-container" style="text-align: center; margin-bottom: 20px;">
+            <img id="company-logo" src="" alt="" style="max-width: 200px; max-height: 80px; display: none;">
+        </div>
+
+        <h1>⚙️ Configuración de la Plataforma</h1>
+        
+        <div class="nav-links">
+            <a href="/html/admin.html">← Volver al Panel</a>
+        </div>
+
+        <div class="stats-panel">
+            <h3>🖼️ Logo de la Empresa</h3>
+            <p style="text-align: left; color: var(--color-text-secondary);">
+                Sube el logo de tu empresa. Aparecerá en todas las páginas y en los PDFs generados.
+            </p>
+            
+            <div id="current-logo" style="text-align: center; margin: 20px 0;">
+                <p style="color: var(--color-text-secondary);">Logo actual:</p>
+                <img id="preview-logo" src="" alt="Sin logo" style="max-width: 300px; max-height: 150px; border: 2px solid var(--color-border); border-radius: 8px; padding: 10px; background-color: #fff;">
+            </div>
+
+            <form id="upload-logo-form">
+                <label for="logo-file" style="display: block; text-align: left; margin-bottom: 10px; color: var(--color-text-primary);">
+                    Seleccionar nuevo logo:
+                </label>
+                <input type="file" id="logo-file" accept="image/*" style="width: 100%; padding: 10px; margin-bottom: 15px; background-color: #333; border: 1px solid var(--color-border); border-radius: 8px; color: var(--color-text-primary);">
+                <button type="submit" style="background-color: var(--color-secondary);">💾 Guardar Logo</button>
+            </form>
+        </div>
+
+        <div class="stats-panel" style="margin-top: 20px;">
+            <h3>📝 Información de la Plataforma</h3>
+            <p style="text-align: left;"><strong>Versión:</strong> 2.0</p>
+            <p style="text-align: left;"><strong>Total DJs:</strong> <span id="total-djs">0</span></p>
+            <p style="text-align: left;"><strong>Fiestas Activas:</strong> <span id="active-parties">0</span></p>
+            <p style="text-align: left;"><strong>Wishlists Activas:</strong> <span id="active-wishlists">0</span></p>
+        </div>
+    </div>
+</body>
+</html>
