@@ -330,22 +330,45 @@ app.post('/register',
         }
 });
 
-app.post('/login', async (req, res) => {
-    try {
-        const { username, password } = req.body;
-        const dj = await DJ.findOne({ username });
-        if (!dj) {
-            return res.status(401).json({ message: 'Usuario o contraseña incorrectos.' });
+app.post('/login', 
+    loginLimiter,
+    [
+        body('username').trim().notEmpty().escape(),
+        body('password').notEmpty()
+    ],
+    async (req, res) => {
+        try {
+            // Validar inputs
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ message: 'Datos inválidos' });
+            }
+
+            const { username, password } = req.body;
+            const sanitizedUsername = sanitizeInput(username);
+            
+            const dj = await DJ.findOne({ username: sanitizedUsername });
+            if (!dj) {
+                return res.status(401).json({ message: 'Usuario o contraseña incorrectos.' });
+            }
+            
+            const isMatch = await bcrypt.compare(password, dj.password);
+            if (!isMatch) {
+                return res.status(401).json({ message: 'Usuario o contraseña incorrectos.' });
+            }
+            
+            // SEGURIDAD: Token con expiración reducida a 2 horas
+            const token = jwt.sign(
+                { id: dj._id, username: dj.username, role: dj.role }, 
+                JWT_SECRET, 
+                { expiresIn: '2h' }
+            );
+            
+            res.json({ token, role: dj.role });
+        } catch (error) {
+            console.error('Error en login:', error);
+            res.status(500).json({ message: 'Error en el servidor.' });
         }
-        const isMatch = await bcrypt.compare(password, dj.password);
-        if (!isMatch) {
-            return res.status(401).json({ message: 'Usuario o contraseña incorrectos.' });
-        }
-        const token = jwt.sign({ id: dj._id, username: dj.username, role: dj.role }, JWT_SECRET, { expiresIn: '24h' });
-        res.json({ token, role: dj.role });
-    } catch (error) {
-        res.status(500).json({ message: 'Error en el servidor.' });
-    }
 });
 
 app.post('/forgot-password', async (req, res) => {
