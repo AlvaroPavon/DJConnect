@@ -16,10 +16,15 @@ const path = require('path');
 const DJ = require('./djModel.js');
 const Party = require('./partyModel.js');
 const Wishlist = require('./wishlistModel.js');
+const Config = require('./configModel.js');
 
 // --- 2. CONFIGURACIÓN INICIAL ---
 const app = express();
 const server = http.createServer(app);
+
+// Aumentar límite de body size para subir imágenes
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Opciones de CORS
 const allowedOrigins = [
@@ -52,7 +57,7 @@ const corsOptions = {
         
         callback(new Error('Not allowed by CORS'));
     },
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true
 };
 app.use(cors(corsOptions));
@@ -61,7 +66,6 @@ const io = new Server(server, {
 });
 
 app.use(express.static('public'));
-app.use(express.json());
 
 // --- LÍNEA MODIFICADA ---
 // La ruta raíz ahora siempre redirige a la página de login dentro de la carpeta html.
@@ -90,10 +94,64 @@ const transporter = nodemailer.createTransport(mailerConfig);
 
 // --- 4. CONEXIÓN A LA BASE DE DATOS ---
 mongoose.connect(MONGO_URI)
-    .then(() => console.log('✅ Conectado a la base de datos'))
+    .then(() => {
+        console.log('✅ Conectado a la base de datos');
+        initializeAdminUser();
+    })
     .catch(err => console.error('❌ Error al conectar a la base de datos:', err));
 
-// --- 5. RUTAS Y LÓGICA DE LA API ---
+// Inicializar usuario admin si no existe
+async function initializeAdminUser() {
+    try {
+        const adminExists = await DJ.findOne({ role: 'admin' });
+        if (!adminExists) {
+            const hashedPassword = await bcrypt.hash('admin123', 10);
+            const admin = new DJ({
+                username: 'admin',
+                email: 'admin@djapp.com',
+                password: hashedPassword,
+                role: 'admin'
+            });
+            await admin.save();
+            console.log('✅ Usuario administrador creado: username=admin, password=admin123');
+        }
+    } catch (error) {
+        console.error('Error al crear usuario admin:', error);
+    }
+}
+
+// --- 5. MIDDLEWARES DE AUTENTICACIÓN ---
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (token == null) return res.sendStatus(401);
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    });
+};
+
+const authenticateAdmin = async (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (token == null) return res.sendStatus(401);
+    
+    jwt.verify(token, JWT_SECRET, async (err, user) => {
+        if (err) return res.sendStatus(403);
+        
+        // Verificar que el usuario sea admin
+        const dj = await DJ.findById(user.id);
+        if (!dj || dj.role !== 'admin') {
+            return res.status(403).json({ message: 'Acceso denegado. Solo administradores.' });
+        }
+        
+        req.user = user;
+        next();
+    });
+};
+
+// --- 6. RUTAS PÚBLICAS ---
 app.post('/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -122,8 +180,8 @@ app.post('/login', async (req, res) => {
         if (!isMatch) {
             return res.status(401).json({ message: 'Usuario o contraseña incorrectos.' });
         }
-        const token = jwt.sign({ id: dj._id, username: dj.username }, JWT_SECRET, { expiresIn: '24h' });
-        res.json({ token });
+        const token = jwt.sign({ id: dj._id, username: dj.username, role: dj.role }, JWT_SECRET, { expiresIn: '24h' });
+        res.json({ token, role: dj.role });
     } catch (error) {
         res.status(500).json({ message: 'Error en el servidor.' });
     }
@@ -245,20 +303,280 @@ app.get('/search', async (req, res) => {
     }
 });
 
-const authenticateToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    if (token == null) return res.sendStatus(401);
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
-        req.user = user;
-        next();
-    });
-};
-
-app.get('/ranking', authenticateToken, async (req, res) => {
+// --- 7. RUTAS DE CONFIGURACIÓN (LOGO) ---
+app.get('/api/config/logo', async (req, res) => {
     try {
-        const djs = await DJ.find({}, 'username partyCount ratings');
+        const logoConfig = await Config.findOne({ key: 'companyLogo' });
+        if (logoConfig && logoConfig.value) {
+            res.json({ logoUrl: logoConfig.value });
+        } else {
+            res.json({ logoUrl: null });
+        }
+    } catch (error) {
+        console.error('Error al obtener logo:', error);
+        res.status(500).json({ message: 'Error al obtener logo' });
+    }
+});
+
+// --- 8. RUTAS DE ADMINISTRADOR ---
+app.get('/api/verify-admin', authenticateAdmin, (req, res) => {
+    res.json({ message: 'Acceso autorizado' });
+});
+
+app.get('/api/admin/me', authenticateAdmin, async (req, res) => {
+    try {
+        const dj = await DJ.findById(req.user.id).select('-password');
+        res.json(dj);
+    } catch (error) {
+        res.status(500).json({ message: 'Error en el servidor' });
+    }
+});
+
+app.get('/api/admin/stats', authenticateAdmin, async (req, res) => {
+    try {
+        const totalDJs = await DJ.countDocuments({ role: 'dj' });
+        const activeParties = await Party.countDocuments({ isActive: true });
+        const totalWishlists = await Wishlist.countDocuments({ isActive: true });
+        
+        res.json({
+            totalDJs,
+            activeParties,
+            totalWishlists
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error al obtener estadísticas' });
+    }
+});
+
+// Gestión de DJs
+app.get('/api/admin/djs', authenticateAdmin, async (req, res) => {
+    try {
+        const djs = await DJ.find({}).select('-password').sort({ createdAt: -1 });
+        res.json(djs);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error al obtener DJs' });
+    }
+});
+
+app.post('/api/admin/djs', authenticateAdmin, async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+        
+        const existingUser = await DJ.findOne({ $or: [{ username }, { email }] });
+        if (existingUser) {
+            return res.status(400).json({ message: 'El nombre de usuario o el email ya están en uso.' });
+        }
+        
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newDJ = new DJ({ username, email, password: hashedPassword, role: 'dj' });
+        await newDJ.save();
+        
+        res.status(201).json({ message: 'DJ creado exitosamente', dj: newDJ });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error al crear DJ' });
+    }
+});
+
+app.patch('/api/admin/djs/:id/password', authenticateAdmin, async (req, res) => {
+    try {
+        const { password } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        await DJ.updateOne({ _id: req.params.id }, { password: hashedPassword });
+        res.json({ message: 'Contraseña actualizada exitosamente' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error al actualizar contraseña' });
+    }
+});
+
+app.delete('/api/admin/djs/:id', authenticateAdmin, async (req, res) => {
+    try {
+        const dj = await DJ.findById(req.params.id);
+        if (!dj) {
+            return res.status(404).json({ message: 'DJ no encontrado' });
+        }
+        
+        if (dj.role === 'admin') {
+            return res.status(403).json({ message: 'No se puede eliminar un administrador' });
+        }
+        
+        await DJ.deleteOne({ _id: req.params.id });
+        res.json({ message: 'DJ eliminado exitosamente' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error al eliminar DJ' });
+    }
+});
+
+// Gestión de Fiestas por Admin
+app.get('/api/admin/parties', authenticateAdmin, async (req, res) => {
+    try {
+        const parties = await Party.find({ isActive: true }).sort({ createdAt: -1 });
+        res.json(parties);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error al obtener fiestas' });
+    }
+});
+
+app.post('/api/admin/parties', authenticateAdmin, async (req, res) => {
+    try {
+        const { partyName, djUsername } = req.body;
+        
+        const dj = await DJ.findOne({ username: djUsername, role: 'dj' });
+        if (!dj) {
+            return res.status(404).json({ message: 'DJ no encontrado' });
+        }
+        
+        // Verificar límite de fiestas
+        if (dj.activePartyIds && dj.activePartyIds.length >= 3) {
+            return res.status(400).json({ message: 'Este DJ ya tiene el máximo de 3 fiestas activas' });
+        }
+        
+        // Generar partyId limpio
+        const cleanName = partyName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        const randomString = Math.random().toString(36).substring(2, 8);
+        const partyId = `${cleanName}-${randomString}`;
+        
+        // Crear la fiesta
+        const newParty = new Party({
+            partyId,
+            djUsername,
+            songRequests: []
+        });
+        await newParty.save();
+        
+        // Agregar a las fiestas activas del DJ
+        await DJ.updateOne(
+            { _id: dj._id },
+            { $push: { activePartyIds: partyId }, $inc: { partyCount: 1 } }
+        );
+        
+        res.status(201).json({ message: 'Fiesta creada y asignada exitosamente', party: newParty });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error al crear fiesta' });
+    }
+});
+
+app.post('/api/admin/parties/:partyId/end', authenticateAdmin, async (req, res) => {
+    try {
+        const { partyId } = req.params;
+        const { djUsername } = req.body;
+        
+        const party = await Party.findOne({ partyId });
+        if (!party) {
+            return res.status(404).json({ message: 'Fiesta no encontrada' });
+        }
+        
+        // Calcular estadísticas
+        const totalSongs = party.songRequests.length;
+        
+        const genreCounts = {};
+        party.songRequests.forEach(song => {
+            const genre = song.genre || 'Desconocido';
+            genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+        });
+        
+        let topGenre = 'Desconocido';
+        let maxCount = 0;
+        for (const [genre, count] of Object.entries(genreCounts)) {
+            if (count > maxCount) {
+                maxCount = count;
+                topGenre = genre;
+            }
+        }
+        
+        party.isActive = false;
+        party.endDate = new Date();
+        party.totalSongs = totalSongs;
+        party.topGenre = topGenre;
+        await party.save();
+        
+        // Remover de las fiestas activas del DJ
+        await DJ.updateOne(
+            { username: djUsername },
+            { $pull: { activePartyIds: partyId } }
+        );
+        
+        res.json({ message: 'Fiesta finalizada exitosamente' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error al finalizar fiesta' });
+    }
+});
+
+// Gestión de Wishlists por Admin
+app.get('/api/admin/wishlists', authenticateAdmin, async (req, res) => {
+    try {
+        const wishlists = await Wishlist.find({}).sort({ createdAt: -1 });
+        res.json(wishlists);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error al obtener wishlists' });
+    }
+});
+
+app.post('/api/admin/wishlists', authenticateAdmin, async (req, res) => {
+    try {
+        const { name, description, eventDate, djUsername } = req.body;
+        
+        const dj = await DJ.findOne({ username: djUsername, role: 'dj' });
+        if (!dj) {
+            return res.status(404).json({ message: 'DJ no encontrado' });
+        }
+        
+        const cleanName = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        const randomString = Math.random().toString(36).substring(2, 8);
+        const wishlistId = `wish-${cleanName}-${randomString}`;
+        
+        const newWishlist = new Wishlist({
+            wishlistId,
+            name,
+            description: description || '',
+            djUsername,
+            eventDate: eventDate ? new Date(eventDate) : null
+        });
+        
+        await newWishlist.save();
+        res.status(201).json(newWishlist);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error al crear wishlist' });
+    }
+});
+
+// Subir logo
+app.post('/api/admin/config/logo', authenticateAdmin, async (req, res) => {
+    try {
+        const { logoData } = req.body;
+        
+        if (!logoData) {
+            return res.status(400).json({ message: 'No se proporcionó imagen' });
+        }
+        
+        // Guardar en la base de datos
+        await Config.findOneAndUpdate(
+            { key: 'companyLogo' },
+            { key: 'companyLogo', value: logoData, updatedAt: new Date() },
+            { upsert: true, new: true }
+        );
+        
+        res.json({ message: 'Logo actualizado exitosamente', logoUrl: logoData });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error al guardar logo' });
+    }
+});
+
+// --- 9. RUTAS DE DJ ---
+app.get('/api/ranking', authenticateToken, async (req, res) => {
+    try {
+        const djs = await DJ.find({ role: 'dj' }, 'username partyCount ratings');
         const ranking = djs.map(dj => {
             const totalRatings = dj.ratings.length;
             const sumOfRatings = dj.ratings.reduce((acc, r) => acc + r.value, 0);
@@ -287,7 +605,7 @@ app.get('/api/active-party', authenticateToken, async (req, res) => {
         if (!dj) {
             return res.status(404).json({ message: 'DJ no encontrado.' });
         }
-        res.json({ activePartyId: dj.activePartyId });
+        res.json({ activePartyIds: dj.activePartyIds || [] });
     } catch (error) {
         res.status(500).json({ message: 'Error en el servidor.' });
     }
@@ -295,17 +613,17 @@ app.get('/api/active-party', authenticateToken, async (req, res) => {
 
 app.post('/api/end-party', authenticateToken, async (req, res) => {
     try {
+        const { partyId } = req.body;
+        
         const dj = await DJ.findById(req.user.id);
-        if (!dj || !dj.activePartyId) {
-            return res.status(400).json({ message: 'No hay una fiesta activa.' });
+        if (!dj || !dj.activePartyIds || !dj.activePartyIds.includes(partyId)) {
+            return res.status(400).json({ message: 'No tienes acceso a esta fiesta.' });
         }
         
-        const party = await Party.findOne({ partyId: dj.activePartyId });
+        const party = await Party.findOne({ partyId });
         if (party) {
-            // Calcular estadísticas
             const totalSongs = party.songRequests.length;
             
-            // Calcular género más pedido
             const genreCounts = {};
             party.songRequests.forEach(song => {
                 const genre = song.genre || 'Desconocido';
@@ -320,7 +638,6 @@ app.post('/api/end-party', authenticateToken, async (req, res) => {
                 }
             }
             
-            // Calcular valoración media de esta fiesta específica
             const partyRatings = dj.ratings.filter(r => 
                 r.date >= party.createdAt && (!party.endDate || r.date <= party.endDate)
             );
@@ -328,7 +645,6 @@ app.post('/api/end-party', authenticateToken, async (req, res) => {
                 ? partyRatings.reduce((acc, r) => acc + r.value, 0) / partyRatings.length 
                 : 0;
             
-            // Actualizar la fiesta con las estadísticas
             party.isActive = false;
             party.endDate = new Date();
             party.totalSongs = totalSongs;
@@ -337,7 +653,7 @@ app.post('/api/end-party', authenticateToken, async (req, res) => {
             await party.save();
         }
         
-        await DJ.updateOne({ _id: req.user.id }, { activePartyId: null });
+        await DJ.updateOne({ _id: req.user.id }, { $pull: { activePartyIds: partyId } });
         res.json({ message: 'Fiesta finalizada con éxito.' });
     } catch (error) {
         console.error('Error al finalizar fiesta:', error);
@@ -361,12 +677,11 @@ app.get('/api/party-history', authenticateToken, async (req, res) => {
 
 // ===== RUTAS DE WISHLISTS PRE-EVENTO =====
 
-// Crear nueva wishlist
+// Crear nueva wishlist (DJ)
 app.post('/api/wishlists', authenticateToken, async (req, res) => {
     try {
         const { name, description, eventDate } = req.body;
         
-        // Generar ID único para la wishlist
         const cleanName = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
         const randomString = Math.random().toString(36).substring(2, 8);
         const wishlistId = `wish-${cleanName}-${randomString}`;
@@ -454,18 +769,21 @@ app.post('/api/wishlists/:wishlistId/songs', async (req, res) => {
     }
 });
 
-// Eliminar canción de wishlist (solo DJ)
+// Eliminar canción de wishlist (solo DJ o Admin)
 app.delete('/api/wishlists/:wishlistId/songs/:songId', authenticateToken, async (req, res) => {
     try {
         const { wishlistId, songId } = req.params;
         
-        const wishlist = await Wishlist.findOne({ 
-            wishlistId,
-            djUsername: req.user.username 
-        });
+        const wishlist = await Wishlist.findOne({ wishlistId });
         
         if (!wishlist) {
             return res.status(404).json({ message: 'Wishlist no encontrada.' });
+        }
+        
+        // Verificar permisos (DJ dueño o admin)
+        const user = await DJ.findById(req.user.id);
+        if (wishlist.djUsername !== req.user.username && user.role !== 'admin') {
+            return res.status(403).json({ message: 'No tienes permiso para editar esta wishlist.' });
         }
         
         wishlist.songs = wishlist.songs.filter(song => song._id.toString() !== songId);
@@ -478,18 +796,21 @@ app.delete('/api/wishlists/:wishlistId/songs/:songId', authenticateToken, async 
     }
 });
 
-// Cerrar/Activar wishlist (solo DJ)
+// Cerrar/Activar wishlist (solo DJ o Admin)
 app.patch('/api/wishlists/:wishlistId/toggle', authenticateToken, async (req, res) => {
     try {
         const { wishlistId } = req.params;
         
-        const wishlist = await Wishlist.findOne({ 
-            wishlistId,
-            djUsername: req.user.username 
-        });
+        const wishlist = await Wishlist.findOne({ wishlistId });
         
         if (!wishlist) {
             return res.status(404).json({ message: 'Wishlist no encontrada.' });
+        }
+        
+        // Verificar permisos
+        const user = await DJ.findById(req.user.id);
+        if (wishlist.djUsername !== req.user.username && user.role !== 'admin') {
+            return res.status(403).json({ message: 'No tienes permiso para editar esta wishlist.' });
         }
         
         wishlist.isActive = !wishlist.isActive;
@@ -502,19 +823,24 @@ app.patch('/api/wishlists/:wishlistId/toggle', authenticateToken, async (req, re
     }
 });
 
-// Eliminar wishlist (solo DJ)
+// Eliminar wishlist (solo DJ o Admin)
 app.delete('/api/wishlists/:wishlistId', authenticateToken, async (req, res) => {
     try {
         const { wishlistId } = req.params;
         
-        const result = await Wishlist.deleteOne({ 
-            wishlistId,
-            djUsername: req.user.username 
-        });
+        const wishlist = await Wishlist.findOne({ wishlistId });
         
-        if (result.deletedCount === 0) {
+        if (!wishlist) {
             return res.status(404).json({ message: 'Wishlist no encontrada.' });
         }
+        
+        // Verificar permisos
+        const user = await DJ.findById(req.user.id);
+        if (wishlist.djUsername !== req.user.username && user.role !== 'admin') {
+            return res.status(403).json({ message: 'No tienes permiso para eliminar esta wishlist.' });
+        }
+        
+        await Wishlist.deleteOne({ wishlistId });
         
         res.json({ message: 'Wishlist eliminada.' });
     } catch (error) {
@@ -523,7 +849,7 @@ app.delete('/api/wishlists/:wishlistId', authenticateToken, async (req, res) => 
     }
 });
 
-// --- 6. LÓGICA DE SOCKET.IO ---
+// --- 10. LÓGICA DE SOCKET.IO ---
 io.on('connection', (socket) => {
     console.log(`🔌 Un cliente se ha conectado: ${socket.id}`);
 
@@ -538,7 +864,16 @@ io.on('connection', (socket) => {
             socket.join(partyId);
             console.log(`🎧 DJ ${djUsername} se ha unido a su sala: ${partyId}`);
             
-            await DJ.updateOne({ username: djUsername }, { activePartyId: partyId });
+            // Verificar si el DJ tiene esta fiesta activa, si no, agregarla
+            const dj = await DJ.findOne({ username: djUsername });
+            if (!dj.activePartyIds || !dj.activePartyIds.includes(partyId)) {
+                // Verificar límite
+                if (dj.activePartyIds && dj.activePartyIds.length >= 3) {
+                    socket.emit('error', 'Has alcanzado el límite de 3 fiestas simultáneas.');
+                    return;
+                }
+                await DJ.updateOne({ username: djUsername }, { $push: { activePartyIds: partyId } });
+            }
     
             const party = await Party.findOneAndUpdate(
                 { partyId: partyId },
@@ -627,7 +962,7 @@ io.on('connection', (socket) => {
     });
 });
 
-// --- 7. INICIAR EL SERVIDOR Y SERVICIOS ---
+// --- 11. INICIAR EL SERVIDOR Y SERVICIOS ---
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Servidor listo y escuchando en http://0.0.0.0:${PORT}`);
