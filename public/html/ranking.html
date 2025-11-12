@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4366966319354898"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ranking de DJs</title>
     <link rel="stylesheet" href="/css/style.css">
     
@@ -11,22 +10,70 @@
     <script src="/js/ranking.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@capacitor/core@latest/dist/capacitor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@capacitor/app@latest/dist/plugin.js"></script>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4366966319354898"
+     crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>🏆 Ranking de DJs</h1>
-    <p><a href="#" id="back-link">Volver a mi panel</a></p>
-    <table>
-        <thead>
-            <tr>
-                <th>Posición</th>
-                <th>DJ</th>
-                <th>Puntuación Media</th>
-                <th>Total Valoraciones</th>
-                <th>Fiestas Realizadas</th>
-            </tr>
-        </thead>
-        <tbody id="ranking-body"></tbody>
-    </table>
-    
+    <div class="ad-banner ad-banner-top">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-4366966319354898"
+             data-ad-slot="2353369620"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <div class="container">
+        <!-- Logo de la empresa -->
+        <div id="company-logo-container" style="text-align: center; margin-bottom: 20px;">
+            <img id="company-logo" src="" alt="" style="max-width: 200px; max-height: 80px; display: none;">
+        </div>
+
+        <h1>🏆 Ranking de DJs</h1>
+        
+        <div class="nav-links">
+            <a href="#" id="back-link">← Volver al Panel</a>
+        </div>
+
+        <div id="loading-message" style="text-align: center; padding: 40px;">
+            <p>Cargando ranking...</p>
+        </div>
+
+        <div id="ranking-container" style="display: none;">
+            <div class="stats-panel">
+                <h3>📊 Top DJs</h3>
+                <p style="text-align: center; color: var(--color-text-secondary); font-size: 0.9em;">
+                    Clasificación basada en valoraciones de los asistentes
+                </p>
+            </div>
+
+            <div id="ranking-list">
+                <!-- Se llenará dinámicamente -->
+            </div>
+
+            <div id="no-data-message" style="display: none; text-align: center; padding: 40px;">
+                <h2 style="color: var(--color-text-secondary);">📊</h2>
+                <p style="color: var(--color-text-secondary);">
+                    Aún no hay DJs registrados o no hay valoraciones disponibles.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="ad-banner ad-banner-bottom">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-4366966319354898"
+             data-ad-slot="6418513812"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
 </body>
 </html>
