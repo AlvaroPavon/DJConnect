@@ -166,16 +166,17 @@ La hoja de ruta se centra en expandir la interactividad y la inteligencia de la 
 ├── assets/                 # Recursos para el README (banners, gifs)
 ├── public/                 # Frontend estático (cliente)
 │   ├── css/                # Hojas de estilo
-│   ├── html/               # Vistas (login, panel DJ, historial, etc.)
+│   ├── html/               # Vistas (login, paneles DJ/Admin, wishlists, etc.)
 │   ├── js/                 # Lógica del cliente (sockets, config, UI)
 │   ├── images/             # Imágenes de la app (logo, favicons)
 │   └── index.html          # Página principal de peticiones
+├── wiki/                   # Documentación del proyecto
 ├── djModel.js              # Modelo de datos DJ (Mongoose)
 ├── partyModel.js           # Modelo de datos Party (Mongoose)
+├── wishlistModel.js        # Modelo de datos Wishlist (Mongoose)
+├── configModel.js          # Modelo de configuración (Logo, etc.)
 ├── server.js               # Servidor Express + Lógica de Socket.IO
 ├── package.json            # Dependencias
-├── .env.example            # Plantilla de variables de entorno
-├── CHANGELOG.md            # Registro de cambios
 └── README.md               # Este archivo
 ```
 ---
