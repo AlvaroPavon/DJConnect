@@ -13,7 +13,6 @@
 </head>
 <body>
     <div class="ad-banner ad-banner-top">
-        
         <ins class="adsbygoogle"
              style="display:block"
              data-ad-client="ca-pub-4366966319354898"
@@ -23,87 +22,61 @@
         <script>
              (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
+    </div>
+
+    <div class="container">
+        <!-- Logo de la empresa -->
+        <div id="company-logo-container" style="text-align: center; margin-bottom: 20px;">
+            <img id="company-logo" src="" alt="" style="max-width: 200px; max-height: 80px; display: none;">
         </div>
 
-    <div class="mobile-layout">
-        <div class="ad-banner-left">
-            
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-4366966319354898"
-                 data-ad-slot="3474879606"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-            </div>
-
-        <div class="mobile-content-area">
-            <div class="container">
-                <h1 id="wishlist-title">🎵 Sugiere tus Canciones</h1>
-                
-                <div id="wishlist-info" class="stats-panel" style="display: none; background-color: rgba(187, 134, 252, 0.1); border-color: var(--color-primary);">
-                    <p id="wishlist-description" style="text-align: center;"></p>
-                    <p style="text-align: center; color: var(--color-text-secondary); font-size: 0.9em;">
-                        <span id="wishlist-date"></span> • 
-                        <strong><span id="song-counter">0</span></strong> canciones sugeridas
-                    </p>
-                </div>
-
-                <div id="loading" style="text-align: center; padding: 40px;">
-                    <p>Cargando wishlist...</p>
-                </div>
-
-                <div id="error-message" style="display: none; text-align: center; padding: 40px;">
-                    <h2 style="color: var(--color-error);">😔 Oops!</h2>
-                    <p id="error-text"></p>
-                </div>
-
-                <div id="wishlist-content" style="display: none;">
-                    <div id="search-container">
-                        <input type="text" id="search-input" placeholder="Busca la canción que quieres sugerir...">
-                        <ul id="suggestions"></ul>
-                    </div>
-
-                    <div style="margin-top: 20px;">
-                        <h3>💡 O agrégala manualmente:</h3>
-                        <form id="manual-form">
-                            <input type="text" id="manual-title" placeholder="Título de la canción" required>
-                            <input type="text" id="manual-artist" placeholder="Artista" required>
-                            <input type="text" id="manual-name" placeholder="Tu nombre (opcional)">
-                            <button type="submit">➕ Agregar Canción</button>
-                        </form>
-                    </div>
-
-                    <div class="stats-panel" style="margin-top: 30px;">
-                        <h3>📋 Canciones Sugeridas</h3>
-                        <ul id="songs-list" style="list-style: none; padding: 0; max-height: 400px; overflow-y: auto;">
-                            <li style="text-align: center; padding: 20px; color: var(--color-text-secondary);">
-                                No hay canciones aún. ¡Sé el primero en sugerir!
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+        <h1 id="wishlist-title">🎵 Sugiere tus Canciones</h1>
+        
+        <div id="wishlist-info" class="stats-panel" style="display: none; background-color: rgba(187, 134, 252, 0.1); border-color: var(--color-primary);">
+            <p id="wishlist-description" style="text-align: center;"></p>
+            <p style="text-align: center; color: var(--color-text-secondary); font-size: 0.9em;">
+                <span id="wishlist-date"></span> • 
+                <strong><span id="song-counter">0</span></strong> canciones sugeridas
+            </p>
         </div>
 
-        <div class="ad-banner-right">
-            
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-4366966319354898"
-                 data-ad-slot="7787984548"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+        <div id="loading" style="text-align: center; padding: 40px;">
+            <p>Cargando wishlist...</p>
+        </div>
+
+        <div id="error-message" style="display: none; text-align: center; padding: 40px;">
+            <h2 style="color: var(--color-error);">😔 Oops!</h2>
+            <p id="error-text"></p>
+        </div>
+
+        <div id="wishlist-content" style="display: none;">
+            <div id="search-container">
+                <input type="text" id="search-input" placeholder="Busca la canción que quieres sugerir...">
+                <ul id="suggestions"></ul>
             </div>
+
+            <div style="margin-top: 20px;">
+                <h3>💡 O agrégala manualmente:</h3>
+                <form id="manual-form">
+                    <input type="text" id="manual-title" placeholder="Título de la canción" required>
+                    <input type="text" id="manual-artist" placeholder="Artista" required>
+                    <input type="text" id="manual-name" placeholder="Tu nombre (opcional)">
+                    <button type="submit">➕ Agregar Canción</button>
+                </form>
+            </div>
+
+            <div class="stats-panel" style="margin-top: 30px;">
+                <h3>📋 Canciones Sugeridas</h3>
+                <ul id="songs-list" style="list-style: none; padding: 0; max-height: 400px; overflow-y: auto;">
+                    <li style="text-align: center; padding: 20px; color: var(--color-text-secondary);">
+                        No hay canciones aún. ¡Sé el primero en sugerir!
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <div class="ad-banner ad-banner-bottom">
-        
         <ins class="adsbygoogle"
              style="display:block"
              data-ad-client="ca-pub-4366966319354898"
@@ -113,7 +86,7 @@
         <script>
              (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
-        </div>
+    </div>
 
     <div id="success-modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; z-index: 100;">
         <div class="modal-content" style="text-align: center; max-width: 400px;">

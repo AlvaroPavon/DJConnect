@@ -6,6 +6,9 @@ const djSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     
+    // Nuevo campo para roles
+    role: { type: String, enum: ['dj', 'admin'], default: 'dj' },
+    
     passwordResetToken: { type: String },
     passwordResetExpires: { type: Date },
     
@@ -15,9 +18,11 @@ const djSchema = new mongoose.Schema({
         date: { type: Date, default: Date.now }
     }],
     
-    // --- CAMPO NUEVO ---
-    // Guardará el ID de la fiesta que está activa en este momento.
-    activePartyId: { type: String, default: null }
+    // Cambiado de activePartyId (string) a activePartyIds (array de strings)
+    activePartyIds: { type: [String], default: [] },
+    
+    // Límite de fiestas simultáneas
+    maxSimultaneousParties: { type: Number, default: 3 }
 });
 
 module.exports = mongoose.model('DJ', djSchema);
