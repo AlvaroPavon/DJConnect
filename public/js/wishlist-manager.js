@@ -340,6 +340,12 @@ function exportToPDF() {
     // Crear contenido HTML para impresión
     const printWindow = window.open('', '_blank');
     
+    const logoSection = companyLogoUrl ? `
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="${companyLogoUrl}" alt="Logo" style="max-width: 250px; max-height: 100px;">
+        </div>
+    ` : '';
+    
     const html = `
         <!DOCTYPE html>
         <html>
@@ -390,6 +396,7 @@ function exportToPDF() {
             </style>
         </head>
         <body>
+            ${logoSection}
             <h1>🎵 ${currentWishlist.name}</h1>
             
             <div class="info">
