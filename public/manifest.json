@@ -2,7 +2,7 @@
   "name": "DJConnect - Gestión de Eventos DJ",
   "short_name": "DJConnect",
   "description": "Plataforma web en tiempo real para la gestión interactiva de peticiones musicales en eventos en vivo",
-  "start_url": "/html/login.html",
+  "start_url": "/welcome.html",
   "display": "standalone",
   "background_color": "#1a1a1a",
   "theme_color": "#ff6b35",
