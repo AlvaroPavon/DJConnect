@@ -186,10 +186,8 @@ const io = new Server(server, {
   cors: corsOptions
 });
 
-app.use(express.static('public'));
-
-// --- LÍNEA MODIFICADA ---
-// La ruta raíz ahora siempre redirige a la página de login dentro de la carpeta html.
+// === IMPORTANTE: Ruta específica ANTES de express.static ===
+// Esto previene que express.static sirva index.html en la raíz
 app.get('/', (req, res) => {
     // Si viene con código de fiesta en query params, ir directo a peticiones
     // Soporta: ?dj=codigo (usado por QR), ?party=codigo, ?partyCode=codigo
@@ -203,6 +201,9 @@ app.get('/', (req, res) => {
     // Si no hay código de fiesta, mostrar página de bienvenida
     res.redirect('/welcome.html');
 });
+
+// Servir archivos estáticos DESPUÉS de las rutas específicas
+app.use(express.static('public'));
 
 
 // --- 3. CONFIGURACIÓN DE CLAVES Y CONSTANTES ---
