@@ -540,9 +540,21 @@ app.post('/api/admin/wishlists', authenticateAdmin, async (req, res) => {
     try {
         const { name, description, eventDate, djUsername } = req.body;
         
-        const dj = await DJ.findOne({ username: djUsername, role: 'dj' });
+        console.log('Buscando DJ para wishlist:', djUsername);
+        
+        // Buscar DJ sin filtro de role primero
+        const dj = await DJ.findOne({ username: djUsername });
+        
         if (!dj) {
-            return res.status(404).json({ message: 'DJ no encontrado' });
+            console.log('DJ no encontrado con username:', djUsername);
+            return res.status(404).json({ message: 'DJ no encontrado. Verifica el nombre de usuario.' });
+        }
+        
+        console.log('DJ encontrado para wishlist:', dj.username, 'role:', dj.role);
+        
+        // Verificar que no sea admin
+        if (dj.role === 'admin') {
+            return res.status(400).json({ message: 'No se pueden asignar wishlists a administradores' });
         }
         
         const cleanName = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
