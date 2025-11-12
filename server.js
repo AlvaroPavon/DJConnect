@@ -40,8 +40,9 @@ app.use(helmet({
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
             scriptSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrcAttr: ["'unsafe-inline'"], // CRÍTICO: Permite onclick, onchange, etc.
             imgSrc: ["'self'", "data:", "https:", "blob:"],
-            connectSrc: ["'self'", "https://api.spotify.com", "https://accounts.spotify.com", "wss://djapp.duckdns.org", "ws://localhost:*"],
+            connectSrc: ["'self'", "https://api.spotify.com", "https://accounts.spotify.com", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "wss://djapp.duckdns.org", "ws://localhost:*"],
             frameSrc: ["'none'"]
         }
     },
