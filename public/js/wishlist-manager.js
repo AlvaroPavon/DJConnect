@@ -317,6 +317,12 @@ function showModal(wishlist) {
 }
 
 function closeModal() {
+    // Salir de la sala de Socket.IO
+    if (socket && socket.connected && currentWishlist) {
+        socket.emit('leave-wishlist-room', currentWishlist.wishlistId);
+        console.log(`📋 Saliendo de sala de wishlist: ${currentWishlist.wishlistId}`);
+    }
+    
     document.getElementById('wishlist-modal').style.display = 'none';
     document.getElementById('qr-container').style.display = 'none';
     currentWishlist = null;
