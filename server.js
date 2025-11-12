@@ -334,9 +334,18 @@ app.get('/api/admin/me', authenticateAdmin, async (req, res) => {
 
 app.get('/api/admin/stats', authenticateAdmin, async (req, res) => {
     try {
-        const totalDJs = await DJ.countDocuments({ role: 'dj' });
+        // Contar DJs (excluyendo admins explícitamente)
+        const totalDJs = await DJ.countDocuments({ 
+            $or: [
+                { role: 'dj' },
+                { role: { $exists: false } } // Incluir DJs sin campo role (creados antes)
+            ]
+        });
+        
         const activeParties = await Party.countDocuments({ isActive: true });
         const totalWishlists = await Wishlist.countDocuments({ isActive: true });
+        
+        console.log('Stats:', { totalDJs, activeParties, totalWishlists });
         
         res.json({
             totalDJs,
@@ -344,7 +353,7 @@ app.get('/api/admin/stats', authenticateAdmin, async (req, res) => {
             totalWishlists
         });
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error al obtener estadísticas:', error);
         res.status(500).json({ message: 'Error al obtener estadísticas' });
     }
 });
