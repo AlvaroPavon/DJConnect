@@ -64,3 +64,7 @@ build/
 # Cobertura de tests
 coverage/
 .nyc_output/
+-e 
+# Environment files
+*.env
+*.env.*
