@@ -140,6 +140,17 @@ function setupMenuListeners() {
         dashboardContentSection.style.display = 'block';
         runDashboard(uniquePartyId);
     });
+
+    // Listener para el botón "Cerrar Sesión"
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                localStorage.removeItem('dj-token');
+                window.location.href = '/html/login.html';
+            }
+        });
+    }
 }
 
 // Iniciar la lógica del menú al cargar la página
