@@ -8,12 +8,21 @@
 Cuando usuarios accedían desde PC a la URL raíz, redirigía directamente a `/html/login.html`, pero esto no era intuitivo y podía causar confusión sobre si acceder como DJ o invitado.
 
 **Solución:**
-✅ Creada página de bienvenida (`welcome.html`) con dos opciones claras:
-- **DJ / Admin**: Redirige a panel de control
-- **Invitado**: Redirige a página de peticiones
+✅ Página de bienvenida inteligente que detecta contexto:
+- **Con QR (`?dj=codigo`)**: Va directo a peticiones de esa fiesta
+- **Sin código**: Muestra página de bienvenida con opciones:
+  - **DJ / Admin**: Redirige a panel de control
+  - **Invitado**: Explica que necesita escanear QR
+
+**Flujo correcto:**
+```
+Invitado escanea QR → URL con ?dj=abc123 → Directo a peticiones
+Usuario entra sin código → Página bienvenida → Elige DJ o lee instrucciones
+DJ accede → Click en "DJ/Admin" → Panel de login
+```
 
 **Archivos modificados:**
-- `server.js`: Cambiada redirección de `/` a `/welcome.html`
+- `server.js`: Redirección inteligente detectando parámetro `?dj=`
 - `manifest.json`: Actualizado `start_url` a `/welcome.html`
 - **NUEVO:** `/public/welcome.html` - Página de bienvenida elegante
 
