@@ -1,6 +1,86 @@
-# ✨ Funcionalidades Actuales (v2.1)
+# ✨ Funcionalidades Actuales (v2.2)
 
 Esta sección describe las características principales implementadas en la versión actual de DJConnect.
+
+## 🎉 Novedades v2.2
+
+### 📱 Progressive Web App (PWA)
+
+DJConnect es ahora una **aplicación web progresiva** completamente instalable:
+
+- **Instalación Nativa**: Los usuarios pueden instalar DJConnect directamente desde el navegador sin necesidad de App Store o Google Play.
+- **Experiencia de App**: Al instalarse, funciona como una aplicación nativa con su propio ícono en la pantalla de inicio.
+- **Sin Barra del Navegador**: Ejecuta en modo standalone para una experiencia inmersiva.
+- **Actualizaciones Instantáneas**: Cada vez que se actualiza el código, todos los usuarios obtienen la nueva versión automáticamente.
+- **Compatible**: Funciona perfectamente en Android (Chrome) e iOS (Safari).
+- **Requiere Internet**: Diseñada para trabajar online con conexión en tiempo real.
+
+### 🔒 Seguridad Empresarial
+
+Implementación completa de medidas de seguridad de nivel producción:
+
+**Headers HTTP Seguros (Helmet.js):**
+- Content Security Policy (CSP) para prevenir XSS
+- Strict-Transport-Security (HSTS) para forzar HTTPS
+- X-Frame-Options para prevenir clickjacking
+- X-Content-Type-Options para prevenir MIME sniffing
+- X-XSS-Protection adicional
+
+**Rate Limiting (Protección DDoS/Fuerza Bruta):**
+- Login: máximo 5 intentos cada 15 minutos
+- Registro: máximo 3 intentos por hora
+- Reset de contraseña: máximo 3 intentos por hora
+- Subida de archivos: máximo 10 por 15 minutos
+- Rate limit general: 100 requests por 15 minutos por IP
+
+**Validación y Sanitización:**
+- Validación estricta con express-validator
+- Sanitización de todos los inputs del usuario
+- Validación de emails, usernames y passwords
+- Remoción automática de caracteres peligrosos
+
+**Protección NoSQL Injection:**
+- Middleware personalizado que bloquea operadores MongoDB maliciosos
+- Sanitización recursiva de objetos anidados
+- Protección en queries de base de datos
+
+**Validación de Subida de Archivos:**
+- Verificación de "magic numbers" (primeros bytes del archivo)
+- Solo formatos permitidos: PNG, JPEG, JPG, WebP
+- Validación de tamaño máximo: 3MB
+- No se confía en la extensión del archivo declarada
+
+**JWT Mejorado:**
+- Tokens con expiración de 2 horas (antes 24h)
+- Trust proxy configurado para nginx
+- Protección en todas las rutas privadas
+
+### 👨‍💼 Panel de Administración
+
+Sistema completo de administración para gestionar toda la plataforma:
+
+- **Dashboard Centralizado**: Vista general con estadísticas del sistema.
+- **Gestión de DJs**: Crear, editar, eliminar DJs y cambiar contraseñas.
+- **Gestión de Fiestas**: Crear y asignar eventos a DJs específicos.
+- **Vista de Wishlists**: Acceso a todas las wishlists del sistema.
+- **Estadísticas Globales**: Total de DJs, fiestas activas, wishlists.
+- **Exportación de Wishlists**: PDF desde el panel admin.
+- **Configuración Global**: Cambiar el logo de la plataforma.
+
+### 🎉 Multi-Fiesta para DJs
+
+Los DJs pueden gestionar múltiples eventos simultáneamente:
+
+- **Hasta 3 Fiestas Activas**: Manejo de múltiples eventos al mismo tiempo.
+- **Selector de Fiesta**: Dropdown para cambiar rápidamente entre eventos.
+- **Gestión Independiente**: Cada fiesta tiene su propia lista de peticiones.
+- **Sin Interferencias**: Las wishlists y peticiones están separadas por evento.
+
+### 📸 Integración Social
+
+- **Perfil de Instagram**: Los DJs pueden agregar su usuario de Instagram.
+- **QR Personalizados**: Los códigos QR incluyen el logo de la empresa y el Instagram del DJ.
+- **Plantilla Profesional**: Template descargable con toda la información visual.
 
 ## 🎵 Wishlists Pre-Evento
 
