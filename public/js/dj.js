@@ -438,7 +438,30 @@ function runDashboard(currentPartyId) {
     const endPartyBtn = document.getElementById('end-party-btn');
     endPartyBtn.addEventListener('click', async () => {
         if (confirm('¿Estás seguro de que quieres finalizar esta fiesta? Se guardarán todas las estadísticas.')) {
+            try {
+                const response = await fetch(`${serverUrl}/api/end-party`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` 
+                    },
+                    body: JSON.stringify({ partyId: currentPartyId })
+                });
 
+                if (response.ok) {
+                    alert('¡Fiesta finalizada! Las estadísticas se han guardado.');
+                    window.location.href = '/html/dj.html';
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error al finalizar la fiesta: ${errorData.message || 'Respuesta no válida del servidor.'}`);
+                }
+            } catch (error) {
+                console.error('Error de red al finalizar la fiesta:', error);
+                alert('No se pudo finalizar la fiesta. Revisa tu conexión.');
+            }
+        }
+    });
+}
 
 // Función para generar la plantilla del QR con texto e Instagram
 async function generateQRTemplate(qrCanvas, partyId) {
