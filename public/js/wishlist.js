@@ -14,7 +14,24 @@ document.addEventListener('DOMContentLoaded', () => {
     currentWishlistId = wishlistId;
     loadWishlist();
     setupEventListeners();
+    loadCompanyLogo();
 });
+
+async function loadCompanyLogo() {
+    try {
+        const response = await fetch(`${serverUrl}/api/config/logo`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.logoUrl) {
+                const logo = document.getElementById('company-logo');
+                logo.src = data.logoUrl;
+                logo.style.display = 'block';
+            }
+        }
+    } catch (error) {
+        console.error('Error loading logo:', error);
+    }
+}
 
 function setupEventListeners() {
     // Búsqueda de canciones
