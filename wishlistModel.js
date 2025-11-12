@@ -20,4 +20,4 @@ const wishlistSchema = new mongoose.Schema({
     maxSongsPerUser: { type: Number, default: 3 }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Wishlist', wishlistSchema);
+module.exports = mongoose.model('Wishlist', wishlistSchema, 'wishlists');
