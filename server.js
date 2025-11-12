@@ -612,15 +612,24 @@ app.post('/api/admin/config/logo', authenticateAdmin, async (req, res) => {
 // --- 9. RUTAS DE DJ ---
 app.get('/api/ranking', authenticateToken, async (req, res) => {
     try {
-        const djs = await DJ.find({ role: 'dj' }, 'username partyCount ratings');
+        // Buscar DJs (excluir admins explícitamente)
+        const djs = await DJ.find({ 
+            $or: [
+                { role: 'dj' },
+                { role: { $exists: false } }
+            ]
+        }, 'username partyCount ratings');
+        
+        console.log(`Ranking: encontrados ${djs.length} DJs`);
+        
         const ranking = djs.map(dj => {
-            const totalRatings = dj.ratings.length;
-            const sumOfRatings = dj.ratings.reduce((acc, r) => acc + r.value, 0);
+            const totalRatings = dj.ratings ? dj.ratings.length : 0;
+            const sumOfRatings = dj.ratings ? dj.ratings.reduce((acc, r) => acc + r.value, 0) : 0;
             const averageRating = totalRatings > 0 ? (sumOfRatings / totalRatings).toFixed(2) : 'Sin valoraciones';
             
             return {
                 username: dj.username,
-                partyCount: dj.partyCount,
+                partyCount: dj.partyCount || 0,
                 averageRating: averageRating,
                 totalRatings: totalRatings
             };
