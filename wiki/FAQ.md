@@ -37,10 +37,11 @@ No hay límite. El bug de 100 peticiones fue solucionado en la v2.0. Ahora puede
 
 ### ¿Cómo protejo mi panel de accesos no autorizados?
 
-- Usa una contraseña fuerte
-- No compartas tus credenciales
-- Cierra sesión cuando no uses el panel
-- El token JWT expira en 24 horas automáticamente
+- ✅ Usa una contraseña fuerte (mínimo 6 caracteres)
+- ✅ No compartas tus credenciales
+- ✅ Cierra sesión cuando no uses el panel
+- ✅ El token JWT expira en 2 horas automáticamente (v2.2)
+- ✅ Rate limiting protege contra fuerza bruta (5 intentos/15 min)
 
 ### ¿Puedo rechazar peticiones?
 
