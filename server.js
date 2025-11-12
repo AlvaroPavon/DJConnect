@@ -861,6 +861,18 @@ app.delete('/api/wishlists/:wishlistId', authenticateToken, async (req, res) => 
 io.on('connection', (socket) => {
     console.log(`🔌 Un cliente se ha conectado: ${socket.id}`);
 
+    // Unirse a una sala de wishlist (público)
+    socket.on('join-wishlist-room', (wishlistId) => {
+        socket.join(`wishlist-${wishlistId}`);
+        console.log(`📋 Cliente ${socket.id} se unió a la sala de wishlist: ${wishlistId}`);
+    });
+
+    // Salir de una sala de wishlist
+    socket.on('leave-wishlist-room', (wishlistId) => {
+        socket.leave(`wishlist-${wishlistId}`);
+        console.log(`📋 Cliente ${socket.id} salió de la sala de wishlist: ${wishlistId}`);
+    });
+
     socket.on('join-dj-room', async (partyId) => {
         const token = socket.handshake.auth.token;
         if (!token) {
