@@ -33,9 +33,7 @@ No hay límite. El bug de 100 peticiones fue solucionado en la v2.0. Ahora puede
 
 ### ¿Puedo tener múltiples fiestas activas?
 
-No, actualmente solo puedes tener una fiesta activa por DJ. Debes finalizar la fiesta actual antes de crear una nueva.
-
-**Nota:** Soporte multi-fiesta está en el roadmap v3.0.
+✅ **Sí, desde v2.2** puedes gestionar hasta 3 fiestas simultáneas. Usa el selector de fiestas en tu panel para cambiar entre ellas.
 
 ### ¿Cómo protejo mi panel de accesos no autorizados?
 
