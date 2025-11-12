@@ -131,10 +131,10 @@ Este repositorio sirve como un **portafolio técnico** para demostrar la arquite
 
 La hoja de ruta se centra en expandir la interactividad y la inteligencia de la plataforma.
 
-### 🚧 v2.2 - En Desarrollo (Q2 2025)
+### 🚧 v2.3 - En Desarrollo (Q2 2025)
 - [ ] **Playlists Personalizadas**: Crear playlists basadas en peticiones.
 - [ ] **Temas Personalizables**: Dark/Light mode y colores customizables.
-- [ ] **Exportación de Datos**: PDF y CSV con estadísticas detalladas.
+- [ ] **Exportación de Datos Avanzada**: CSV con estadísticas detalladas.
 - [ ] **Notificaciones Push**: Alertas para el DJ en nuevas peticiones.
 - [ ] **Multi-idioma**: Soporte para inglés, portugués y francés.
 
