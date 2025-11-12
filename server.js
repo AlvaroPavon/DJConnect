@@ -427,9 +427,24 @@ app.post('/api/admin/parties', authenticateAdmin, async (req, res) => {
     try {
         const { partyName, djUsername } = req.body;
         
-        const dj = await DJ.findOne({ username: djUsername, role: 'dj' });
+        console.log('Buscando DJ:', djUsername);
+        
+        // Buscar DJ sin filtro de role primero
+        let dj = await DJ.findOne({ username: djUsername });
+        
         if (!dj) {
-            return res.status(404).json({ message: 'DJ no encontrado' });
+            console.log('DJ no encontrado con username:', djUsername);
+            // Listar todos los DJs para debug
+            const allDJs = await DJ.find({}).select('username role');
+            console.log('DJs disponibles:', allDJs);
+            return res.status(404).json({ message: 'DJ no encontrado. Verifica el nombre de usuario.' });
+        }
+        
+        console.log('DJ encontrado:', dj.username, 'role:', dj.role);
+        
+        // Verificar que no sea admin
+        if (dj.role === 'admin') {
+            return res.status(400).json({ message: 'No se pueden asignar fiestas a administradores' });
         }
         
         // Verificar límite de fiestas
