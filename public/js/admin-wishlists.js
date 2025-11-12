@@ -229,11 +229,18 @@ function showWishlistModal(wishlist) {
                 <p><strong>DJ:</strong> ${wishlist.djUsername}</p>
                 <p><strong>Fecha del evento:</strong> ${eventDate}</p>
                 ${wishlist.description ? `<p><strong>Descripción:</strong> ${wishlist.description}</p>` : ''}
-                <p><strong>Enlace para invitados:</strong></p>
-                <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
-                    <input type="text" value="${wishlistUrl}" readonly style="flex: 1; padding: 10px; background-color: #333; border: 1px solid var(--color-border); border-radius: 5px; color: var(--color-text-primary);">
-                    <button onclick="copyWishlistLink('${wishlistUrl}')" style="width: auto; padding: 10px 15px; background-color: var(--color-secondary); margin: 0;">📋 Copiar</button>
+                
+                <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                    <button onclick="exportWishlistToPDF()" style="flex: 1; min-width: 150px; padding: 10px 15px; background-color: var(--color-primary); margin: 0;">
+                        📄 Exportar PDF
+                    </button>
+                    <button onclick="copyWishlistLink('${wishlistUrl}')" style="flex: 1; min-width: 150px; padding: 10px 15px; background-color: var(--color-secondary); margin: 0;">
+                        📋 Copiar Enlace
+                    </button>
                 </div>
+                
+                <p style="margin-top: 15px;"><strong>Enlace para invitados:</strong></p>
+                <input type="text" value="${wishlistUrl}" readonly style="width: 100%; padding: 10px; background-color: #333; border: 1px solid var(--color-border); border-radius: 5px; color: var(--color-text-primary); font-size: 0.85em;">
             </div>
             
             <h3>🎵 Canciones Sugeridas (${wishlist.songs.length})</h3>
@@ -354,11 +361,18 @@ function showWishlistModal(wishlist) {
                 <p><strong>DJ:</strong> ${wishlist.djUsername}</p>
                 <p><strong>Fecha del evento:</strong> ${eventDate}</p>
                 ${wishlist.description ? `<p><strong>Descripción:</strong> ${wishlist.description}</p>` : ''}
-                <p><strong>Enlace para invitados:</strong></p>
-                <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
-                    <input type="text" value="${wishlistUrl}" readonly style="flex: 1; padding: 10px; background-color: #333; border: 1px solid var(--color-border); border-radius: 5px; color: var(--color-text-primary);">
-                    <button onclick="copyWishlistLink('${wishlistUrl}')" style="width: auto; padding: 10px 15px; background-color: var(--color-secondary); margin: 0;">📋 Copiar</button>
+                
+                <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                    <button onclick="exportWishlistToPDF()" style="flex: 1; min-width: 150px; padding: 10px 15px; background-color: var(--color-primary); margin: 0;">
+                        📄 Exportar PDF
+                    </button>
+                    <button onclick="copyWishlistLink('${wishlistUrl}')" style="flex: 1; min-width: 150px; padding: 10px 15px; background-color: var(--color-secondary); margin: 0;">
+                        📋 Copiar Enlace
+                    </button>
                 </div>
+                
+                <p style="margin-top: 15px;"><strong>Enlace para invitados:</strong></p>
+                <input type="text" value="${wishlistUrl}" readonly style="width: 100%; padding: 10px; background-color: #333; border: 1px solid var(--color-border); border-radius: 5px; color: var(--color-text-primary); font-size: 0.85em;">
             </div>
             
             <h3>🎵 Canciones Sugeridas (${wishlist.songs.length})</h3>
