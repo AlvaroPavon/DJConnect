@@ -404,7 +404,9 @@ function runDashboard(currentPartyId) {
     });
 
     shareQrBtn.onclick = async () => {
-        const dataUrl = canvas.toDataURL('image/png');
+        // Generar plantilla completa con QR, texto e Instagram
+        const templateCanvas = await generateQRTemplate(canvas, currentPartyId);
+        const dataUrl = templateCanvas.toDataURL('image/png');
         
         if (Capacitor.isNativePlatform()) {
             try {
