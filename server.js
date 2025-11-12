@@ -12,6 +12,12 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const path = require('path');
 
+// SEGURIDAD: Nuevas importaciones
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const { body, validationResult } = require('express-validator');
+const mongoSanitize = require('express-mongo-sanitize');
+
 // Modelos de la base de datos
 const DJ = require('./djModel.js');
 const Party = require('./partyModel.js');
