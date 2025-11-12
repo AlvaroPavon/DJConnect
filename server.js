@@ -804,27 +804,44 @@ app.post('/api/admin/wishlists', authenticateAdmin, async (req, res) => {
     }
 });
 
-// Subir logo
-app.post('/api/admin/config/logo', authenticateAdmin, async (req, res) => {
-    try {
-        const { logoData } = req.body;
-        
-        if (!logoData) {
-            return res.status(400).json({ message: 'No se proporcionó imagen' });
+// === SEGURIDAD: Subir logo con validación estricta ===
+app.post('/api/admin/config/logo', 
+    authenticateAdmin,
+    uploadLimiter,
+    [
+        body('logoData').notEmpty()
+    ],
+    async (req, res) => {
+        try {
+            // Validar inputs
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ message: 'No se proporcionó imagen' });
+            }
+
+            const { logoData } = req.body;
+            
+            // SEGURIDAD: Validar que sea una imagen base64 válida y segura
+            const validation = validateBase64Image(logoData);
+            if (!validation.valid) {
+                console.warn('Intento de subida de archivo inválido:', validation.error);
+                return res.status(400).json({ message: validation.error });
+            }
+            
+            console.log(`✅ Imagen validada: tipo=${validation.imageType}, tamaño=${validation.size} bytes`);
+            
+            // Guardar en la base de datos
+            await Config.findOneAndUpdate(
+                { key: 'companyLogo' },
+                { key: 'companyLogo', value: logoData, updatedAt: new Date() },
+                { upsert: true, new: true }
+            );
+            
+            res.json({ message: 'Logo actualizado exitosamente', logoUrl: logoData });
+        } catch (error) {
+            console.error('Error al guardar logo:', error);
+            res.status(500).json({ message: 'Error al guardar logo' });
         }
-        
-        // Guardar en la base de datos
-        await Config.findOneAndUpdate(
-            { key: 'companyLogo' },
-            { key: 'companyLogo', value: logoData, updatedAt: new Date() },
-            { upsert: true, new: true }
-        );
-        
-        res.json({ message: 'Logo actualizado exitosamente', logoUrl: logoData });
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ message: 'Error al guardar logo' });
-    }
 });
 
 // --- 9. RUTAS DE DJ ---
