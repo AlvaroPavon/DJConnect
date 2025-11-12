@@ -75,6 +75,24 @@
 
             <hr>
 
+            <!-- Configuración de Instagram -->
+            <div class="stats-panel" style="margin-top: 20px;">
+                <h3>📱 Mi Instagram</h3>
+                <p style="font-size: 0.9em; color: var(--color-text-secondary); text-align: left;">
+                    Añade tu usuario de Instagram. Aparecerá en los QR descargables.
+                </p>
+                <form id="instagram-form">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <span style="font-size: 1.2em; color: var(--color-text-secondary);">@</span>
+                        <input type="text" id="instagram-input" placeholder="tu_usuario" style="flex: 1;">
+                        <button type="submit" style="width: auto; padding: 10px 20px; background-color: var(--color-secondary);">
+                            💾 Guardar
+                        </button>
+                    </div>
+                </form>
+                <p id="instagram-status" style="text-align: center; margin-top: 10px; font-size: 0.9em; display: none;"></p>
+            </div>
+
             <!-- Botón de cerrar sesión -->
             <button id="logout-btn" style="background-color: var(--color-error); margin-top: 20px;">
                 🚪 Cerrar Sesión
