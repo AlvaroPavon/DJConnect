@@ -793,6 +793,10 @@ app.delete('/api/wishlists/:wishlistId/songs/:songId', authenticateToken, async 
         wishlist.songs = wishlist.songs.filter(song => song._id.toString() !== songId);
         await wishlist.save();
         
+        // Emitir evento Socket.IO para actualización en tiempo real
+        io.to(`wishlist-${wishlistId}`).emit('wishlist-song-deleted', songId);
+        console.log(`🗑️ Canción eliminada de wishlist [${wishlistId}]: ${songId}`);
+        
         res.json({ message: 'Canción eliminada.' });
     } catch (error) {
         console.error('Error al eliminar canción:', error);
