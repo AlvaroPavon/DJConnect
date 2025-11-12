@@ -12,9 +12,83 @@ document.addEventListener('DOMContentLoaded', () => {
     loadWishlists();
     setupEventListeners();
     loadCompanyLogo();
+    setupSocketIO();
 });
 
 let companyLogoUrl = null;
+
+// Configurar Socket.IO
+function setupSocketIO() {
+    socket = io(serverUrl, {
+        auth: {
+            token: token
+        }
+    });
+    
+    socket.on('connect', () => {
+        console.log('✅ DJ conectado a Socket.IO');
+    });
+    
+    // Escuchar cuando se agrega una canción
+    socket.on('wishlist-song-added', (newSong) => {
+        console.log('🎵 Nueva canción recibida en wishlist:', newSong);
+        if (currentWishlist) {
+            currentWishlist.songs.push(newSong);
+            updateModalSongsList();
+        }
+    });
+    
+    // Escuchar cuando se elimina una canción
+    socket.on('wishlist-song-deleted', (songId) => {
+        console.log('🗑️ Canción eliminada de wishlist:', songId);
+        if (currentWishlist) {
+            currentWishlist.songs = currentWishlist.songs.filter(song => song._id !== songId);
+            updateModalSongsList();
+        }
+    });
+    
+    socket.on('disconnect', () => {
+        console.log('❌ Desconectado de Socket.IO');
+    });
+}
+
+// Actualizar lista de canciones en el modal
+function updateModalSongsList() {
+    const songsList = document.getElementById('modal-songs-list');
+    const songCount = document.getElementById('song-count');
+    
+    if (!songsList || !currentWishlist) return;
+    
+    songCount.textContent = currentWishlist.songs.length;
+    songsList.innerHTML = '';
+    
+    if (currentWishlist.songs.length === 0) {
+        songsList.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--color-text-secondary);">No hay canciones aún</li>';
+    } else {
+        currentWishlist.songs.forEach(song => {
+            const li = document.createElement('li');
+            li.style.cssText = 'background-color: #2c2c2c; padding: 15px; margin: 10px 0; border-radius: 8px; border-left: 4px solid var(--color-secondary);';
+            li.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div style="flex: 1;">
+                        <strong style="display: block; color: var(--color-text-primary);">${song.titulo}</strong>
+                        <em style="display: block; color: var(--color-text-secondary); font-size: 0.9em;">${song.artista}</em>
+                        <small style="color: var(--color-text-secondary);">
+                            🎵 ${song.genre} • 
+                            👤 ${song.addedBy} • 
+                            🕐 ${new Date(song.timestamp).toLocaleString('es-ES')}
+                        </small>
+                    </div>
+                    <button onclick="deleteSong('${currentWishlist.wishlistId}', '${song._id}')" 
+                            style="width: auto; padding: 8px 15px; background-color: var(--color-error);">
+                        🗑️
+                    </button>
+                </div>
+            `;
+            songsList.appendChild(li);
+        });
+    }
+}
 
 async function loadCompanyLogo() {
     try {
