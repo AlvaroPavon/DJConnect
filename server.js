@@ -290,21 +290,44 @@ const authenticateAdmin = async (req, res, next) => {
 };
 
 // --- 6. RUTAS PÚBLICAS ---
-app.post('/register', async (req, res) => {
-    try {
-        const { username, email, password } = req.body;
-        const existingUser = await DJ.findOne({ $or: [{ username }, { email }] });
-        if (existingUser) {
-            return res.status(400).json({ message: 'El nombre de usuario o el email ya están en uso.' });
+app.post('/register', 
+    registerLimiter,
+    [
+        body('username').trim().isLength({ min: 3, max: 30 }).escape(),
+        body('email').isEmail().normalizeEmail(),
+        body('password').isLength({ min: 6, max: 100 })
+    ],
+    async (req, res) => {
+        try {
+            // Validar inputs
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ message: 'Datos inválidos', errors: errors.array() });
+            }
+
+            const { username, email, password } = req.body;
+            
+            // Sanitizar inputs adicionales
+            const sanitizedUsername = sanitizeInput(username);
+            const sanitizedEmail = sanitizeInput(email);
+            
+            const existingUser = await DJ.findOne({ $or: [{ username: sanitizedUsername }, { email: sanitizedEmail }] });
+            if (existingUser) {
+                return res.status(400).json({ message: 'El nombre de usuario o el email ya están en uso.' });
+            }
+            
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const newDJ = new DJ({ 
+                username: sanitizedUsername, 
+                email: sanitizedEmail, 
+                password: hashedPassword 
+            });
+            await newDJ.save();
+            res.status(201).json({ message: '¡Registro exitoso! Ya puedes iniciar sesión.' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error en el servidor al registrar.' });
         }
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newDJ = new DJ({ username, email, password: hashedPassword });
-        await newDJ.save();
-        res.status(201).json({ message: '¡Registro exitoso! Ya puedes iniciar sesión.' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error en el servidor al registrar.' });
-    }
 });
 
 app.post('/login', async (req, res) => {
