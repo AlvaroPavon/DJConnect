@@ -115,6 +115,10 @@ function createWishlistCard(wishlist) {
                 ${wishlist.description ? `<p style="margin: 5px 0; color: var(--color-text-secondary); font-size: 0.85em;">${wishlist.description}</p>` : ''}
             </div>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button onclick="viewWishlistDetails('${wishlist.wishlistId}')" 
+                        style="width: auto; padding: 10px 15px; background-color: var(--color-primary);">
+                    👁️ Ver Detalles
+                </button>
                 <button onclick="toggleWishlist('${wishlist.wishlistId}')" 
                         style="width: auto; padding: 10px 15px; background-color: ${wishlist.isActive ? '#666' : 'var(--color-secondary)'};">
                     ${wishlist.isActive ? '🔒 Cerrar' : '🔓 Abrir'}
