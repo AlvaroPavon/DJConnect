@@ -438,6 +438,116 @@ function runDashboard(currentPartyId) {
     const endPartyBtn = document.getElementById('end-party-btn');
     endPartyBtn.addEventListener('click', async () => {
         if (confirm('¿Estás seguro de que quieres finalizar esta fiesta? Se guardarán todas las estadísticas.')) {
+
+
+// Función para generar la plantilla del QR con texto e Instagram
+async function generateQRTemplate(qrCanvas, partyId) {
+    // Crear canvas de plantilla (tamaño A4 vertical: 794x1123 px aproximadamente)
+    const templateCanvas = document.createElement('canvas');
+    const ctx = templateCanvas.getContext('2d');
+    
+    // Dimensiones optimizadas para impresión y móvil
+    templateCanvas.width = 800;
+    templateCanvas.height = 1000;
+    
+    // Fondo blanco
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, templateCanvas.width, templateCanvas.height);
+    
+    try {
+        // Cargar logo de la empresa si existe
+        const logoResponse = await fetch(`${serverUrl}/api/config/logo`);
+        if (logoResponse.ok) {
+            const logoData = await logoResponse.json();
+            if (logoData.logoUrl) {
+                const logoImg = new Image();
+                logoImg.crossOrigin = 'anonymous';
+                
+                await new Promise((resolve, reject) => {
+                    logoImg.onload = resolve;
+                    logoImg.onerror = resolve; // Continuar aunque falle
+                    logoImg.src = logoData.logoUrl;
+                });
+                
+                if (logoImg.complete && logoImg.naturalWidth > 0) {
+                    // Calcular dimensiones para centrar el logo
+                    const maxLogoWidth = 250;
+                    const maxLogoHeight = 100;
+                    let logoWidth = logoImg.naturalWidth;
+                    let logoHeight = logoImg.naturalHeight;
+                    
+                    // Escalar manteniendo proporción
+                    if (logoWidth > maxLogoWidth) {
+                        logoHeight = (maxLogoWidth / logoWidth) * logoHeight;
+                        logoWidth = maxLogoWidth;
+                    }
+                    if (logoHeight > maxLogoHeight) {
+                        logoWidth = (maxLogoHeight / logoHeight) * logoWidth;
+                        logoHeight = maxLogoHeight;
+                    }
+                    
+                    // Dibujar logo centrado en la parte superior
+                    const logoX = (templateCanvas.width - logoWidth) / 2;
+                    ctx.drawImage(logoImg, logoX, 40, logoWidth, logoHeight);
+                }
+            }
+        }
+    } catch (error) {
+        console.log('Logo no disponible, continuando sin logo');
+    }
+    
+    // Texto principal: "Escanea el QR para pedir tu canción"
+    ctx.fillStyle = '#1a1a1a';
+    ctx.font = 'bold 42px Arial, sans-serif';
+    ctx.textAlign = 'center';
+    
+    // Dividir el texto en dos líneas para mejor legibilidad
+    const line1 = 'Escanea el QR';
+    const line2 = 'para pedir tu canción';
+    
+    ctx.fillText(line1, templateCanvas.width / 2, 230);
+    ctx.fillText(line2, templateCanvas.width / 2, 285);
+    
+    // Dibujar el QR centrado
+    const qrSize = 450;
+    const qrX = (templateCanvas.width - qrSize) / 2;
+    const qrY = 330;
+    
+    ctx.drawImage(qrCanvas, qrX, qrY, qrSize, qrSize);
+    
+    // Obtener Instagram del DJ
+    try {
+        const profileResponse = await fetch(`${serverUrl}/api/dj/profile`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (profileResponse.ok) {
+            const profile = await profileResponse.json();
+            
+            if (profile.instagram) {
+                // Dibujar Instagram debajo del QR
+                ctx.fillStyle = '#E4405F'; // Color de Instagram
+                ctx.font = 'bold 36px Arial, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(`@${profile.instagram}`, templateCanvas.width / 2, qrY + qrSize + 60);
+                
+                // Icono de Instagram (emoji)
+                ctx.font = '40px Arial';
+                ctx.fillText('📷', templateCanvas.width / 2 - 150, qrY + qrSize + 60);
+            }
+        }
+    } catch (error) {
+        console.log('Instagram no disponible');
+    }
+    
+    // Agregar borde decorativo
+    ctx.strokeStyle = '#bb86fc';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(20, 20, templateCanvas.width - 40, templateCanvas.height - 40);
+    
+    return templateCanvas;
+}
+
             try {
                 const response = await fetch(`${serverUrl}/api/end-party`, {
                     method: 'POST',
