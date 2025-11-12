@@ -4,7 +4,7 @@ if (!token) window.location.href = '/html/login.html'; // <-- RUTA CORREGIDA
 const serverUrl = window.SERVER_URL || window.location.origin;
 
 async function loadRanking() {
-    const response = await fetch(`${serverUrl}/ranking`, {
+    const response = await fetch(`${serverUrl}/api/ranking`, {
         headers: { 'Authorization': `Bearer ${token}` }
     });
     if (response.ok) {
