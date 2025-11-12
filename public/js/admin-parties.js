@@ -45,8 +45,18 @@ async function loadDJs() {
             const option = document.createElement('option');
             option.value = dj.username;
             const activeParties = dj.activePartyIds ? dj.activePartyIds.length : 0;
-            option.textContent = `${dj.username} (${activeParties}/3 fiestas activas)`;
+            
+            // Emoji según disponibilidad
+            const statusEmoji = activeParties >= 3 ? '🔴' : activeParties >= 2 ? '🟡' : '🟢';
+            
+            option.textContent = `${statusEmoji} ${dj.username} (${activeParties}/3 fiestas)`;
             option.disabled = activeParties >= 3;
+            
+            // Estilo adicional para opciones deshabilitadas
+            if (activeParties >= 3) {
+                option.style.opacity = '0.5';
+            }
+            
             select.appendChild(option);
         });
         
