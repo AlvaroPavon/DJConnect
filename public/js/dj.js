@@ -173,6 +173,46 @@ function setupMenuListeners() {
             }
         });
     }
+
+    // Listener para el formulario de Instagram
+    const instagramForm = document.getElementById('instagram-form');
+    if (instagramForm) {
+        instagramForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const instagramInput = document.getElementById('instagram-input');
+            const instagramStatus = document.getElementById('instagram-status');
+            const instagram = instagramInput.value.trim().replace('@', '');
+            
+            try {
+                const response = await fetch(`${serverUrl}/api/dj/instagram`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ instagram })
+                });
+                
+                if (response.ok) {
+                    instagramStatus.textContent = '✅ Instagram guardado correctamente';
+                    instagramStatus.style.color = 'var(--color-secondary)';
+                    instagramStatus.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        instagramStatus.style.display = 'none';
+                    }, 3000);
+                } else {
+                    throw new Error('Error al guardar');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                instagramStatus.textContent = '❌ Error al guardar Instagram';
+                instagramStatus.style.color = 'var(--color-error)';
+                instagramStatus.style.display = 'block';
+            }
+        });
+    }
 }
 
 // Iniciar la lógica del menú al cargar la página
