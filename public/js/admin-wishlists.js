@@ -44,7 +44,13 @@ async function loadDJs() {
         djs.filter(dj => dj.role === 'dj').forEach(dj => {
             const option = document.createElement('option');
             option.value = dj.username;
-            option.textContent = dj.username;
+            
+            // Mostrar información adicional del DJ
+            const totalFiestas = dj.partyCount || 0;
+            const activeParties = dj.activePartyIds ? dj.activePartyIds.length : 0;
+            
+            option.textContent = `🎧 ${dj.username} (${totalFiestas} fiestas realizadas)`;
+            
             select.appendChild(option);
         });
         
