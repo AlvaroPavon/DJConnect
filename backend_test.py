@@ -16,11 +16,15 @@ BASE_URL = "https://djapp.duckdns.org"
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin123"
 
-class SecurityTester:
+class DJConnectTester:
     def __init__(self):
         self.session = requests.Session()
         self.admin_token = None
+        self.dj_token = None
         self.test_results = []
+        self.created_dj_id = None
+        self.created_party_id = None
+        self.created_wishlist_id = None
         
     def log_test(self, test_name, passed, details=""):
         """Log test results"""
