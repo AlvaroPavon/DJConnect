@@ -407,8 +407,8 @@ Si tienes problemas:
    ```
 
 3. **Contactar:**
-   - Email: alvaropavonmartinez7@gmail.com
-   - Asunto: [NGINX CONFIG] Descripción del problema
+   - GitHub Issues: [Reportar problema](https://github.com/tu-usuario/djconnect/issues)
+   - Etiqueta: nginx-config
 
 ---
 
