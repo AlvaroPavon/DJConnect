@@ -5,6 +5,27 @@ if (!token) {
 
 const serverUrl = window.SERVER_URL || window.location.origin;
 
+document.addEventListener('DOMContentLoaded', () => {
+    loadHistory();
+    loadCompanyLogo();
+});
+
+async function loadCompanyLogo() {
+    try {
+        const response = await fetch(`${serverUrl}/api/config/logo`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.logoUrl) {
+                const logo = document.getElementById('company-logo');
+                logo.src = data.logoUrl;
+                logo.style.display = 'block';
+            }
+        }
+    } catch (error) {
+        console.error('Error loading logo:', error);
+    }
+}
+
 async function loadHistory() {
     const loadingMessage = document.getElementById('loading-message');
     const partiesList = document.getElementById('parties-list');
