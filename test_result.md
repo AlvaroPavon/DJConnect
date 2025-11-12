@@ -82,6 +82,18 @@ backend:
         agent: "testing"
         comment: "❌ CRITICAL: File upload validation bypassed in production. Magic number validation and file type validation not working at https://djapp.duckdns.org. Non-image files accepted."
 
+  - task: "Comprehensive API Endpoint Testing"
+    implemented: true
+    working: true
+    file: "server.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE BACKEND TESTING COMPLETED: Tested all requested API endpoints at https://djapp.duckdns.org. SUCCESS RATE: 93.3% (14/15). WORKING: Admin party list, Admin DJ management (list/create/delete), Admin wishlist list, Logo config (get/upload), Admin stats. MISSING ENDPOINTS: PUT/DELETE for DJs, wishlist details/export-pdf/delete, DJ party management endpoints return 404. FIXED ISSUE: Party end endpoint works when using partyId instead of MongoDB _id."
+
   - task: "HTTPS & SSL Configuration"
     implemented: true
     working: true
