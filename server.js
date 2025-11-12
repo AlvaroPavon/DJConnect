@@ -28,9 +28,76 @@ const Config = require('./configModel.js');
 const app = express();
 const server = http.createServer(app);
 
-// Aumentar límite de body size para subir imágenes
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
+// === SEGURIDAD: Headers HTTP con Helmet ===
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https:", "blob:"],
+            connectSrc: ["'self'", "https://api.spotify.com", "https://accounts.spotify.com", "wss://djapp.duckdns.org", "ws://localhost:*"],
+            frameSrc: ["'none'"]
+        }
+    },
+    hsts: {
+        maxAge: 31536000,
+        includeSubDomains: true,
+        preload: true
+    }
+}));
+
+// === SEGURIDAD: Sanitización contra NoSQL Injection ===
+app.use(mongoSanitize({
+    replaceWith: '_'
+}));
+
+// Aumentar límite de body size para subir imágenes (máximo 5MB por seguridad)
+app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ limit: '5mb', extended: true }));
+
+// === SEGURIDAD: Rate Limiters ===
+// Rate limiter general para todas las rutas
+const generalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 100, // máximo 100 requests por IP
+    message: 'Demasiadas peticiones desde esta IP, por favor intenta de nuevo más tarde.',
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// Rate limiter estricto para login (prevenir fuerza bruta)
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 5, // máximo 5 intentos de login
+    message: 'Demasiados intentos de inicio de sesión. Por favor, intenta de nuevo en 15 minutos.',
+    skipSuccessfulRequests: true
+});
+
+// Rate limiter para registro
+const registerLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hora
+    max: 3, // máximo 3 registros por hora
+    message: 'Demasiados registros desde esta IP. Por favor, intenta de nuevo más tarde.'
+});
+
+// Rate limiter para reset de contraseña
+const passwordResetLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hora
+    max: 3, // máximo 3 intentos de reset por hora
+    message: 'Demasiadas solicitudes de recuperación de contraseña. Intenta de nuevo en 1 hora.'
+});
+
+// Rate limiter para subida de archivos
+const uploadLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 10, // máximo 10 subidas
+    message: 'Demasiadas subidas de archivos. Por favor, intenta de nuevo más tarde.'
+});
+
+// Aplicar rate limiter general a todas las rutas
+app.use(generalLimiter);
 
 // Opciones de CORS
 const allowedOrigins = [
