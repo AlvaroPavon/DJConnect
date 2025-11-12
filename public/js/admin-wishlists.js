@@ -175,22 +175,7 @@ async function createWishlist(e) {
 }
 
 
-async function viewWishlistDetails(wishlistId) {
-    try {
-        const response = await fetch(`${serverUrl}/api/wishlists/${wishlistId}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
-        if (!response.ok) throw new Error('Error al cargar wishlist');
-        
-        const wishlist = await response.json();
-        showWishlistModal(wishlist);
-        
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error al cargar los detalles de la wishlist.');
-    }
-}
+// Duplicate function removed - using the one below
 
 function showWishlistModal(wishlist) {
     const modal = document.createElement('div');
