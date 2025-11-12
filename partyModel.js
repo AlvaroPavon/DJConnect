@@ -21,4 +21,4 @@ const partySchema = new mongoose.Schema({
     averageRating: { type: Number }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Party', partySchema);
+module.exports = mongoose.model('Party', partySchema, 'parties');
