@@ -38,13 +38,15 @@
 
 | Módulo | Funcionalidad | Descripción |
 | :--- | :--- | :--- |
-| **🔐 Autenticación** | Gestión de Usuarios (DJ) | Registro, login y recuperación de contraseñas con `bcryptjs` y `JWT`. |
-| **🎉 Gestión de Eventos** | Salas de Fiesta Dinámicas | Creación de eventos únicos con códigos QR para acceso instantáneo. |
+| **🔐 Autenticación** | Gestión de Usuarios | Sistema de login con roles diferenciados (Admin/DJ). |
+| **👨‍💼 Panel Admin** | Administración Completa | Control total de DJs, eventos, wishlists y configuración de la plataforma. |
+| **🎉 Gestión de Eventos** | Multi-Fiesta y Salas Dinámicas | Creación de eventos con QR personalizados. DJs pueden gestionar hasta 3 fiestas simultáneas. |
 | **🎛️ Panel del DJ** | Dashboard en Tiempo Real | Visualización de peticiones, estadísticas y gestión de cola (Socket.IO). |
 | **📱 Interacción** | Sistema de Peticiones | Búsqueda en Spotify y envío de solicitudes desde cualquier móvil. |
 | **📝 Wishlists** | Planificación Pre-Evento | Creación de listas de deseos compartibles (URL/QR) antes del evento. |
 | **⭐ Valoraciones** | Ranking y Feedback | Sistema de puntuación y ranking de DJs para eventos. |
 | **📊 Analytics** | Estadísticas Avanzadas | Géneros más pedidos, historial de fiestas y métricas de valoración. |
+| **📸 Integración Social** | Perfil Instagram | Los DJs pueden vincular su Instagram visible en QR codes. |
 
 ---
 
