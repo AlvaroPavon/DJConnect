@@ -351,7 +351,7 @@ Se registran los siguientes eventos:
 ## 📞 Contacto de Seguridad
 
 Para reportar vulnerabilidades de seguridad:
-- **Email**: alvaropavonmartinez7@gmail.com
+- **GitHub Issues**: [Reportar vulnerabilidad](https://github.com/tu-usuario/djconnect/issues)
 - **Asunto**: [SECURITY] Vulnerabilidad en DJConnect
 
 ---
