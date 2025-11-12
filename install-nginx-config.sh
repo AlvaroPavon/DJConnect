@@ -65,12 +65,25 @@ fi
 # Verificar que el servidor Node.js está corriendo
 echo ""
 echo "🔍 Verificando servidor Node.js..."
-if pgrep -f "node server.js" > /dev/null; then
-    echo "✅ Servidor Node.js está corriendo"
+# Verificar si usa PM2
+if command -v pm2 &> /dev/null; then
+    if pm2 list | grep -q "dj-app.*online"; then
+        echo "✅ Servidor Node.js está corriendo (PM2)"
+        echo "   Reiniciando con PM2..."
+        cd $PROJECT_PATH
+        pm2 restart dj-app
+    else
+        echo "⚠️  Servidor Node.js no está corriendo en PM2"
+        echo "   Iniciando con PM2..."
+        cd $PROJECT_PATH
+        pm2 start server.js --name dj-app
+    fi
+elif pgrep -f "node server.js" > /dev/null; then
+    echo "✅ Servidor Node.js está corriendo (standalone)"
 else
     echo "⚠️  Servidor Node.js no está corriendo"
     echo "   Iniciando servidor..."
-    cd /app
+    cd $PROJECT_PATH
     pkill -f "node server.js" 2>/dev/null
     node server.js > /tmp/djconnect-server.log 2>&1 &
     sleep 3
