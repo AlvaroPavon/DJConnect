@@ -15,6 +15,28 @@ Esta guía asume que:
 - ✅ DJConnect corre en `localhost:3000`
 - ✅ El dominio `tu-dominio.com` apunta a tu VPS
 
+## 🚨 Problema Común: Error 400 al Subir Logo
+
+Si obtienes un error 400 al subir el logo del DJ en el panel de administrador, es probable que NGINX tenga un límite de tamaño muy pequeño para el body de las peticiones.
+
+**Solución:**
+
+1. Edita tu archivo de configuración de NGINX (usualmente en `/etc/nginx/sites-available/djapp` o similar)
+2. Agrega o modifica la siguiente línea dentro del bloque `server`:
+
+```nginx
+client_max_body_size 10M;
+```
+
+3. Guarda el archivo y recarga NGINX:
+
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+**Nota:** El límite de 10M permite subir imágenes de hasta 10 megabytes. Ajusta este valor según tus necesidades.
+
 ---
 
 ## 📋 Pasos de Instalación
