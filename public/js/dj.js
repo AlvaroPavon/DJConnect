@@ -1,5 +1,8 @@
-const Capacitor = window.Capacitor;
-const { App, Share, Filesystem } = Capacitor.Plugins;
+// Capacitor detection y importación segura
+const Capacitor = window.Capacitor || { isNativePlatform: () => false };
+const App = window.CapacitorApp || null;
+const Share = window.CapacitorShare || null;
+const Filesystem = window.CapacitorFilesystem || null;
 
 const token = localStorage.getItem('dj-token');
 if (!token) {
