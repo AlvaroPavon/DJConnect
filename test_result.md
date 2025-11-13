@@ -146,3 +146,18 @@ agent_communication:
     message: "PRODUCTION SECURITY GAPS: 1) Security headers stripped by proxy, 2) Rate limiting bypassed, 3) File upload validation failing. Local server has all security features working correctly."
   - agent: "testing"
     message: "COMPREHENSIVE BACKEND API TESTING COMPLETED: Tested all requested endpoints at https://djapp.duckdns.org. SUCCESS RATE: 93.3% (14/15 endpoints working). All core admin functionality working. Several endpoints return 404 indicating they are not implemented (PUT/DELETE operations for DJs, wishlist details, PDF export, DJ party management). One critical issue found: party end endpoint requires partyId parameter instead of MongoDB _id."
+  - agent: "main"
+    date: "2025-11-13"
+    message: "✅ FIXED: All three reported UI bugs resolved. Root cause was Capacitor.Plugins API deprecation in Capacitor 5+. Changed from `Capacitor.Plugins` to direct imports. Also relaxed CSP to allow inline scripts in scriptSrcElem and frame-src for Google Ads."
+    
+fixes_applied:
+  - issue: "Botones no funcionaban en Panel DJ"
+    root_cause: "Error JavaScript: `Cannot read properties of undefined (reading 'Plugins')` - Capacitor 5+ deprecated Capacitor.Plugins API"
+    files_modified: 
+      - "public/js/dj.js"
+      - "server.js (CSP configuration)"
+    changes:
+      - "Cambiado de `const { App, Share, Filesystem } = Capacitor.Plugins;` a importación directa y segura"
+      - "Agregado `'unsafe-inline'` a `scriptSrcElem` en CSP"
+      - "Actualizado `frameSrc` para permitir Google Ads"
+    testing: "✅ Todos los botones probados y funcionando: Crear Fiesta, Cerrar Sesión, Guardar Instagram"
