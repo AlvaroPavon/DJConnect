@@ -416,7 +416,7 @@ app.post('/register',
 app.post('/login', 
     loginLimiter,
     [
-        body('username').trim().notEmpty().escape(),
+        body('username').trim().notEmpty(),
         body('password').notEmpty()
     ],
     async (req, res) => {
