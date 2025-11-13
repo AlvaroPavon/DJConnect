@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         searchTimeout = setTimeout(async () => {
-            const response = await fetch(`${serverUrl}/search?q=${encodeURIComponent(query)}`);
+            const response = await fetch(`${serverUrl}/api/search?q=${encodeURIComponent(query)}`);
             const songs = await response.json();
             suggestionsList.innerHTML = '';
             songs.forEach(song => {
