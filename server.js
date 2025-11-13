@@ -66,7 +66,7 @@ app.use(helmet({
                 "ws://localhost:*",
                 "https://djapp.duckdns.org"
             ],
-            frameSrc: ["'none'"]
+            frameSrc: ["https://googleads.g.doubleclick.net", "https://www.google.com"]
         }
     },
     hsts: {
