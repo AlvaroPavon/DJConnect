@@ -891,18 +891,15 @@ app.post('/api/admin/wishlists', authenticateAdmin, async (req, res) => {
 app.post('/api/admin/config/logo', 
     authenticateAdmin,
     uploadLimiter,
-    [
-        body('logoData').notEmpty()
-    ],
     async (req, res) => {
         try {
-            // Validar inputs
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
+            const { logoData } = req.body;
+            
+            // Validar que se proporcionó logoData
+            if (!logoData) {
+                console.warn('Upload logo: No se proporcionó logoData');
                 return res.status(400).json({ message: 'No se proporcionó imagen' });
             }
-
-            const { logoData } = req.body;
             
             // SEGURIDAD: Validar que sea una imagen base64 válida y segura
             const validation = validateBase64Image(logoData);
