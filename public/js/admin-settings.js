@@ -105,7 +105,11 @@ async function uploadLogo(e) {
                 body: JSON.stringify({ logoData: base64Image })
             });
             
-            if (!response.ok) throw new Error('Error al subir logo');
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                const errorMsg = errorData.message || 'Error desconocido';
+                throw new Error(`Error al subir logo: ${errorMsg}`);
+            }
             
             alert('✅ Logo actualizado exitosamente!');
             loadCurrentLogo();
