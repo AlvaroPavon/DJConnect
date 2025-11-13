@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 // Conectar a MongoDB
 mongoose.connect('mongodb://localhost:27017/dj-connect');
@@ -28,7 +28,7 @@ async function createTestDJ() {
         // Verificar si ya existe
         const existing = await DJ.findOne({ username: 'testdj' });
         if (existing) {
-            console.log('✅ DJ de prueba ya existe');
+            console.log('✅ DJ de prueba ya existe: username=testdj, password=test123');
             process.exit(0);
         }
 
