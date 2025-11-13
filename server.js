@@ -547,7 +547,7 @@ const getSpotifyToken = async () => {
     }
 };
 
-app.get('/search', async (req, res) => {
+app.get('/api/search', async (req, res) => {
     const query = req.query.q;
     
     // Si Spotify no está disponible, usar datos de ejemplo
