@@ -430,16 +430,10 @@ app.post('/login',
             const { username, password } = req.body;
             const sanitizedUsername = sanitizeInput(username);
             
-            console.log('[LOGIN] Original username:', username);
-            console.log('[LOGIN] Sanitized username:', sanitizedUsername);
-            
             const dj = await DJ.findOne({ username: sanitizedUsername });
             if (!dj) {
-                console.log('[LOGIN] DJ no encontrado con username:', sanitizedUsername);
                 return res.status(401).json({ message: 'Usuario o contraseña incorrectos.' });
             }
-            
-            console.log('[LOGIN] DJ encontrado:', dj.username);
             
             const isMatch = await bcrypt.compare(password, dj.password);
             if (!isMatch) {
