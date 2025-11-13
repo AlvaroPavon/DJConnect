@@ -22,17 +22,21 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         searchTimeout = setTimeout(async () => {
-            const response = await fetch(`${serverUrl}/api/search?q=${encodeURIComponent(query)}`);
-            const songs = await response.json();
-            suggestionsList.innerHTML = '';
-            songs.forEach(song => {
-                const item = document.createElement('li');
-                item.dataset.titulo = song.titulo;
-                item.dataset.artista = song.artista;
-                item.dataset.genre = song.genre || 'Desconocido';
-                item.textContent = `${song.titulo} - ${song.artista}`;
-                suggestionsList.appendChild(item);
-            });
+            try {
+                const response = await fetch(`${serverUrl}/api/search?q=${encodeURIComponent(query)}`);
+                const songs = await response.json();
+                suggestionsList.innerHTML = '';
+                songs.forEach(song => {
+                    const item = document.createElement('li');
+                    item.dataset.titulo = song.titulo;
+                    item.dataset.artista = song.artista;
+                    item.dataset.genre = song.genre || 'Desconocido';
+                    item.textContent = `${song.titulo} - ${song.artista}`;
+                    suggestionsList.appendChild(item);
+                });
+            } catch (error) {
+                console.error('Error buscando canciones:', error);
+            }
         }, 300);
     });
 
