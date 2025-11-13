@@ -209,7 +209,7 @@ function displaySongs(songs) {
 
 async function searchSongs(query) {
     try {
-        const response = await fetch(`${serverUrl}/search?q=${encodeURIComponent(query)}`);
+        const response = await fetch(`${serverUrl}/api/search?q=${encodeURIComponent(query)}`);
         const songs = await response.json();
         
         const suggestionsList = document.getElementById('suggestions');
