@@ -893,18 +893,21 @@ app.post('/api/admin/config/logo',
     uploadLimiter,
     async (req, res) => {
         try {
+            console.log('[LOGO UPLOAD] Request recibido');
             const { logoData } = req.body;
             
             // Validar que se proporcionó logoData
             if (!logoData) {
-                console.warn('Upload logo: No se proporcionó logoData');
+                console.warn('[LOGO UPLOAD] No se proporcionó logoData');
                 return res.status(400).json({ message: 'No se proporcionó imagen' });
             }
+            
+            console.log(`[LOGO UPLOAD] logoData recibido, tamaño: ${logoData.length} caracteres`);
             
             // SEGURIDAD: Validar que sea una imagen base64 válida y segura
             const validation = validateBase64Image(logoData);
             if (!validation.valid) {
-                console.warn('Intento de subida de archivo inválido:', validation.error);
+                console.warn('[LOGO UPLOAD] Validación falló:', validation.error);
                 return res.status(400).json({ message: validation.error });
             }
             
