@@ -48,6 +48,7 @@ app.use(helmet({
             ],
             scriptSrcElem: [
                 "'self'",
+                "'unsafe-inline'",
                 "https://cdn.jsdelivr.net",
                 "https://cdn.socket.io",
                 "https://pagead2.googlesyndication.com"
