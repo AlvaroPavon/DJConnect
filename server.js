@@ -225,7 +225,7 @@ app.get('/', (req, res) => {
     }
     
     // Si no hay código de fiesta, mostrar página de bienvenida
-    res.redirect('/welcome.html');
+    res.redirect('/login.html');
 });
 
 // Servir archivos estáticos DESPUÉS de las rutas específicas
