@@ -42,6 +42,7 @@ app.use(helmet({
             scriptSrc: [
                 "'self'", 
                 "'unsafe-inline'",
+                "'unsafe-eval'",
                 "https://cdn.jsdelivr.net",
                 "https://cdn.socket.io",
                 "https://pagead2.googlesyndication.com" // Google Ads si se usa
@@ -49,6 +50,7 @@ app.use(helmet({
             scriptSrcElem: [
                 "'self'",
                 "'unsafe-inline'",
+                "'unsafe-eval'",
                 "https://cdn.jsdelivr.net",
                 "https://cdn.socket.io",
                 "https://pagead2.googlesyndication.com"
