@@ -49,7 +49,9 @@ jobs:
 
           # 2. Instalar dependencias nuevas si las hay
           echo "📦 Instalando dependencias..."
+          npm install --omit=dev
           npm install --production
+
 
           # 3. Ejecutar script de versionado para evitar caché (CRÍTICO para tu app)
           # Usamos la versión que tienes en el repo
