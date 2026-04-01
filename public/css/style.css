@@ -1,1238 +1,609 @@
-/* --- Estilos Generales y Tema Dinámico --- */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+/* =========================================================================
+   DJConnect - Estilos Globales (Modern & Mobile-First Redesign)
+   Tema: Neon / Glassmorphism
+   ========================================================================= */
 
-/* Definición de la paleta de colores */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
 :root {
-    --color-background: #121212;
-    --color-surface: #1e1e1e;
-    --color-primary: #bb86fc;
-    --color-secondary: #03dac6;
-    --color-error: #cf6679;
+    /* Paleta Deep Neon */
+    --color-background: #0d0914; /* Morado/negro muy oscuro */
+    --color-surface: rgba(30, 20, 45, 0.6); /* Transparencia para glassmorphism */
+    --color-surface-hover: rgba(50, 30, 75, 0.8);
+    --color-primary: #d946ef; /* Magenta brillante (Fuchsia) */
+    --color-primary-glow: rgba(217, 70, 239, 0.5);
+    --color-secondary: #06b6d4; /* Cian brillante */
+    --color-secondary-fade: rgba(6, 182, 212, 0.15);
+    --color-error: #f43f5e; /* Rojo/Rosa de error */
     --color-text-primary: #ffffff;
-    --color-text-secondary: #aaaaaa;
-    --color-border: #333333;
+    --color-text-secondary: #cbd5e1; /* Slate claro para lectura */
+    --color-border: rgba(255, 255, 255, 0.1);
+    
+    /* Configuración UI */
+    --glass-blur: blur(16px);
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Optimización para scroll suave */
+/* =========================================================================
+   1. RESET Y ESTILOS BASE
+   ========================================================================= */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
 html {
     scroll-behavior: smooth;
 }
 
-/* Prevenir zoom en inputs en iOS */
-@media screen and (max-width: 600px) {
-    input[type="text"],
-    input[type="password"],
-    input[type="email"],
-    input[type="date"],
-    select,
-    textarea {
-        font-size: 16px !important; /* iOS no hace zoom si es >= 16px */
-    }
-}
-
-/* Animaciones reusables */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Logo de la empresa - centrado perfecto */
-#company-logo-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto 20px auto;
-    width: 100%;
-}
-
-#company-logo {
-    display: block;
-    max-width: 200px;
-    max-height: 80px;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-}
-
-@keyframes slideDown {
-    from { opacity: 0; transform: translateY(-15px); max-height: 0; }
-    to { opacity: 1; transform: translateY(0); max-height: 100px; }
-}
-
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Outfit', sans-serif;
     background-color: var(--color-background);
     color: var(--color-text-primary);
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
     min-height: 100vh;
-    box-sizing: border-box;
+    overflow-x: hidden;
+
+    /* Fondo animado / degradado radial dinámico (Modern aesthetic) */
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(217, 70, 239, 0.12), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.15), transparent 40%);
+    background-attachment: fixed;
 }
 
-.container {
-    width: 100%;
-    max-width: 600px;
-    background-color: var(--color-surface);
-    padding: 30px;
-    margin: 20px auto;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    box-sizing: border-box;
-    animation: fadeIn 0.6s ease-out forwards;
-}
-
-/* Layout móvil optimizado */
-@media screen and (max-width: 768px) {
-    body {
-        padding: 0;
-        align-items: stretch;
-    }
-    
-    .container {
-        width: 100%;
-        max-width: 100%;
-        padding: 20px 15px;
-        margin: 0;
-        border-radius: 0;
-        box-shadow: none;
-        background-color: var(--color-surface);
-        min-height: 100vh;
-    }
-    
-    /* Logo más pequeño en móvil */
-    #company-logo {
-        max-width: 150px;
-        max-height: 60px;
-    }
-}
-
-@media screen and (max-width: 400px) {
-    .container {
-        padding: 15px 10px;
-    }
-    
-    /* Logo aún más pequeño en pantallas muy pequeñas */
-    #company-logo {
-        max-width: 120px;
-        max-height: 50px;
-    }
-}
-
-/* --- BANNERS PUBLICITARIOS (MODIFICADOS) --- */
-/* Se eliminó: background-color, border, color, font-size, text-align, padding */
-/* Se mantiene min-height para evitar saltos de contenido (Layout Shift) */
-.ad-banner {
-    width: 100%;
-    max-width: 728px;
-    min-height: 90px; /* Mantiene el espacio reservado */
-    margin: 15px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-}
-
-.ad-banner-top {
-    margin-bottom: 20px;
-}
-
-.ad-banner-bottom {
-    margin-top: 20px;
-}
-
-/* Layout de 3 columnas para móvil */
-@media screen and (max-width: 768px) {
-    body {
-        display: block;
-        padding: 0;
-        min-height: 100vh;
-    }
-    
-    /* Contenedor principal con grid */
-    .mobile-layout {
-        display: grid;
-        grid-template-columns: 60px 1fr 60px;
-        grid-template-areas: 
-            "ad-left content ad-right";
-        min-height: 100vh;
-        gap: 0;
-    }
-    
-    /* Publicidad lateral izquierda (MODIFICADA) */
-    /* Se eliminó: background-color, border-right, display, align-items, justify-content */
-    .ad-banner-left {
-        grid-area: ad-left;
-        writing-mode: vertical-rl;
-        transform: rotate(180deg);
-        min-height: 100vh;
-        width: 60px;
-        min-width: 60px;
-        max-width: 60px;
-        margin: 0;
-        border-radius: 0;
-        padding: 5px 2px;
-        position: sticky;
-        top: 0;
-    }
-    
-    /* Publicidad lateral derecha (MODIFICADA) */
-    /* Se eliminó: background-color, border-left, display, align-items, justify-content */
-    .ad-banner-right {
-        grid-area: ad-right;
-        writing-mode: vertical-rl;
-        min-height: 100vh;
-        width: 60px;
-        min-width: 60px;
-        max-width: 60px;
-        margin: 0;
-        border-radius: 0;
-        padding: 5px 2px;
-        position: sticky;
-        top: 0;
-    }
-    
-    /* Área de contenido centrada */
-    .mobile-content-area {
-        grid-area: content;
-        padding: 15px 10px;
-        overflow-x: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    /* Ocultar banners horizontales en móvil */
-    .ad-banner-top,
-    .ad-banner-bottom {
-        display: none;
-    }
-}
-
-/* Móviles muy pequeños - publicidad aún más delgada */
-@media screen and (max-width: 400px) {
-    .mobile-layout {
-        grid-template-columns: 40px 1fr 40px;
-    }
-    
-    .ad-banner-left,
-    .ad-banner-right {
-        width: 40px;
-        min-width: 40px;
-        max-width: 40px;
-    }
-}
-
-h1, h2, h3, p {
+/* Tipografía */
+h1, h2, h3 {
     text-align: center;
-    color: var(--color-primary);
     margin-top: 0;
-}
-h2 { color: var(--color-text-primary); }
-p { color: var(--color-text-secondary); line-height: 1.5; }
-a { color: var(--color-secondary); text-decoration: none; font-weight: bold; }
-hr { border: 1px solid var(--color-border); margin: 30px 0; }
-
-/* Títulos más grandes y prominentes en móvil */
-@media screen and (max-width: 768px) {
-    h1 {
-        font-size: 2em;
-        margin-bottom: 20px;
-        font-weight: bold;
-    }
-    
-    h2 {
-        font-size: 1.6em;
-        margin-bottom: 15px;
-    }
-    
-    h3 {
-        font-size: 1.3em;
-        margin-bottom: 12px;
-    }
-    
-    p {
-        font-size: 1em;
-        line-height: 1.5;
-    }
-    
-    hr {
-        margin: 25px 0;
-    }
+    font-weight: 800;
 }
 
-@media screen and (max-width: 400px) {
-    h1 {
-        font-size: 1.8em;
-    }
-    
-    h2 {
-        font-size: 1.5em;
-    }
-}
-
-/* --- Formularios y Botones Interactivos --- */
-input[type="text"],
-input[type="password"],
-input[type="email"],
-input[type="date"] {
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 15px;
-    background-color: #333;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
+h1 {
+    font-size: 2.2rem;
     color: var(--color-text-primary);
-    font-size: 16px;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    text-shadow: 0 0 20px var(--color-primary-glow);
+    margin-bottom: 24px;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus,
-input[type="date"]:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 15px rgba(187, 134, 252, 0.3);
-}
+h2 { font-size: 1.8rem; color: var(--color-secondary); }
+h3 { font-size: 1.4rem; color: var(--color-primary); }
 
-button {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 15px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #000000;
-    background-color: var(--color-secondary);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(3, 218, 198, 0.3);
-}
-
-button:active {
-    transform: translateY(0px);
-    box-shadow: 0 2px 10px rgba(3, 218, 198, 0.2);
-}
-
-/* Inputs y botones MÁS GRANDES en móvil */
-@media screen and (max-width: 768px) {
-    input[type="text"],
-    input[type="password"],
-    input[type="email"],
-    input[type="date"] {
-        padding: 18px;
-        font-size: 18px;
-        margin-bottom: 18px;
-        border-width: 2px;
-    }
-    
-    button {
-        padding: 20px;
-        font-size: 20px;
-        margin-bottom: 18px;
-        min-height: 60px;
-        border-radius: 10px;
-    }
-}
-
-@media screen and (max-width: 400px) {
-    input[type="text"],
-    input[type="password"],
-    input[type="email"],
-    input[type="date"] {
-        padding: 16px;
-        font-size: 17px;
-    }
-    
-    button {
-        padding: 18px;
-        font-size: 19px;
-        min-height: 58px;
-    }
-}
-
-/* Mejorar stats-panel para móvil */
-@media screen and (max-width: 768px) {
-    .stats-panel {
-        padding: 15px 12px;
-        margin-bottom: 15px;
-    }
-    
-    .stats-panel h3 {
-        font-size: 1.2em;
-        margin-bottom: 12px;
-    }
-    
-    /* Mejorar nav-links para móvil */
-    .nav-links {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-    
-    .nav-links a {
-        display: block;
-        padding: 15px;
-        text-align: center;
-        background-color: rgba(187, 134, 252, 0.1);
-        border-radius: 8px;
-        border: 1px solid var(--color-border);
-        font-size: 16px;
-        min-height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .nav-links a:active {
-        background-color: rgba(187, 134, 252, 0.2);
-        transform: scale(0.98);
-    }
-}
-
-@media screen and (max-width: 400px) {
-    .stats-panel {
-        padding: 12px 10px;
-    }
-    
-    .nav-links a {
-        padding: 12px;
-        font-size: 15px;
-        min-height: 48px;
-    }
-}
-
-/* --- Listas Dinámicas (Sugerencias y Peticiones) --- */
-#suggestions li, .cancion-item {
-    animation: slideDown 0.5s ease-out forwards;
-    overflow: hidden;
-}
-
-#suggestions { list-style: none; padding: 0; margin: 0; max-height: 250px; overflow-y: auto; }
-#suggestions li { padding: 15px; background-color: #2c2c2c; border-bottom: 1px solid var(--color-border); cursor: pointer; transition: background-color 0.2s; }
-#suggestions li:first-child { border-radius: 8px 8px 0 0; }
-#suggestions li:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
-#suggestions li:hover { background-color: var(--color-primary); color: var(--color-background); }
-
-/* Optimización de sugerencias para móvil */
-@media screen and (max-width: 600px) {
-    #suggestions {
-        max-height: 220px;
-    }
-    
-    #suggestions li {
-        padding: 12px;
-        font-size: 0.95em;
-    }
-}
-
-@media screen and (max-width: 400px) {
-    #suggestions {
-        max-height: 200px;
-    }
-    
-    #suggestions li {
-        padding: 10px;
-        font-size: 0.9em;
-    }
-}
-
-/* --- Panel del DJ y Ranking --- */
-#lista-canciones { 
-    list-style: none; 
-    padding: 0; 
-    max-height: 500px; 
-    overflow-y: auto; 
-    border: 1px solid var(--color-border); 
-    border-radius: 8px; 
-    padding: 10px; 
-}
-
-.cancion-item { 
-    background-color: #2c2c2c; 
-    border-left: 5px solid var(--color-primary); 
-    margin-bottom: 10px; 
-    padding: 15px; 
-    border-radius: 5px; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    transition: all 0.4s ease;
-    flex-wrap: wrap;
-}
-
-.cancion-info { 
-    flex: 1;
-    min-width: 200px;
-}
-
-.cancion-info strong { font-size: 1.1em; color: var(--color-text-primary); display: block; }
-.cancion-info em { font-size: 0.9em; color: var(--color-text-secondary); display: block; margin-top: 5px; }
-.cancion-info .genre-tag { 
-    display: inline-block;
-    font-size: 0.75em; 
-    color: var(--color-secondary); 
-    background-color: rgba(3, 218, 198, 0.1);
-    padding: 2px 8px;
-    border-radius: 10px;
-    margin-top: 5px;
-    font-style: normal;
-}
-
-.cancion-item.played { background-color: #222; border-left-color: var(--color-secondary); opacity: 0.6; }
-.cancion-item.played .cancion-info strong { text-decoration: line-through; }
-
-.cancion-actions {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.btn-played, .btn-hide { 
-    padding: 8px 12px; 
-    font-size: 12px; 
-    background-color: #333; 
-    color: var(--color-secondary); 
-    border: 1px solid var(--color-secondary); 
-    width: auto; 
-    margin: 0;
-}
-
-.btn-hide {
-    color: var(--color-error);
-    border-color: var(--color-error);
-}
-
-.btn-played:disabled { background-color: var(--color-surface); color: #666; border-color: #444; cursor: not-allowed; }
-.btn-played:disabled:hover, .btn-hide:disabled:hover { transform: none; box-shadow: none; }
-
-/* --- MODIFICACIÓN PARA CENTRAR QR --- */
-#qrcode-container {
-    text-align: center; /* Centra el canvas generado */
-    padding: 10px 0; /* Añade espacio vertical */
-}
-
-/* --- Stats Panel --- */
-.stats-panel {
-    background-color: rgba(187, 134, 252, 0.1);
-    border: 1px solid var(--color-primary);
-    border-radius: 8px;
-    padding: 15px;
-    margin: 20px 0;
-}
-
-.stats-panel h3 {
-    margin-top: 0;
-    color: var(--color-primary);
-}
-
-.genre-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.genre-badge {
-    background-color: rgba(3, 218, 198, 0.2);
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 14px;
-    border: 1px solid var(--color-secondary);
-}
-
-.genre-badge.top {
-    background-color: rgba(187, 134, 252, 0.3);
-    border-color: var(--color-primary);
-    font-weight: bold;
-}
-
-/* Stats más compactos en móvil */
-@media screen and (max-width: 600px) {
-    .stats-panel {
-        padding: 12px;
-        margin: 15px 0;
-    }
-    
-    .stats-panel h3 {
-        font-size: 1.1em;
-        margin-bottom: 10px;
-    }
-    
-    .stats-panel p {
-        font-size: 0.9em;
-        margin: 8px 0;
-    }
-    
-    .genre-stats {
-        gap: 8px;
-    }
-    
-    .genre-badge {
-        font-size: 12px;
-        padding: 6px 12px;
-    }
-}
-
-table { width: 100%; border-collapse: collapse; text-align: left; }
-table th { padding: 12px; background-color: #333; color: var(--color-secondary); }
-table td { padding: 12px; border-bottom: 1px solid var(--color-border); }
-table tr:last-child td { border-bottom: none; }
-table tr:hover { background-color: #2c2c2c; }
-
-/* --- Modal y Animaciones --- */
-#rating-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(5px); animation: fadeIn 0.3s ease forwards; }
-.modal-content { background: var(--color-surface); padding: 25px; border-radius: 12px; text-align: center; max-width: 90%; }
-
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.85);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 200;
-    backdrop-filter: blur(5px);
-}
-
-.modal .modal-content {
-    background: var(--color-surface);
-    padding: 30px;
-    border-radius: 12px;
-    max-width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-}
-
-.stars span { font-size: 3.5em; cursor: pointer; color: #444; transition: transform 0.2s ease, color 0.2s ease; display: inline-block; }
-.stars span:hover, .stars span.lit { transform: scale(1.2); color: var(--color-primary); }
-@keyframes fadeOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.9); margin-bottom: -60px; } }
-.cancion-item.removing { animation: fadeOut 0.4s ease-out forwards; }
-
-/* --- Estilos para Formularios --- */
-.form-container { animation: fadeIn 0.6s ease-out forwards; }
-.form-title { margin-bottom: 2rem; color: var(--color-text-primary); }
-.input-group { position: relative; margin-bottom: 1.5rem; }
-.password-toggle { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer; user-select: none; }
-.form-footer { text-align: center; margin-top: 1.5rem; }
-.strength-meter { height: 5px; width: 100%; background-color: var(--color-border); border-radius: 5px; margin-top: -10px; margin-bottom: 15px; overflow: hidden; }
-.strength-bar { height: 100%; width: 0; transition: width 0.3s ease, background-color 0.3s ease; }
-.strength-bar.weak { width: 25%; background-color: #ef5350; }
-.strength-bar.medium { width: 50%; background-color: #ffc107; }
-.strength-bar.strong { width: 75%; background-color: #66bb6a; }
-.strength-bar.very-strong { width: 100%; background-color: #4caf50; }
-.password-hint { font-size: 0.8em; color: var(--color-text-secondary); text-align: left; height: 15px; }
-
-.nav-links {
+p {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
     text-align: center;
+}
+
+a {
+    color: var(--color-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--color-primary);
+    text-shadow: 0 0 10px var(--color-primary-glow);
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+    margin: 30px 0;
+}
+
+/* =========================================================================
+   2. CONTENEDORES Y LAYOUT (Mobile-First approach)
+   ========================================================================= */
+
+/* Logo Empresa */
+#company-logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+}
+#company-logo {
+    max-width: 180px;
+    max-height: 70px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); /* Efecto glow en logo */
+}
+
+/* Contenedor Principal (Tarjetas Glassmorphism) */
+.container {
+    width: 92%;
+    max-width: 500px; /* Óptimo para legibilidad en móvil y centrado en PC */
+    background: var(--color-surface);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    padding: 32px 24px;
+    margin: 20px auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUpFade {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================================
+   3. LAYOUT CON PUBLICIDAD (Mantiene el Grid original pero fluid)
+   ========================================================================= */
+.mobile-layout {
+    width: 100%;
+    display: grid;
+    grid-template-areas: "content";
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.ad-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 90px;
     margin: 15px 0;
 }
 
-.nav-links a {
-    display: inline-block;
-    margin: 0 10px;
-    padding: 8px 15px;
-    background-color: rgba(187, 134, 252, 0.1);
-    border: 1px solid var(--color-primary);
-    border-radius: 5px;
-    transition: all 0.3s ease;
+/* Ocultos por defecto en móvil para maximizar espacio */
+.ad-banner-left, .ad-banner-right {
+    display: none;
 }
 
-.nav-links a:hover {
-    background-color: var(--color-primary);
-    color: var(--color-background);
+.mobile-content-area {
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
-/* Navegación MUCHO MÁS GRANDE y prominente en móvil */
-@media screen and (max-width: 768px) {
-    .nav-links {
-        margin: 20px 0;
+/* Diseño de Escritorio (Tablet/PC) > 768px */
+@media screen and (min-width: 768px) {
+    .mobile-layout {
+        grid-template-areas: "ad-left content ad-right";
+        grid-template-columns: minmax(100px, 1fr) 3fr minmax(100px, 1fr);
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .ad-banner-left, .ad-banner-right {
         display: flex;
-        flex-direction: column;
-        gap: 12px;
+        justify-content: center;
+        align-items: flex-start;
+        position: sticky;
+        top: 20px;
     }
-    
-    .nav-links a {
-        display: block;
-        margin: 0;
-        padding: 18px 15px;
-        font-size: 18px;
-        font-weight: bold;
-        border-width: 2px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    }
-    
-    .nav-links a:active {
-        transform: scale(0.98);
+    .ad-banner-left { grid-area: ad-left; }
+    .ad-banner-right { grid-area: ad-right; }
+    .container {
+        padding: 40px;
     }
 }
 
-@media screen and (max-width: 400px) {
-    .nav-links a {
-        padding: 16px 12px;
-        font-size: 17px;
-    }
+/* =========================================================================
+   4. FORMULARIOS, INPUTS Y BOTONES (UI táctil e intuitiva)
+   ========================================================================= */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="date"],
+input[type="search"],
+select,
+textarea {
+    width: 100%;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    background-color: rgba(0, 0, 0, 0.5); /* Más oscuro para contraste */
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-size: 16px; /* Evita auto-zoom en iOS */
+    font-family: 'Outfit', sans-serif;
+    transition: var(--transition);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* --- RESPONSIVE PARA TABLA DE RANKING --- */
-@media screen and (max-width: 600px) {
-    table thead {
-        display: none;
-    }
-    table, tbody, tr, td {
-        display: block;
-        width: 100%;
-    }
-    table tr {
-        margin-bottom: 15px;
-        border: 1px solid var(--color-border);
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    table td {
-        text-align: right;
-        padding-left: 50%;
-        position: relative;
-        border-bottom: 1px solid var(--color-border);
-    }
-    table td:last-child {
-        border-bottom: none;
-    }
-    table td::before {
-        content: attr(data-label);
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: auto;
-        padding-right: 10px;
-        white-space: nowrap;
-        text-align: left;
-        font-weight: bold;
-        color: var(--color-primary);
-    }
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background-color: rgba(217, 70, 239, 0.05);
+    box-shadow: 0 0 0 3px var(--color-primary-glow);
 }
 
-/* --- BLOQUE AÑADIDO: Estilos para el contenedor principal y la advertencia --- */
-.main-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 500px;
+input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
 }
 
+/* Botones Premium */
+button, .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 16px;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--color-primary), #a21caf); /* Gradiente vibrante */
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 10px 20px -5px var(--color-primary-glow);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px -5px var(--color-primary-glow);
+    background: linear-gradient(135deg, #e879f9, var(--color-primary));
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 5px 10px -5px var(--color-primary-glow);
+}
+
+/* Variantes de Botones */
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-border);
+    box-shadow: none;
+    color: var(--color-text-primary);
+}
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* =========================================================================
+   5. COMPONENTES ESPECÍFICOS: LISTAS, CANCIONES, BANNER WARNING
+   ========================================================================= */
+
+/* Banner de Advertencia Inteligente */
 #warning-banner {
-  color: yellow;
-  text-align: center;
-  padding: 10px;
-  font-weight: bold;
-  width: 100%;
-  margin-bottom: 20px;
-  border: 1px solid yellow;
-  border-radius: 8px;
-  background-color: rgba(255, 255, 0, 0.1);
-  box-sizing: border-box;
+    background: rgba(250, 204, 21, 0.1);
+    border: 1px solid rgba(250, 204, 21, 0.4);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    width: 92%;
+    max-width: 500px;
+    text-align: center;
 }
 
 #warning-banner p {
+    color: #fde047; /* Amarillo cálido Neón */
     margin: 0;
-    color: yellow;
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
-/* Warning banner en móvil - más grande y visible */
-@media screen and (max-width: 768px) {
-    #warning-banner {
-        padding: 12px;
-        margin-bottom: 15px;
-        font-size: 0.9em;
-        border-radius: 8px;
-        border-width: 2px;
-        background-color: rgba(255, 255, 0, 0.15);
-    }
-    
-    #warning-banner p {
-        font-weight: bold;
-    }
-    
-    #warning-banner br {
-        display: none;
-    }
+/* Motor de Búsqueda y Sugerencias */
+#search-container {
+    position: relative;
+    width: 100%;
 }
 
-@media screen and (max-width: 400px) {
-    #warning-banner {
-        padding: 10px;
-        font-size: 0.85em;
-    }
+#suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    list-style: none;
+    margin: 4px 0 0 0;
+    padding: 0;
+    background: var(--color-surface-hover);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-primary-glow);
+    border-radius: var(--radius-md);
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
 }
 
-/* --- RESPONSIVE DESIGN PARA MÓVILES --- */
-@media screen and (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-
-    .container {
-        padding: 15px;
-        max-width: 100%;
-    }
-
-    h1 {
-        font-size: 1.5em;
-    }
-
-    h2 {
-        font-size: 1.3em;
-    }
-
-    h3 {
-        font-size: 1.1em;
-    }
-
-    button {
-        padding: 12px;
-        font-size: 16px;
-    }
-
-    input[type="text"],
-    input[type="password"],
-    input[type="email"],
-    input[type="date"] {
-        padding: 12px;
-        font-size: 16px;
-    }
-
-    .cancion-item {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 12px;
-    }
-
-    .cancion-info {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    .cancion-actions {
-        width: 100%;
-        justify-content: flex-end;
-    }
-
-    .btn-played, .btn-hide {
-        flex: 1;
-        min-width: 70px;
-        padding: 10px 8px;
-        font-size: 11px;
-    }
-
-    #qrcode-container canvas {
-        max-width: 100%;
-        height: auto !important;
-    }
-
-    .stars span {
-        font-size: 2.5em;
-    }
-
-    .modal-content {
-        padding: 20px;
-        margin: 0 10px;
-    }
-
-    #lista-canciones {
-        max-height: 350px;
-        padding: 8px;
-    }
-
-    /* MODIFICACIÓN: Banners publicitarios en móvil */
-    .ad-banner {
-        min-height: 60px;
-        /* Se eliminó font-size y max-width: 100% */
-    }
-
-    .stats-panel {
-        padding: 10px;
-    }
-
-    .genre-badge {
-        font-size: 12px;
-        padding: 6px 12px;
-    }
-
-    .nav-links a {
-        display: block;
-        margin: 5px 0;
-        padding: 12px 10px;
-        font-size: 14px;
-    }
-    
-    /* Reducir espaciado general en móvil */
-    .main-wrapper {
-        padding: 0;
-    }
-    
-    #warning-banner {
-        padding: 8px;
-        margin-bottom: 10px;
-        font-size: 0.85em;
-    }
-    
-    #warning-banner br {
-        display: none; /* Quitar saltos de línea en móvil */
-    }
+#suggestions li {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+#suggestions li:last-child { border-bottom: none; }
+#suggestions li:hover {
+    background: var(--color-primary-glow);
+    padding-left: 28px; /* Animación de flecha mental */
 }
 
-@media screen and (max-width: 400px) {
-    h1 {
-        font-size: 1.3em;
-    }
-
-    .container {
-        padding: 12px;
-    }
-
-    .cancion-info strong {
-        font-size: 1em;
-    }
-
-    .cancion-info em {
-        font-size: 0.85em;
-    }
-    
-    button {
-        font-size: 15px;
-        padding: 12px;
-    }
-    
-    .nav-links a {
-        font-size: 13px;
-        padding: 10px 8px;
-    }
-
-/* ==========================================
-   MEJORAS COMPLETAS PARA MÓVIL
-   ========================================== */
-
-/* Asegurar que todo el contenido sea scrollable en móvil */
-@media screen and (max-width: 768px) {
-    * {
-        -webkit-tap-highlight-color: rgba(187, 134, 252, 0.3);
-    }
-    
-    /* Prevenir overflow horizontal */
-    body, html {
-        overflow-x: hidden;
-        width: 100%;
-    }
-    
-    /* Mejorar modales en móvil */
-    .modal {
-        padding: 10px;
-    }
-    
-    .modal .modal-content {
-        max-width: 95%;
-        max-height: 85vh;
-        padding: 20px 15px;
-        margin: 10px;
-    }
-    
-    .modal h2 {
-        font-size: 1.5em;
-        margin-bottom: 15px;
-    }
-    
-    .modal h3 {
-        font-size: 1.2em;
-        margin-bottom: 12px;
-    }
-    
-    /* Mejorar estrellas de rating en móvil */
-    .stars span {
-        font-size: 3em;
-        padding: 10px;
-    }
-    
-    /* Mejorar listas de canciones en móvil */
-    .cancion-item {
-        padding: 15px 10px;
-        gap: 10px;
-    }
-    
-    .cancion-info {
-        font-size: 0.95em;
-    }
-    
-    /* Mejorar QR en móvil */
-    #qrcode-container {
-        padding: 15px;
-        max-width: 100%;
-    }
-    
-    #qrcode-container canvas {
-        max-width: 100% !important;
-        height: auto !important;
-    }
-    
-    /* Mejorar tablas en móvil si existen */
-    table {
-        font-size: 0.9em;
-    }
-    
-    /* Mejorar inputs de búsqueda en móvil */
-    #search-input,
-    input[type="search"] {
-        font-size: 18px;
-        padding: 18px;
-    }
-    
-    /* Mejorar selects en móvil */
-    select {
-        font-size: 18px;
-        padding: 18px;
-        min-height: 60px;
-    }
-    
-    /* Mejorar textarea en móvil */
-    textarea {
-        font-size: 18px;
-        padding: 18px;
-        min-height: 100px;
-    }
-    
-    /* Mejorar formularios en móvil */
-    form {
-        width: 100%;
-    }
-    
-    /* Espaciado entre elementos */
-    * + * {
-        margin-top: 0;
-    }
-    
-    /* Mejorar hr en móvil */
-    hr {
-        margin: 20px 0;
-        border-width: 1px;
-    }
+/* Lista de Canciones del DJ */
+#lista-canciones {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 400px;
+    overflow-y: auto;
 }
 
-/* Optimizaciones específicas para pantallas muy pequeñas */
-@media screen and (max-width: 400px) {
-    .modal .modal-content {
-        padding: 15px 10px;
-    }
-    
-    .stars span {
-        font-size: 2.5em;
-        padding: 8px;
-    }
-    
-    .cancion-item {
-        padding: 12px 8px;
-    }
-    
-    table {
-        font-size: 0.85em;
-    }
+/* Scrollbar moderno */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+
+.cancion-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-secondary);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-wrap: wrap; /* Asegura que en móvil colapse lindo */
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition);
 }
 
-/* Mejorar accesibilidad táctil en toda la app */
-@media (hover: none) and (pointer: coarse) {
-    /* Dispositivos táctiles */
-    button,
-    a,
-    .btn,
-    [role="button"],
-    .clickable {
-        min-height: 44px;
-        min-width: 44px;
-        padding: 12px;
-    }
-    
-    /* Feedback táctil */
-    button:active,
-    a:active,
-    .btn:active {
-        opacity: 0.8;
-        transform: scale(0.98);
-    }
-    
-    /* Eliminar hover effects en táctiles */
-    button:hover {
-        transform: none;
-    }
+.cancion-item:hover {
+    background: rgba(255,255,255,0.06);
+    transform: translateX(4px);
+    border-color: rgba(255,255,255,0.2);
 }
 
-/* Landscape mode en móviles */
-@media screen and (max-width: 768px) and (orientation: landscape) {
-    .container {
-        padding: 15px;
-    }
-    
-    h1 {
-        font-size: 1.8em;
-        margin-bottom: 15px;
-    }
-    
-    .modal .modal-content {
-        max-height: 80vh;
-    }
+.cancion-item.played {
+    opacity: 0.5;
+    border-left-color: #4b5563;
+    pointer-events: none; /* Desactiva interacción para limpiarlo */
 }
 
-/* Prevenir zoom en double-tap en iOS */
-@media screen and (max-width: 768px) {
-    button,
-    a {
-        touch-action: manipulation;
-    }
+.cancion-info {
+    flex: 1 1 200px;
+}
+.cancion-info strong {
+    display: block;
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 4px;
+}
+.cancion-info em {
+    font-style: normal;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
 }
 
-/* Mejorar rendimiento en móvil */
-@media screen and (max-width: 768px) {
-    * {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-    
-    /* Optimizar animaciones en móvil */
-    @media (prefers-reduced-motion: reduce) {
-        * {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-        }
-    }
+/* Badges (Género) */
+.genre-tag, .genre-badge {
+    display: inline-block;
+    background: var(--color-secondary-fade);
+    color: var(--color-secondary);
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 8px;
+    border: 1px solid rgba(6, 182, 212, 0.3);
 }
 
-/* ==========================================
-   ESTILOS PERSONALIZADOS PARA SELECT
-   ========================================== */
+/* Botones dentro de cancion-item (DJ Controls) */
+.cancion-actions {
+    display: flex;
+    gap: 8px;
+}
+.cancion-actions button {
+    margin: 0;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    width: auto;
+    border-radius: var(--radius-sm);
+    text-transform: none;
+}
+.btn-played {
+    background: rgba(16, 185, 129, 0.15); /* Verde esmeralda */
+    color: #34d399;
+    box-shadow: none;
+}
+.btn-played:hover { background: rgba(16, 185, 129, 0.3); transform: scale(1.05); }
 
+.btn-hide {
+    background: rgba(244, 63, 94, 0.15); /* Rojo */
+    color: var(--color-error);
+    box-shadow: none;
+}
+.btn-hide:hover { background: rgba(244, 63, 94, 0.3); transform: scale(1.05); }
+
+/* =========================================================================
+   6. MODALES Y ESTRELLAS (Rating UI)
+   ========================================================================= */
+.modal, #rating-modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none; /* Controlado por JS flex/none */
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background: var(--color-background);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(217, 70, 239, 0.2);
+    padding: 40px 32px;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.stars {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 24px 0;
+}
+
+.stars span {
+    font-size: 3rem;
+    color: rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: var(--transition);
+    text-shadow: 0 0 10px transparent;
+}
+
+.stars span:hover, .stars span.active, .stars span:hover ~ span {
+    color: #fbbf24; /* Amarillo oro */
+    text-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+    transform: scale(1.15);
+}
+/* Arreglo visual: llenar estrellas previas al hover (JS suele gestionar el click pero CSS puede ayudar en hover) */
+.stars:hover span {
+    color: #fbbf24;
+}
+.stars span:hover ~ span {
+    color: rgba(255,255,255,0.1);
+    transform: scale(1);
+}
+
+/* =========================================================================
+   7. PANNERLES EXTRAS, NAVEGACIONES Y EXTRAS
+   ========================================================================= */
+.nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.nav-links a {
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--color-border);
+    border-radius: 100px;
+    font-size: 0.95rem;
+}
+.nav-links a:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+}
+
+/* Panel Estadísticas y QR */
+.stats-panel {
+    background: rgba(0,0,0,0.3);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+#qrcode-container {
+    background: #fff; /* Fuerte contraste para que los móviles lean bien el QR siempre */
+    padding: 24px;
+    border-radius: var(--radius-md);
+    display: inline-block;
+    margin: 16px 0;
+}
+
+#qrcode-container canvas {
+    max-width: 100%;
+    height: auto !important;
+    display: block;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+table th {
+    text-align: left;
+    padding: 12px;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+table td {
+    padding: 16px 12px;
+    background: rgba(255,255,255,0.03);
+}
+table tr td:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+table tr td:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
+/* Menú Select Customizado */
 select {
     appearance: none;
     -webkit-appearance: none;
-    -moz-appearance: none;
-    
-    width: 100%;
-    padding: 15px 40px 15px 15px;
-    font-size: 16px;
-    font-family: 'Roboto', sans-serif;
-    color: var(--color-text-primary);
-    
-    background-color: var(--color-surface);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23bb86fc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23d946ef'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 10px center;
+    background-position: right 16px center;
     background-size: 20px;
-    
-    border: 2px solid var(--color-border);
-    border-radius: 8px;
-    
-    cursor: pointer;
-    transition: all 0.3s ease;
-    
-    /* Sombra sutil */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding-right: 48px;
 }
-
-select:hover {
-    border-color: var(--color-primary);
-    box-shadow: 0 4px 8px rgba(187, 134, 252, 0.2);
-}
-
-select:focus {
-    outline: none;
-    border-color: var(--color-secondary);
-    box-shadow: 0 0 0 3px rgba(3, 218, 198, 0.2);
-    background-color: rgba(187, 134, 252, 0.05);
-}
-
-select:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background-color: #2a2a2a;
-}
-
-/* Estilo para las opciones del select */
 select option {
-    background-color: var(--color-surface);
-    color: var(--color-text-primary);
-    padding: 12px;
-    font-size: 16px;
+    background: #1e1b4b; /* Indigo muy oscuro para las opciones */
+    color: #fff;
+    padding: 10px;
 }
 
-select option:disabled {
-    color: var(--color-text-secondary);
-    font-style: italic;
-}
-
-select option:hover {
-    background-color: var(--color-primary);
-}
-
-/* Select con icono de DJ */
-select.dj-select {
-    background-image: 
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23bb86fc' stroke-width='2'%3E%3Ccircle cx='12' cy='8' r='5'/%3E%3Cpath d='M3 21c0-4 4-7 9-7s9 3 9 7'/%3E%3C/svg%3E"),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23bb86fc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat, no-repeat;
-    background-position: left 12px center, right 10px center;
-    background-size: 20px, 20px;
-    padding-left: 42px;
-}
-
-/* Animación al abrir */
-select:active {
-    transform: scale(0.99);
-}
-
-/* Estilo especial para select vacío o con placeholder */
-select:invalid {
-    color: var(--color-text-secondary);
-}
-
-/* Mejoras para móvil */
-@media screen and (max-width: 768px) {
-    select {
-        padding: 18px 45px 18px 18px;
-        font-size: 18px;
-        min-height: 60px;
-        border-width: 2px;
+/* =========================================================================
+   8. AJUSTES FINALES MÓVIL (Maximilizando la inmersión)
+   ========================================================================= */
+@media screen and (max-width: 480px) {
+    body {
+        /* Desactiva los márgenes del body para que container abarque ancho */
+        padding: 0;
     }
     
-    select.dj-select {
-        padding-left: 48px;
-        background-size: 22px, 22px;
-        background-position: left 15px center, right 12px center;
+    .container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        border-radius: 0;
+        border-right: none;
+        border-left: none;
+        min-height: 100vh;
+        /* En móvil, le quitamos bordes duros */
     }
-}
 
-@media screen and (max-width: 400px) {
-    select {
-        padding: 16px 40px 16px 16px;
-        font-size: 17px;
-        min-height: 58px;
+    h1 { font-size: 1.8rem; }
+    
+    #warning-banner { width: 100%; }
+
+    .nav-links a {
+        flex: 1 1 100%; /* Botones de nav toman ancho completo */
+        text-align: center;
+        border-radius: var(--radius-md);
     }
-}
-
-}
+}. c a r d s - g r i d   {   d i s p l a y :   g r i d ;   g r i d - t e m p l a t e - c o l u m n s :   r e p e a t ( a u t o - f i t ,   m i n m a x ( 2 5 0 p x ,   1 f r ) ) ;   g a p :   2 0 p x ;   t e x t - a l i g n :   c e n t e r ;   }   . s t a t s - c a r d   {   b a c k g r o u n d :   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 0 5 ) ;   b o r d e r :   1 p x   s o l i d   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 1 ) ;   b o r d e r - r a d i u s :   1 2 p x ;   p a d d i n g :   2 5 p x ;   t r a n s i t i o n :   t r a n s f o r m   0 . 3 s   e a s e ;   }   . s t a t s - c a r d : h o v e r   {   t r a n s f o r m :   t r a n s l a t e Y ( - 5 p x ) ;   b a c k g r o u n d :   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 1 ) ;   }   . s t a t s - c a r d   h 2   {   f o n t - s i z e :   2 . 5 r e m ;   m a r g i n :   0 ;   }  
+ 

@@ -2,52 +2,60 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestionar Fiestas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Monitor de Fiestas | DJConnect Admin</title>
     <link rel="stylesheet" href="/css/style.css">
     <script src="/js/config.js?v=2.2.1"></script>
     <script src="/js/admin-parties.js?v=2.2.1" defer></script>
 
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#ff6b35">
+    <meta name="theme-color" content="#d946ef">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="DJConnect">
+    <meta name="apple-mobile-web-app-title" content="DJ Admin">
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/images/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/images/icon-512x512.png">
-    <!-- PWA Installation Script -->
     <script src="/js/pwa-install.js?v=2.2.1" defer></script>
 </head>
 <body>
-    <div class="container" style="max-width: 1200px;">
-        <!-- Logo de la empresa -->
+    <div class="container animate-fade-in" style="max-width: 1200px;">
+        
         <div id="company-logo-container">
-            <img id="company-logo" src="" alt="Logo" style="display: none;">
+            <img id="company-logo" src="" alt="Logo" style="display: none; border-radius: 15px;">
         </div>
 
-        <h1>🎉 Gestión de Fiestas</h1>
+        <h1 class="glow-text">🎉 Monitor Global de Fiestas</h1>
         
         <div class="nav-links">
-            <a href="/html/admin.html">← Volver al Panel</a>
+            <a href="/html/admin.html" class="btn btn-secondary">← Retorno al Mando Central</a>
         </div>
 
-        <div class="stats-panel">
-            <h3>➕ Crear Nueva Fiesta y Asignar a DJ</h3>
-            <form id="create-party-form">
-                <input type="text" id="party-name" placeholder="Nombre de la fiesta" required>
-                <select id="dj-select" class="dj-select" required>
-                    <option value="">Selecciona un DJ...</option>
+        <hr style="margin: 30px 0; border-color: rgba(255,255,255,0.1);">
+
+        <!-- ==========================================
+             PANEL DE ASIGNACIÓN (CREAR EVENTOS)
+             ========================================== -->
+        <div class="stats-panel" style="margin-bottom: 30px;">
+            <h3 style="margin-bottom: 20px; color: var(--color-primary);">➕ Declarar Nuevo Evento</h3>
+            <form id="create-party-form" class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <input type="text" id="party-name" placeholder="Nombre único de la fiesta..." required>
+                <select id="dj-select" class="dj-select" style="padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid rgba(255,255,255,0.2);" required>
+                    <option value="">Cargando DJs disponibles...</option>
                 </select>
-                <button type="submit" style="background-color: var(--color-secondary);">Crear y Asignar Fiesta</button>
+                <button type="submit" class="btn">🚀 Inicializar Evento</button>
             </form>
         </div>
 
+        <!-- ==========================================
+             CONTENEDOR DE EVENTOS ACTIVOS
+             ========================================== -->
         <div id="parties-container">
-            <h3>📋 Fiestas Activas</h3>
-            <p id="loading-message">Cargando fiestas...</p>
-            <div id="parties-list"></div>
+            <h3 style="margin-bottom: 20px;">📋 Salas Abiertas en este Instante</h3>
+            <p id="loading-message" style="text-align: center; color: var(--color-accent);">Escaneando transmisiones... ⏳</p>
+            
+            <div id="parties-list" class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));"></div>
         </div>
     </div>
 </body>

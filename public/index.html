@@ -3,105 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pide tu Canción</title>
+    <title>Pide tu Canción (En Vivo) | DJConnect</title>
+    
     <link rel="stylesheet" href="/css/style.css">
     
     <script src="/js/libs/socket.io.min.js"></script>
     <script src="/js/config.js?v=2.2.4"></script>
     <script src="/js/index.js?v=2.2.4" defer></script>
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4366966319354898"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4366966319354898" crossorigin="anonymous"></script>
 
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#ff6b35">
+    <!-- Meta Tags PWA (Progressive Web App) -->
+    <meta name="theme-color" content="#d946ef">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="DJConnect">
+    <meta name="apple-mobile-web-app-title" content="Peticiones Live">
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/images/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/images/icon-512x512.png">
-    <!-- PWA Installation Script -->
     <script src="/js/pwa-install.js?v=2.2.4" defer></script>
 </head>
-<body>
-    <div class="ad-banner ad-banner-top">
-        
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+
+    <!-- ==========================================
+         BANNERS PUBLICITARIOS (TOP) 
+         ========================================== -->
+    <div class="ad-banner ad-banner-top" style="margin-bottom: 15px;">
         <ins class="adsbygoogle"
              style="display:block"
              data-ad-client="ca-pub-4366966319354898"
              data-ad-slot="3983922166"
              data-ad-format="auto"
              data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-        </div>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
 
-    <div class="mobile-layout">
-        <div class="ad-banner-left">
-            
+    <!-- MAIN WRAPPER PARA CENTRALIZAR CONTENIDO Y SEPARAR PANELES DE ANUNCIOS -->
+    <div class="mobile-layout container animate-fade-in" style="flex: 1; max-width: 1200px; display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr);">
+        
+        <!-- PUBLICIDAD LATERAL (SOLO PC) - Oculta por defecto en Desktop vía media queries -->
+        <style>
+            @media(min-width: 900px) {
+                .mobile-layout { grid-template-columns: 200px 1fr 200px !important; }
+            }
+        </style>
+
+        <div class="ad-banner-left" style="display: flex; flex-direction: column; justify-content: center;">
             <ins class="adsbygoogle"
                  style="display:block"
                  data-ad-client="ca-pub-4366966319354898"
                  data-ad-slot="8115287606"
                  data-ad-format="auto"
                  data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
+        <!-- ==========================================
+             ÁREA PRINCIPAL DE CONTENIDO
+             ========================================== -->
+        <div class="mobile-content-area" style="display: flex; flex-direction: column; align-items: stretch;">
+            
+            <div id="company-logo-container" style="text-align: center; margin-bottom: 10px;">
+                <img id="company-logo" src="" alt="Logo" style="display: none; max-width: 150px; border-radius: 12px; margin: 0 auto;">
             </div>
 
-        <div class="mobile-content-area">
-            <div id="warning-banner">
-                <p>⚠️ Atención: La canción solicitada será puesta según los criterios de los novios <br>y la organización del evento. ⚠️</p>
+            <!-- Banner de Advertencia Inteligente -->
+            <div id="warning-banner" class="stats-panel" style="background-color: rgba(255, 170, 0, 0.05); border: 1px dashed rgba(255, 170, 0, 0.4); border-radius: 8px; margin-bottom: 25px;">
+                <p style="color: #ffcc66; font-size: 0.9em; text-align: center; margin: 0;">⚠️ Atención: La canción solicitada será puesta a criterio exclusivo del DJ en el orden que mejor fomente la fiesta.</p>
             </div>
 
-            <div class="container">
-                <h1>¡Pide tu Canción!</h1>
-                <div id="search-container">
-                    <input type="text" id="search-input" placeholder="Busca por título o artista...">
-                    <ul id="suggestions"></ul>
+            <!-- Módulo Votación Rápido en Vivo -->
+            <div class="stats-panel" style="text-align: center;">
+                <h1 class="glow-text">¡Pide tu Canción! 🎵</h1>
+                
+                <div id="search-container" style="margin-top: 25px;">
+                    <input type="text" id="search-input" placeholder="Escribe el Título o Artista de la canción... 🎤" 
+                           style="width: 100%; padding: 18px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0,0,0,0.4); color: white; font-size: 1.1em; outline: none; transition: border-color 0.3s; margin-bottom: 15px;">
+                    
+                    <!-- Lista de Sugerencias Resultantes -->
+                    <ul id="suggestions" style="list-style: none; padding: 0; margin: 0; text-align: left;"></ul>
                 </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 25px;">
+                <p style="color: var(--color-text-secondary); font-size: 0.8em; opacity: 0.6;">Solicitudes Enviadas vía DJConnect</p>
             </div>
         </div>
 
-        <div class="ad-banner-right">
-            
+        <div class="ad-banner-right" style="display: flex; flex-direction: column; justify-content: center;">
             <ins class="adsbygoogle"
                  style="display:block"
                  data-ad-client="ca-pub-4366966319354898"
                  data-ad-slot="6292614636"
                  data-ad-format="auto"
                  data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-            </div>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
     </div>
 
-    <div class="ad-banner ad-banner-bottom">
-        
+    <!-- ==========================================
+         BANNERS PUBLICITARIOS (BOTTOM) 
+         ========================================== -->
+    <div class="ad-banner ad-banner-bottom" style="margin-top: 20px;">
         <ins class="adsbygoogle"
              style="display:block"
              data-ad-client="ca-pub-4366966319354898"
              data-ad-slot="2544941316"
              data-ad-format="auto"
              data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-        </div>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
 
-    <div id="rating-modal" style="display:none;">
-        <div class="modal-content">
-            <h3>¿Qué tal lo está haciendo el DJ?</h3>
-            <div class="stars">
-                <span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span>
+    <!-- ==========================================
+         MODAL DE PUNTUACIÓN (CALIFICAR AL DJ)
+         ========================================== -->
+    <div id="rating-modal" class="modal animate-fade-in" style="display:none;">
+        <div class="modal-content" style="max-width: 450px; text-align: center;">
+            <h2 class="glow-text" style="color: var(--color-primary); margin-bottom: 25px;">¿Qué tal lo está haciendo el DJ? 🎧</h2>
+            <p style="color: var(--color-text-secondary); margin-bottom: 25px;">Tu honesta opinión ayudará enormemente al DJ contratado esta noche.</p>
+            
+            <div class="stars" style="font-size: 50px; display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; cursor: pointer; user-select: none;">
+                <span data-value="1">☆</span>
+                <span data-value="2">☆</span>
+                <span data-value="3">☆</span>
+                <span data-value="4">☆</span>
+                <span data-value="5">☆</span>
             </div>
-            <button id="close-modal">Cerrar</button>
+            
+            <button id="close-modal" class="btn btn-secondary" style="width: 100%;">Dejar de lado ahora mismo</button>
         </div>
     </div>
+
 </body>
 </html>

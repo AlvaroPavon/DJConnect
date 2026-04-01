@@ -192,8 +192,13 @@ const corsOptions = {
         // Permitir requests sin origin (como mobile apps o curl)
         if (!origin) return callback(null, true);
         
-        // Permitir dominios en la lista
+        // Permitir dominios en la lista predefinida
         if (allowedOrigins.indexOf(origin) !== -1) {
+            return callback(null, true);
+        }
+        
+        // === BUGFIX ===: Permitir conexiones desde la red local (LAN) para pruebas móviles
+        if (origin.match(/^https?:\/\/(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)/)) {
             return callback(null, true);
         }
         

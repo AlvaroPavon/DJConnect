@@ -223,10 +223,17 @@ initialize();
 
 if (Capacitor.isNativePlatform()) {
     App.addListener('resume', () => {
-        // Al volver a la app, siempre volvemos al menú
+        // Al volver a la app nativa, siempre actualizamos
         initialize();
     });
 }
+
+// BFCache fix para navegadores web cuando se dale "Atrás" en el historial
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        initialize();
+    }
+});
 
 
 // --- 3. LÓGICA DEL DASHBOARD (La fiesta en sí) ---
@@ -249,13 +256,16 @@ function runDashboard(currentPartyId) {
     // ===== LISTENER DEL BOTÓN DE VOLVER =====
     backToMenuBtn.addEventListener('click', () => {
         // 1. Desconectar el socket de esta fiesta
-        socket.disconnect();
+        if(socket) socket.disconnect();
         
         // 2. Ocultar el dashboard
         dashboardContentSection.style.display = 'none';
         
         // 3. Mostrar el menú principal
         mainMenuSection.style.display = 'block';
+        
+        // 4. Refrescar datos cruciales (soluciona bug de "no aparecen fiestas creadas")
+        initialize();
     });
     // ========================================
 

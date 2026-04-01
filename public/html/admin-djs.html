@@ -2,65 +2,81 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestionar DJs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gestionar Staff (DJs) | DJConnect Admin</title>
     <link rel="stylesheet" href="/css/style.css">
     <script src="/js/config.js?v=2.2.1"></script>
     <script src="/js/admin-djs.js?v=2.2.1" defer></script>
 
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#ff6b35">
+    <meta name="theme-color" content="#d946ef">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="DJConnect">
+    <meta name="apple-mobile-web-app-title" content="DJ Admin">
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/images/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/images/icon-512x512.png">
-    <!-- PWA Installation Script -->
     <script src="/js/pwa-install.js?v=2.2.1" defer></script>
 </head>
 <body>
-    <div class="container" style="max-width: 1200px;">
-        <!-- Logo de la empresa -->
+    <div class="container animate-fade-in" style="max-width: 1200px;">
+        
         <div id="company-logo-container">
-            <img id="company-logo" src="" alt="Logo" style="display: none;">
+            <img id="company-logo" src="" alt="Logo" style="display: none; border-radius: 15px;">
         </div>
 
-        <h1>🎧 Gestión de DJs</h1>
+        <h1 class="glow-text">🎧 Contratación y Plantilla (DJs)</h1>
         
         <div class="nav-links">
-            <a href="/html/admin.html">← Volver al Panel</a>
+            <a href="/html/admin.html" class="btn btn-secondary">← Retorno al Mando Central</a>
         </div>
 
-        <div class="stats-panel">
-            <h3>➕ Crear Nuevo DJ</h3>
-            <form id="create-dj-form">
-                <input type="text" id="dj-username" placeholder="Nombre de usuario" required>
-                <input type="email" id="dj-email" placeholder="Email" required>
-                <input type="password" id="dj-password" placeholder="Contraseña" required>
-                <button type="submit" style="background-color: var(--color-secondary);">Crear DJ</button>
+        <hr style="margin: 30px 0; border-color: rgba(255,255,255,0.1);">
+
+        <!-- ==========================================
+             ZONA DE CREACIÓN DE NUEVO PERSONAL
+             ========================================== -->
+        <div class="stats-panel" style="margin-bottom: 30px;">
+            <h3 style="margin-bottom: 20px; color: var(--color-primary);">➕ Dar de Alta Usuario Nuevo</h3>
+            <!-- Utilizamos el form genérico bien espaciado -->
+            <form id="create-dj-form" class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <input type="text" id="dj-username" placeholder="Seudónimo (Alias DJ)" required>
+                <input type="email" id="dj-email" placeholder="Correo (Opcional o Real)" required>
+                <input type="password" id="dj-password" placeholder="Clave Asignada" required>
+                <!-- Botón alineado y estirado -->
+                <button type="submit" class="btn" style="width: 100%; height: 100%;">Fichar Empleado</button>
             </form>
         </div>
 
+        <!-- ==========================================
+             SISTEMA DE MUESTRA (TARJETAS DINÁMICAS RELLENADAS POR JS)
+             ========================================== -->
         <div id="djs-container">
-            <h3>📋 Lista de DJs</h3>
-            <p id="loading-message">Cargando DJs...</p>
-            <div id="djs-list"></div>
+            <h3 style="margin-bottom: 20px;">📋 Personal Activo en la Plataforma</h3>
+            <p id="loading-message" style="text-align: center; color: var(--color-accent);">Analizando base de datos central... ⏳</p>
+            
+            <!-- Aquí el JavaScript inyectará el HTML de los .stats-card organizados como grid -->
+            <div id="djs-list" class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));"></div>
         </div>
     </div>
 
-    <!-- Modal para cambiar contraseña -->
+    <!-- ==========================================
+         MODAL GLOBAL: Cambio de Password Remoto
+         Efecto overlay translúcido heredado del style.css superior
+         ========================================== -->
     <div id="password-modal" class="modal" style="display:none;">
         <div class="modal-content" style="max-width: 500px;">
-            <h2>🔑 Cambiar Contraseña</h2>
-            <p id="password-dj-name"></p>
+            <h2 class="glow-text">🔐 Reseteo de Seguridad</h2>
+            <p id="password-dj-name" style="color: var(--color-text-secondary); margin-bottom: 20px;"></p>
+            
             <form id="change-password-form">
-                <input type="password" id="new-password" placeholder="Nueva contraseña" required>
-                <input type="password" id="confirm-password" placeholder="Confirmar contraseña" required>
-                <div style="display: flex; gap: 10px;">
-                    <button type="submit" style="flex: 1; background-color: var(--color-secondary);">Cambiar</button>
-                    <button type="button" onclick="closePasswordModal()" style="flex: 1; background-color: var(--color-error);">Cancelar</button>
+                <input type="password" id="new-password" placeholder="Escribe la clave maestra nueva..." required>
+                <input type="password" id="confirm-password" placeholder="Repite por seguridad..." required>
+                
+                <div class="cards-grid" style="grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+                    <button type="submit" class="btn">Sobrescribir</button>
+                    <button type="button" onclick="closePasswordModal()" class="btn btn-danger">Abortar</button>
                 </div>
             </form>
         </div>

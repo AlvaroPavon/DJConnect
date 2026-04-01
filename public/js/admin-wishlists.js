@@ -1,18 +1,32 @@
+/**
+ * =========================================================================
+ * GESTOR DE REPERTORIOS Y LISTAS (admin-wishlists.js)
+ * Función: Despliega las 'Wishlists' creadas de bases de datos de música o
+ * listas predefinidas para eventos (Bodas, Fiestas X, etc.). 
+ * Incluye generación PDF de las peticiones para enviarlas por correo o 
+ * llevarlas impresas.
+ * =========================================================================
+ */
+
 const token = localStorage.getItem('dj-token');
 const serverUrl = window.SERVER_URL || window.location.origin;
 
+// Bloqueo estricto del Panel de control admin
 if (!token) {
     window.location.href = '/html/login.html';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    verifyAdmin();
-    loadDJs();
-    loadWishlists();
+    verifyAdmin();         // Prevenir escalada de privilegios
+    loadDJs();             // Asigna al Select formográfico
+    loadWishlists();       // Carga la información central MongoDB
     loadCompanyLogo();
     setupEventListeners();
 });
 
+/**
+ * Filtro 1: Autenticación de servidor JWT y validación del 'role' == 'admin'
+ */
 async function verifyAdmin() {
     try {
         const res = await fetch(`${serverUrl}/api/verify-admin`, {
@@ -27,38 +41,42 @@ async function verifyAdmin() {
 }
 
 function setupEventListeners() {
+    // Al atrapar el evento Submit evitamos el recargo (F5) para una SPA Fluída
     document.getElementById('create-wishlist-form').addEventListener('submit', createWishlist);
 }
 
+/**
+ * Rellena el listado de opciones con el personal de música
+ */
 async function loadDJs() {
     try {
         const response = await fetch(`${serverUrl}/api/admin/djs`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
-        if (!response.ok) throw new Error('Error al cargar DJs');
+        if (!response.ok) throw new Error('Se perdió el enlace HTTP');
         
         const djs = await response.json();
         const select = document.getElementById('dj-select');
         
-        djs.filter(dj => dj.role === 'dj').forEach(dj => {
+        djs.filter(dj => dj.role === 'dj' || !dj.role).forEach(dj => {
             const option = document.createElement('option');
             option.value = dj.username;
             
-            // Mostrar información adicional del DJ
             const totalFiestas = dj.partyCount || 0;
-            const activeParties = dj.activePartyIds ? dj.activePartyIds.length : 0;
-            
-            option.textContent = `🎧 ${dj.username} (${totalFiestas} fiestas realizadas)`;
+            option.textContent = `🎧 @${dj.username} (Fiestas operadas: ${totalFiestas})`;
             
             select.appendChild(option);
         });
         
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Problema en Render DJs:', error);
     }
 }
 
+/**
+ * Petición asincrónica a los catálogos MongoDB sobre listas pregrabadas
+ */
 async function loadWishlists() {
     const loadingMessage = document.getElementById('loading-message');
     const wishlistsList = document.getElementById('wishlists-list');
@@ -68,16 +86,17 @@ async function loadWishlists() {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
-        if (!response.ok) throw new Error('Error al cargar wishlists');
+        if (!response.ok) throw new Error('Caída de API Wishlist');
         
         const wishlists = await response.json();
-        loadingMessage.style.display = 'none';
+        loadingMessage.style.display = 'none'; // Quitar animaciones spinners si existen
         
         if (wishlists.length === 0) {
-            wishlistsList.innerHTML = '<p style="text-align: center; color: var(--color-text-secondary);">No hay wishlists.</p>';
+            wishlistsList.innerHTML = '<p class="glow-text">Bases vacías o aún no definidas.</p>';
             return;
         }
         
+        // Repintado con efecto .cards-grid
         wishlistsList.innerHTML = '';
         wishlists.forEach(wishlist => {
             const card = createWishlistCard(wishlist);
@@ -85,53 +104,57 @@ async function loadWishlists() {
         });
         
     } catch (error) {
-        console.error('Error:', error);
-        loadingMessage.textContent = 'Error al cargar wishlists.';
-        loadingMessage.style.color = 'var(--color-error)';
+        console.error('Data Load Error:', error);
+        loadingMessage.textContent = '❌ Base inalcanzable temporalmente.';
     }
 }
 
+/**
+ * Generador HTML (Card) que encaja en el CSS Glassmorphism .stats-card
+ */
 function createWishlistCard(wishlist) {
     const card = document.createElement('div');
-    card.className = 'stats-panel';
-    card.style.marginBottom = '15px';
+    card.className = 'stats-card animate-fade-in';
     
+    // Semaforización de la Card ("Activa" recibe nuevos submits, "Cerrada" se bloquea).
     const statusBadge = wishlist.isActive 
-        ? '<span style="color: var(--color-secondary);">🟢 Activa</span>' 
-        : '<span style="color: var(--color-text-secondary);">⚪ Cerrada</span>';
+        ? '<span style="color: var(--color-accent); font-weight: bold;">🟢 RECIBIENDO SOLICITUDES</span>' 
+        : '<span style="color: var(--color-text-secondary);">⚫ CERRADA (SOLO LECTURA)</span>';
     
     const eventDate = wishlist.eventDate 
         ? new Date(wishlist.eventDate).toLocaleDateString('es-ES') 
-        : 'Sin fecha';
+        : 'Sin agenda temporal';
+    
+    const btnAperturaHTML = wishlist.isActive 
+        ? `<button onclick="toggleWishlist('${wishlist.wishlistId}')" class="btn btn-secondary">🔒 Prohibir Nv Petición</button>`
+        : `<button onclick="toggleWishlist('${wishlist.wishlistId}')" class="btn" style="background-color:var(--color-secondary)">🔓 Abrir Módulo (Público)</button>`;
     
     card.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 10px;">
-            <div style="flex: 1; min-width: 200px;">
-                <h3 style="margin: 0 0 10px 0; color: var(--color-secondary);">
-                    ${wishlist.name}
-                </h3>
-                <p style="margin: 5px 0; font-size: 0.9em;">
-                    🎧 DJ: <strong>${wishlist.djUsername}</strong>
-                </p>
-                <p style="margin: 5px 0; font-size: 0.9em;">
-                    ${statusBadge} • 
-                    <strong>${wishlist.songs.length}</strong> canciones • 
-                    📅 ${eventDate}
-                </p>
-                ${wishlist.description ? `<p style="margin: 5px 0; color: var(--color-text-secondary); font-size: 0.85em;">${wishlist.description}</p>` : ''}
+        <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+            <div>
+                <h3 style="color: var(--color-primary); font-size: 1.6em; margin: 0 0 5px 0;">${wishlist.name}</h3>
+                <p style="font-size: 0.85em; opacity: 0.7; font-family: monospace; margin: 0 0 15px 0;">ID: ${wishlist.wishlistId}</p>
+                
+                <div style="background: rgba(0,0,0,0.5); border-radius: 8px; padding: 15px;">
+                    <p style="margin: 5px 0;">🎙️ Asignada a: <strong style="float: right;">@${wishlist.djUsername}</strong></p>
+                    <p style="margin: 5px 0;">📅 Fecha de uso: <strong style="float: right;">${eventDate}</strong></p>
+                    <div style="text-align: center; margin-top: 20px; border-top: 1px dotted rgba(255,255,255,0.2); padding-top: 15px;">
+                        <h2 style="color: var(--color-accent); margin: 0 0 5px 0;">${wishlist.songs.length}</h2>
+                        <small>Peticiones Capturadas</small>
+                    </div>
+                </div>
             </div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button onclick="viewWishlistDetails('${wishlist.wishlistId}')" 
-                        style="width: auto; padding: 10px 15px; background-color: var(--color-primary);">
-                    👁️ Ver Detalles
+            
+            <p style="text-align: center; margin: 20px 0 10px 0;">${statusBadge}</p>
+            
+            <!-- Botones responsivos grid del admin -->
+            <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+                <button onclick="viewWishlistDetails('${wishlist.wishlistId}')" class="btn" style="background-color: var(--color-primary);">
+                    👁️ Leer / Exportar (PDF)
                 </button>
-                <button onclick="toggleWishlist('${wishlist.wishlistId}')" 
-                        style="width: auto; padding: 10px 15px; background-color: ${wishlist.isActive ? '#666' : 'var(--color-secondary)'};">
-                    ${wishlist.isActive ? '🔒 Cerrar' : '🔓 Abrir'}
-                </button>
-                <button onclick="deleteWishlist('${wishlist.wishlistId}', '${wishlist.name}')" 
-                        style="width: auto; padding: 10px 15px; background-color: var(--color-error);">
-                    🗑️ Eliminar
+                ${btnAperturaHTML}
+                <button onclick="deleteWishlist('${wishlist.wishlistId}', '${wishlist.name}')" class="btn btn-danger">
+                    🗑️ Borrar Permanentemente
                 </button>
             </div>
         </div>
@@ -140,6 +163,9 @@ function createWishlistCard(wishlist) {
     return card;
 }
 
+/**
+ * Enviar petición POST a MongoDB creando las bases para una nueva noche/bodas
+ */
 async function createWishlist(e) {
     e.preventDefault();
     
@@ -149,7 +175,7 @@ async function createWishlist(e) {
     const djUsername = document.getElementById('dj-select').value;
     
     if (!name || !djUsername) {
-        alert('Por favor, completa nombre y DJ.');
+        alert('A la lista le faltan datos críticos.');
         return;
     }
     
@@ -164,118 +190,24 @@ async function createWishlist(e) {
         });
         
         const data = await response.json();
-        
         if (!response.ok) {
-            alert(`❌ Error: ${data.message}`);
+            alert(`❌ Rechazo del Motor DB: ${data.message}`);
             return;
         }
         
-        alert(`✅ Wishlist "${name}" creada y asignada a ${djUsername}!`);
+        alert(`✅ Éxito absoluto. Catálogo "[${name}]" reservado. \nMándaselo por WhatsApp al DJ.`);
         document.getElementById('create-wishlist-form').reset();
-        loadWishlists();
+        loadWishlists(); // Actualizar GUI Frontal
         
     } catch (error) {
-        console.error('Error:', error);
-        alert('❌ Error al crear wishlist.');
+        console.error('Rotura al generar listas:', error);
+        alert('❌ Servidor no accesible.');
     }
 }
 
-async function viewWishlistDetails(wishlistId) {
-    try {
-        const response = await fetch(`${serverUrl}/api/wishlists/${wishlistId}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
-        if (!response.ok) throw new Error('Error al cargar wishlist');
-        
-        const wishlist = await response.json();
-        showWishlistModal(wishlist);
-        
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error al cargar los detalles de la wishlist.');
-    }
-}
-
-function showWishlistModal(wishlist) {
-    const modal = document.createElement('div');
-    modal.id = 'wishlist-detail-modal';
-    modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000;';
-    
-    const eventDate = wishlist.eventDate 
-        ? new Date(wishlist.eventDate).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })
-        : 'Sin fecha definida';
-    
-    const statusText = wishlist.isActive ? '🟢 Activa (Invitados pueden agregar canciones)' : '⚪ Cerrada (No se aceptan más canciones)';
-    
-    const wishlistUrl = `${window.location.origin}/html/wishlist.html?w=${wishlist.wishlistId}`;
-    
-    const songsHtml = wishlist.songs.length > 0 
-        ? wishlist.songs.map(song => `
-            <div style="background-color: #2c2c2c; padding: 12px; margin: 8px 0; border-radius: 5px; border-left: 3px solid var(--color-secondary);">
-                <strong style="display: block; color: var(--color-text-primary);">${song.titulo}</strong>
-                <em style="display: block; color: var(--color-text-secondary); font-size: 0.9em;">${song.artista}</em>
-                <small style="color: var(--color-text-secondary);">
-                    🎵 ${song.genre} • 👤 ${song.addedBy} • 🕐 ${new Date(song.timestamp).toLocaleString('es-ES')}
-                </small>
-            </div>
-        `).join('')
-        : '<p style="text-align: center; color: var(--color-text-secondary);">No hay canciones aún</p>';
-    
-    // Guardar wishlist en variable temporal para PDF
-    window.currentWishlistForPDF = wishlist;
-    
-    modal.innerHTML = `
-        <div style="background: var(--color-surface); padding: 30px; border-radius: 12px; max-width: 800px; max-height: 90vh; overflow-y: auto; width: 90%;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="margin: 0; color: var(--color-secondary);">${wishlist.name}</h2>
-                <button onclick="closeWishlistModal()" style="width: auto; padding: 10px 20px; background-color: var(--color-error); margin: 0;">✕</button>
-            </div>
-            
-            <div style="background-color: rgba(187, 134, 252, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                <p><strong>Estado:</strong> ${statusText}</p>
-                <p><strong>DJ:</strong> ${wishlist.djUsername}</p>
-                <p><strong>Fecha del evento:</strong> ${eventDate}</p>
-                ${wishlist.description ? `<p><strong>Descripción:</strong> ${wishlist.description}</p>` : ''}
-                
-                <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
-                    <button onclick="exportWishlistToPDF()" style="flex: 1; min-width: 150px; padding: 10px 15px; background-color: var(--color-primary); margin: 0;">
-                        📄 Exportar PDF
-                    </button>
-                    <button onclick="copyWishlistLink('${wishlistUrl}')" style="flex: 1; min-width: 150px; padding: 10px 15px; background-color: var(--color-secondary); margin: 0;">
-                        📋 Copiar Enlace
-                    </button>
-                </div>
-                
-                <p style="margin-top: 15px;"><strong>Enlace para invitados:</strong></p>
-                <input type="text" value="${wishlistUrl}" readonly style="width: 100%; padding: 10px; background-color: #333; border: 1px solid var(--color-border); border-radius: 5px; color: var(--color-text-primary); font-size: 0.85em;">
-            </div>
-            
-            <h3>🎵 Canciones Sugeridas (${wishlist.songs.length})</h3>
-            <div style="max-height: 400px; overflow-y: auto;">
-                ${songsHtml}
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-}
-
-function closeWishlistModal() {
-    const modal = document.getElementById('wishlist-detail-modal');
-    if (modal) {
-        modal.remove();
-    }
-}
-
-function copyWishlistLink(url) {
-    navigator.clipboard.writeText(url).then(() => {
-        alert('✅ Enlace copiado al portapapeles!');
-    }).catch(() => {
-        prompt('Copia este enlace:', url);
-    });
-}
-
+/**
+ * Interruptor Cierre Perimetral (Permite o prohíbe votos de extraños a la URL)
+ */
 async function toggleWishlist(wishlistId) {
     try {
         const response = await fetch(`${serverUrl}/api/wishlists/${wishlistId}/toggle`, {
@@ -283,37 +215,37 @@ async function toggleWishlist(wishlistId) {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
-        if (!response.ok) throw new Error('Error al cambiar estado');
-        
+        if (!response.ok) throw new Error('Modificación interceptada');
         loadWishlists();
         
     } catch (error) {
-        console.error('Error:', error);
-        alert('❌ Error al cambiar estado.');
+        console.error('Fallo en la alteración de estado:', error);
+        alert('❌ Ocurrió algo inesperado al cerrar/abrir.');
     }
 }
 
+/**
+ * Solicitud Destructiva total.
+ */
 async function deleteWishlist(wishlistId, wishlistName) {
-    if (!confirm(`¿Estás seguro de eliminar la wishlist "${wishlistName}"?`)) {
-        return;
-    }
-    
+    if (!confirm(`Tensión: Quieres ELIMINAR toda la base asignada a ["${wishlistName}"].\nLas canciones elegidas desaparecerán.`)) return;
     try {
         const response = await fetch(`${serverUrl}/api/wishlists/${wishlistId}`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
-        if (!response.ok) throw new Error('Error al eliminar');
-        
-        alert('✅ Wishlist eliminada exitosamente');
+        if (!response.ok) throw new Error('Database lockdown.');
+        alert('✅ Destrucción efectuada.');
         loadWishlists();
-        
     } catch (error) {
-        console.error('Error:', error);
-        alert('❌ Error al eliminar wishlist.');
+        alert('❌ Cuidado, hubo un error borrando la Wishlist');
     }
 }
+
+// ==========================================
+// VENTANA MODAL, INSPECTOR Y GENERADOR PDF
+// ==========================================
 
 async function viewWishlistDetails(wishlistId) {
     try {
@@ -321,123 +253,129 @@ async function viewWishlistDetails(wishlistId) {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
-        if (!response.ok) throw new Error('Error al cargar wishlist');
+        if (!response.ok) throw new Error('Archivo Corrupto o Oculto');
         
         const wishlist = await response.json();
         showWishlistModal(wishlist);
         
     } catch (error) {
-        console.error('Error:', error);
-        alert('Error al cargar los detalles de la wishlist.');
+        alert('❌ Error al interceptar el catálogo en caché.');
     }
 }
 
+/**
+ * Lanza la UI que se sobrepone al Panel Administrativo usando ".modal" y ".modal-content"
+ */
 function showWishlistModal(wishlist) {
+    // Si hubiera uno vivo lo destruimos
+    closeWishlistModal(); 
+
     const modal = document.createElement('div');
     modal.id = 'wishlist-detail-modal';
-    modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000;';
+    // Aprovechamos los estilos premium del css (efecto de cristal)
+    modal.className = 'modal animate-fade-in';
+    modal.style.display = 'flex';
     
     const eventDate = wishlist.eventDate 
         ? new Date(wishlist.eventDate).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })
-        : 'Sin fecha definida';
+        : 'Incierta';
     
-    const statusText = wishlist.isActive ? '🟢 Activa (Invitados pueden agregar canciones)' : '⚪ Cerrada (No se aceptan más canciones)';
-    
+    // Rutas públicas que se mandarán vía WhatsApp enlazadas
     const wishlistUrl = `${window.location.origin}/html/wishlist.html?w=${wishlist.wishlistId}`;
     
+    // Compilador de la tabla HTML para canciones elegidas
     const songsHtml = wishlist.songs.length > 0 
         ? wishlist.songs.map(song => `
-            <div style="background-color: #2c2c2c; padding: 12px; margin: 8px 0; border-radius: 5px; border-left: 3px solid var(--color-secondary);">
-                <strong style="display: block; color: var(--color-text-primary);">${song.titulo}</strong>
-                <em style="display: block; color: var(--color-text-secondary); font-size: 0.9em;">${song.artista}</em>
-                <small style="color: var(--color-text-secondary);">
-                    🎵 ${song.genre} • 👤 ${song.addedBy} • 🕐 ${new Date(song.timestamp).toLocaleString('es-ES')}
-                </small>
+            <div style="background: rgba(255, 255, 255, 0.05); border-left: 4px solid var(--color-accent); padding: 15px; margin: 10px 0; border-radius: 6px;">
+                <strong style="color: #fff; font-size: 1.1em; display:block;">${song.titulo}</strong>
+                <em style="color: var(--color-text-secondary); display:block; margin: 3px 0;">De: ${song.artista}</em>
+                <div style="font-size: 0.85em; opacity: 0.7; margin-top: 10px; display: flex; justify-content: space-between;">
+                    <span>📂 ${song.genre}</span>
+                    <span>🕒 ${new Date(song.timestamp).toLocaleTimeString('es-ES')}</span>
+                </div>
             </div>
         `).join('')
-        : '<p style="text-align: center; color: var(--color-text-secondary);">No hay canciones aún</p>';
+        : '<p class="glow-text">Las urnas aún están vacías.</p>';
     
-    // Guardar wishlist en variable temporal para PDF
     window.currentWishlistForPDF = wishlist;
     
+    // Contenido general (Ventana)
     modal.innerHTML = `
-        <div style="background: var(--color-surface); padding: 30px; border-radius: 12px; max-width: 800px; max-height: 90vh; overflow-y: auto; width: 90%;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="margin: 0; color: var(--color-secondary);">${wishlist.name}</h2>
-                <button onclick="closeWishlistModal()" style="width: auto; padding: 10px 20px; background-color: var(--color-error); margin: 0;">✕</button>
+        <div class="modal-content" style="max-width: 800px; width: 95%; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+                <h2 class="glow-text" style="color: var(--color-primary); margin: 0; font-size: 2em;">${wishlist.name}</h2>
+                <button onclick="closeWishlistModal()" class="btn btn-danger" style="padding: 10px 15px; width: auto; font-size: 1.2em;">✕</button>
             </div>
             
-            <div style="background-color: rgba(187, 134, 252, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                <p><strong>Estado:</strong> ${statusText}</p>
-                <p><strong>DJ:</strong> ${wishlist.djUsername}</p>
-                <p><strong>Fecha del evento:</strong> ${eventDate}</p>
-                ${wishlist.description ? `<p><strong>Descripción:</strong> ${wishlist.description}</p>` : ''}
+            <div class="stats-card" style="margin-bottom: 20px; text-align: left;">
+                <p><strong>🗓️ Asignación DJ:</strong> @${wishlist.djUsername}</p>
+                <p><strong>📍 Fecha Marcada:</strong> ${eventDate}</p>
+                ${wishlist.description ? `<p style="margin-top: 10px; border-left: 3px solid #ccc; padding-left: 10px;"><i>"${wishlist.description}"</i></p>` : ''}
                 
-                <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
-                    <button onclick="exportWishlistToPDF()" style="flex: 1; min-width: 150px; padding: 10px 15px; background-color: var(--color-primary); margin: 0;">
-                        📄 Exportar PDF
+                <h4 style="margin-top: 25px; margin-bottom: 10px; color: var(--color-secondary);">🔗 URL PÚBLICA PARA INVITADOS</h4>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <input type="text" value="${wishlistUrl}" readonly style="flex: 1; padding: 12px; font-family: monospace; font-size: 0.85em; cursor: copy;" onclick="this.select()">
+                    <button onclick="copyWishlistLink('${wishlistUrl}')" class="btn" style="width: auto; background-color: var(--color-secondary);">
+                        📋 Copiar URL
                     </button>
-                    <button onclick="copyWishlistLink('${wishlistUrl}')" style="flex: 1; min-width: 150px; padding: 10px 15px; background-color: var(--color-secondary); margin: 0;">
-                        📋 Copiar Enlace
+                    <button onclick="exportWishlistToPDF()" class="btn" style="width: auto; background-color: var(--color-accent);">
+                        📄 Descargar PDF
                     </button>
                 </div>
-                
-                <p style="margin-top: 15px;"><strong>Enlace para invitados:</strong></p>
-                <input type="text" value="${wishlistUrl}" readonly style="width: 100%; padding: 10px; background-color: #333; border: 1px solid var(--color-border); border-radius: 5px; color: var(--color-text-primary); font-size: 0.85em;">
             </div>
             
-            <h3>🎵 Canciones Sugeridas (${wishlist.songs.length})</h3>
-            <div style="max-height: 400px; overflow-y: auto;">
+            <h3 style="margin-bottom: 15px;">🎵 Desglose de Tracklist Reservado</h3>
+            <div style="max-height: 40vh; overflow-y: auto; padding-right: 15px; /* Fix scrollbar overflow */">
                 ${songsHtml}
             </div>
         </div>
     `;
-    
     document.body.appendChild(modal);
 }
 
 function closeWishlistModal() {
     const modal = document.getElementById('wishlist-detail-modal');
-    if (modal) {
-        modal.remove();
-    }
+    if (modal) modal.remove();
 }
 
 function copyWishlistLink(url) {
-    navigator.clipboard.writeText(url).then(() => {
-        alert('✅ Enlace copiado al portapapeles!');
-    }).catch(() => {
-        prompt('Copia este enlace:', url);
-    });
-}
-
-async function loadCompanyLogo() {
-    try {
-        const response = await fetch(`${serverUrl}/api/config/logo`);
-        if (response.ok) {
-            const data = await response.json();
-            if (data.logoUrl) {
-                const logo = document.getElementById('company-logo');
-                logo.src = data.logoUrl;
-                logo.style.display = 'block';
-            }
-        }
-    } catch (error) {
-        console.error('Error loading logo:', error);
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => {
+            alert('✅ Link listo para enviar (copiado al portapapeles)');
+        });
+    } else {
+        prompt('Usa Control+C para apropiarte de la URL:', url); // Fallback navegadores de legado
     }
 }
 
-// PDF Export functionality
+// Manejo del isologo comercial extraído como promesas
+async function loadCompanyLogo() {
+    try {
+        const response = await fetch(`${serverUrl}/api/config/logo`);
+        const data = await response.json();
+        if (data.logoUrl) {
+            const logo = document.getElementById('company-logo');
+            logo.src = data.logoUrl;
+            logo.style.display = 'block';
+        }
+    } catch(e) {}
+}
+
+/**
+ * ----------------------------------------------------
+ * LÓGICA DE DUMPING (CONVERTIR A PDF FÍSICO IMPRIMIBLE)
+ * ----------------------------------------------------
+ */
 async function exportWishlistToPDF() {
     const wishlist = window.currentWishlistForPDF;
     if (!wishlist) {
-        alert('❌ Error: No hay datos de wishlist disponibles');
+        alert('❌ Conflicto: Se ha perdido la referencia local a la lista musical.');
         return;
     }
 
     try {
-        // Cargar jsPDF
-        if (typeof window.jsPDF === 'undefined') {
+        // Carga On-Demand del motor generador de PDF (Para no ralentizar el inicio de la app)
+        if (typeof window.jspdf === 'undefined') {
             const script = document.createElement('script');
             script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
             document.head.appendChild(script);
@@ -448,114 +386,51 @@ async function exportWishlistToPDF() {
             });
         }
 
-        const { jsPDF } = window.jsPDF;
-        const doc = new jsPDF();
-
-        // Configuración
-        const pageWidth = doc.internal.pageSize.width;
-        const margin = 20;
-        let yPosition = margin;
-
-        // Función para añadir texto con salto de línea automático
-        function addText(text, x, y, maxWidth, fontSize = 12) {
-            doc.setFontSize(fontSize);
-            const lines = doc.splitTextToSize(text, maxWidth);
-            doc.text(lines, x, y);
-            return y + (lines.length * fontSize * 0.4);
-        }
-
-        // Cargar logo si existe
-        try {
-            const logoResponse = await fetch(`${serverUrl}/api/config/logo`);
-            if (logoResponse.ok) {
-                const logoData = await logoResponse.json();
-                if (logoData.logoUrl) {
-                    const img = new Image();
-                    img.crossOrigin = 'anonymous';
-                    await new Promise((resolve, reject) => {
-                        img.onload = resolve;
-                        img.onerror = resolve; // Continuar aunque falle el logo
-                        img.src = logoData.logoUrl;
-                    });
-                    
-                    if (img.complete && img.naturalWidth > 0) {
-                        const logoWidth = 40;
-                        const logoHeight = (img.naturalHeight / img.naturalWidth) * logoWidth;
-                        doc.addImage(img, 'PNG', pageWidth - margin - logoWidth, yPosition, logoWidth, logoHeight);
-                    }
-                }
-            }
-        } catch (error) {
-            console.log('Logo no disponible, continuando sin logo');
-        }
-
-        // Título
-        doc.setFontSize(20);
-        doc.setFont(undefined, 'bold');
-        yPosition = addText(`Wishlist: ${wishlist.name}`, margin, yPosition + 10, pageWidth - 2 * margin, 20);
-        yPosition += 10;
-
-        // Información básica
-        doc.setFont(undefined, 'normal');
-        doc.setFontSize(12);
+        const { jsPDF } = window.jspdf;
+        const documento = new jsPDF();
         
-        const eventDate = wishlist.eventDate 
-            ? new Date(wishlist.eventDate).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })
-            : 'Sin fecha definida';
-        
-        const statusText = wishlist.isActive ? 'Activa (Invitados pueden agregar canciones)' : 'Cerrada (No se aceptan más canciones)';
-        
-        yPosition = addText(`DJ: ${wishlist.djUsername}`, margin, yPosition, pageWidth - 2 * margin);
-        yPosition = addText(`Estado: ${statusText}`, margin, yPosition + 5, pageWidth - 2 * margin);
-        yPosition = addText(`Fecha del evento: ${eventDate}`, margin, yPosition + 5, pageWidth - 2 * margin);
-        
-        if (wishlist.description) {
-            yPosition = addText(`Descripción: ${wishlist.description}`, margin, yPosition + 5, pageWidth - 2 * margin);
-        }
-        
-        yPosition += 15;
+        let yCursor = 20;
 
-        // Título de canciones
-        doc.setFont(undefined, 'bold');
-        yPosition = addText(`Canciones Sugeridas (${wishlist.songs.length})`, margin, yPosition, pageWidth - 2 * margin, 14);
-        yPosition += 10;
+        // Estética Formal Base del PDF 
+        documento.setFontSize(22);
+        documento.setFont(undefined, 'bold');
+        documento.text(`Setlist (Wishlist): ${wishlist.name}`, 20, yCursor);
+        yCursor += 12;
 
-        // Lista de canciones
-        doc.setFont(undefined, 'normal');
-        doc.setFontSize(10);
-        
+        documento.setFontSize(12);
+        documento.setFont(undefined, 'normal');
+        documento.text(`Designado para Operador DJ: @${wishlist.djUsername}`, 20, yCursor);
+        documento.text(`Impreso en Sistema DJConnect by Alvaro Pavon`, 20, yCursor + 8);
+        yCursor += 20;
+
+        documento.setFont(undefined, 'bold');
+        documento.text(`Canciones Totales Registradas: ${wishlist.songs.length}`, 20, yCursor);
+        yCursor += 10;
+        documento.setFont(undefined, 'normal');
+
+        // Renderizado del desglose Tracklist a Folios
         if (wishlist.songs.length === 0) {
-            yPosition = addText('No hay canciones sugeridas aún.', margin, yPosition, pageWidth - 2 * margin, 10);
+           documento.text('Todavía no ha habido interacciones por el público', 20, yCursor);
         } else {
-            wishlist.songs.forEach((song, index) => {
-                // Verificar si necesitamos nueva página
-                if (yPosition > doc.internal.pageSize.height - 40) {
-                    doc.addPage();
-                    yPosition = margin;
+            wishlist.songs.forEach((song, ordinal) => {
+                // Prevenir salida y derrame inferior creando una página "nueva"
+                if (yCursor > 280) { 
+                    documento.addPage();
+                    yCursor = 20;
                 }
-                
-                const songText = `${index + 1}. ${song.titulo} - ${song.artista}`;
-                yPosition = addText(songText, margin, yPosition, pageWidth - 2 * margin, 11);
-                
-                const detailsText = `   Género: ${song.genre} | Sugerida por: ${song.addedBy} | ${new Date(song.timestamp).toLocaleString('es-ES')}`;
-                yPosition = addText(detailsText, margin, yPosition + 2, pageWidth - 2 * margin, 9);
-                yPosition += 8;
+                const renglon = `${ordinal + 1}. [${song.genre}] ${song.titulo} // Autor: ${song.artista}`;
+                documento.text(renglon, 20, yCursor);
+                yCursor += 8;
             });
         }
 
-        // Pie de página
-        const now = new Date().toLocaleString('es-ES');
-        doc.setFontSize(8);
-        doc.text(`Generado el ${now}`, margin, doc.internal.pageSize.height - 10);
-
-        // Descargar PDF
-        const fileName = `wishlist_${wishlist.name.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
-        doc.save(fileName);
+        // Proceso de entrega y descarga de disco
+        const timeStamp = new Date().toISOString().split('T')[0];
+        const archName = `Lista_Imprimible_${wishlist.name.replace(/[^a-zA-Z]/g, '_')}_${timeStamp}.pdf`;
+        documento.save(archName);
         
-        alert('✅ PDF generado exitosamente!');
-
     } catch (error) {
-        console.error('Error generando PDF:', error);
-        alert('❌ Error al generar el PDF. Inténtalo de nuevo.');
+        console.error('El script ensamblador de hojas PDF interrumpió el proceso:', error);
+        alert('❌ El archivo de memoria o librería PDF de Internet fallaron brutalmente.');
     }
 }
