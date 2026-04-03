@@ -24,6 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
 });
 
+// Resincronizar visualmente al hacer Atrás (BFCache iOS/Android)
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        loadWishlists();
+    }
+});
+
 /**
  * Filtro 1: Autenticación de servidor JWT y validación del 'role' == 'admin'
  */
@@ -377,7 +384,7 @@ async function exportWishlistToPDF() {
         // Carga On-Demand del motor generador de PDF (Para no ralentizar el inicio de la app)
         if (typeof window.jspdf === 'undefined') {
             const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+            script.src = 'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js';
             document.head.appendChild(script);
             
             await new Promise((resolve, reject) => {

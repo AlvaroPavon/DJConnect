@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
  * general va creciendo a medida que otros invitados en otras casas añaden sus canciones.
  */
 function setupSocketIO() {
-    socket = io(serverUrl, { transports: ["websocket"] });
+    socket = io(serverUrl);
     
     socket.on('connect', () => {
         socket.emit('join-wishlist-room', currentWishlistId);

@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const serverUrl = window.SERVER_URL || window.location.origin;
     
     // Conexión robusta sin HTTP Polling (Latencia ultrabaja requerida para salas en directo)
-    const socket = io(serverUrl, { transports: ["websocket"] });
+    const socket = io(serverUrl);
 
     // 2. CONEXIÓN AL DOM
     const searchInput = document.getElementById('search-input');

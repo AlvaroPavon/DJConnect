@@ -26,6 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
 });
 
+// Bug Fix BFCache: Refrescar listas al volver hacia atrás
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        loadParties();
+    }
+});
 /**
  * Escudo de doble comprobación asíncrona contra el Backend.
  */

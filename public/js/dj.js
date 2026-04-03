@@ -249,8 +249,7 @@ function runDashboard(currentPartyId) {
     const backToMenuBtn = document.getElementById('back-to-menu-btn');
     
     const socket = io(serverUrl, { 
-        auth: { token }, 
-        transports: ["websocket"] 
+        auth: { token }
     });
 
     // ===== LISTENER DEL BOTÓN DE VOLVER =====

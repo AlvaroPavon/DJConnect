@@ -28,6 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners(); // Mapeo de botones de formularios
 });
 
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        loadDJs();
+    }
+});
 /**
  * Autenticación estricta: Corrobora con el servidor que el token pertenezca
  * a un administrador usando el endpoint protegido `/api/verify-admin`

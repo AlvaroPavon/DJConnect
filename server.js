@@ -44,6 +44,7 @@ app.use(helmet({
                 "'unsafe-inline'",
                 "'unsafe-eval'",
                 "https://cdn.jsdelivr.net",
+                "https://cdnjs.cloudflare.com",
                 "https://cdn.socket.io",
                 "https://pagead2.googlesyndication.com" // Google Ads si se usa
             ],
@@ -52,6 +53,7 @@ app.use(helmet({
                 "'unsafe-inline'",
                 "'unsafe-eval'",
                 "https://cdn.jsdelivr.net",
+                "https://cdnjs.cloudflare.com",
                 "https://cdn.socket.io",
                 "https://pagead2.googlesyndication.com"
             ],
@@ -63,9 +65,8 @@ app.use(helmet({
                 "https://accounts.spotify.com", 
                 "https://fonts.googleapis.com", 
                 "https://fonts.gstatic.com", 
-                "wss://djapp.duckdns.org",
-                "wss://djapp.duckdns.org:443",
-                "ws://localhost:*",
+                "wss:",
+                "ws:",
                 "https://djapp.duckdns.org"
             ],
             frameSrc: ["https://googleads.g.doubleclick.net", "https://www.google.com"]

@@ -41,6 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        // Refrescar tarjetas de stats al volver atrás
+        const token = localStorage.getItem('dj-token');
+        const serverUrl = window.SERVER_URL || window.location.origin;
+        if (token) loadAdminData(serverUrl, token);
+    }
+});
+
 /**
  * Función que inyecta los KPIs (Métricas Clave de Rendimiento) en las famosas 'Cards' de Cristal.
  */

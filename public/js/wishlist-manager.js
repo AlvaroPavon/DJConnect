@@ -15,6 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
     setupSocketIO();
 });
 
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        loadWishlists();
+    }
+});
+
 let companyLogoUrl = null;
 
 // Configurar Socket.IO
