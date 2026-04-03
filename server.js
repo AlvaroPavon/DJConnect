@@ -1015,6 +1015,37 @@ app.patch('/api/dj/instagram', authenticateToken, async (req, res) => {
     }
 });
 
+app.post('/api/parties', authenticateToken, async (req, res) => {
+    try {
+        const { partyId } = req.body;
+        const djUsername = req.user.username;
+        
+        const dj = await DJ.findOne({ username: djUsername });
+        if (!dj) {
+            return res.status(404).json({ message: 'DJ no encontrado' });
+        }
+        
+        if (dj.activePartyIds && dj.activePartyIds.length >= 3) {
+            return res.status(400).json({ message: 'Límite de 3 fiestas activas alcanzado' });
+        }
+        
+        const party = await Party.findOneAndUpdate(
+            { partyId: partyId },
+            { $setOnInsert: { partyId: partyId, djUsername: djUsername } },
+            { upsert: true, new: true, setDefaultsOnInsert: true }
+        );
+        
+        if (!dj.activePartyIds || !dj.activePartyIds.includes(partyId)) {
+            await DJ.updateOne({ username: djUsername }, { $push: { activePartyIds: partyId } });
+        }
+        
+        res.status(201).json(party);
+    } catch (error) {
+        console.error('Error al crear fiesta:', error);
+        res.status(500).json({ message: 'Error al crear la fiesta' });
+    }
+});
+
 app.post('/api/end-party', authenticateToken, async (req, res) => {
     try {
         const { partyId } = req.body;

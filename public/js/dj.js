@@ -143,7 +143,7 @@ async function loadCompanyLogo() {
 // --- 2. LISTENERS DEL MENÚ ---
 function setupMenuListeners() {
     // Listener para el botón "Crear Nueva Fiesta"
-    createPartyBtn.addEventListener('click', () => {
+    createPartyBtn.addEventListener('click', async () => {
         const customName = partyNameInput.value.trim();
         if (!customName) {
             alert('Por favor, escribe un nombre para la fiesta.');
@@ -160,10 +160,40 @@ function setupMenuListeners() {
         const randomString = Math.random().toString(36).substring(2, 8);
         const uniquePartyId = `${cleanName}-${randomString}`;
         
-        // Ocultar menú y mostrar dashboard con la NUEVA fiesta
-        mainMenuSection.style.display = 'none';
-        dashboardContentSection.style.display = 'block';
-        runDashboard(uniquePartyId);
+        try {
+            createPartyBtn.disabled = true;
+            createPartyBtn.textContent = 'Creando...';
+            
+            const response = await fetch(`${serverUrl}/api/parties`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ partyId: uniquePartyId })
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                createPartyBtn.disabled = false;
+                createPartyBtn.textContent = 'Crear Nueva Fiesta';
+                alert(`Error al crear la fiesta: ${data.message || 'Desconocido'}`);
+                return;
+            }
+            
+            createPartyBtn.disabled = false;
+            createPartyBtn.textContent = 'Crear Nueva Fiesta';
+
+            // Ocultar menú y mostrar dashboard con la NUEVA fiesta
+            mainMenuSection.style.display = 'none';
+            dashboardContentSection.style.display = 'block';
+            runDashboard(uniquePartyId);
+        } catch (error) {
+            console.error('Error de red al crear fiesta:', error);
+            createPartyBtn.disabled = false;
+            createPartyBtn.textContent = 'Crear Nueva Fiesta';
+            alert('Error de conexión al crear nueva fiesta. Verifica tu red.');
+        }
     });
 
     // Listener para el botón "Cerrar Sesión"
