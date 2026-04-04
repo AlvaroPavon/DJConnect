@@ -1029,11 +1029,16 @@ app.post('/api/parties', authenticateToken, async (req, res) => {
             return res.status(400).json({ message: 'Límite de 3 fiestas activas alcanzado' });
         }
         
-        const party = await Party.findOneAndUpdate(
-            { partyId: partyId },
-            { $setOnInsert: { partyId: partyId, djUsername: djUsername } },
-            { upsert: true, new: true, setDefaultsOnInsert: true }
-        );
+        let party = await Party.findOne({ partyId: partyId });
+        if (!party) {
+            party = new Party({
+                partyId: partyId,
+                djUsername: djUsername,
+                isActive: true,
+                songRequests: []
+            });
+            await party.save();
+        }
         
         if (!dj.activePartyIds || !dj.activePartyIds.includes(partyId)) {
             await DJ.updateOne({ username: djUsername }, { $push: { activePartyIds: partyId } });
